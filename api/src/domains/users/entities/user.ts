@@ -10,7 +10,6 @@ export type UserProps = {
   username?: string
   email: Email
   password: string
-  confirmationPassword: string
 }
 
 export class User extends Entity<User, UserProps> {
@@ -34,22 +33,12 @@ export class User extends Entity<User, UserProps> {
     return this.props.password
   }
   
-  get confirmationPassword(): string {
-    return this.props.confirmationPassword
-  }
-
   static create(props: UserProps): Result<User> {
     const guardResults = Result.combine([
       Guard.againstNullOrUndefined(props.firstname, "firstname"),
       Guard.againstNullOrUndefined(props.lastname, "lastname"),
       Guard.againstNullOrUndefined(props.email, "email"),
-      Guard.againstNullOrUndefined(props.password, "password"),
-      Guard.againstNullOrUndefined(props.confirmationPassword, "confirmationPassword"),
-      Guard.againstNotEquals(
-        props.password,
-        props.confirmationPassword,
-        "password and confirmationPassword"
-      )
+      Guard.againstNullOrUndefined(props.password, "password")
     ])
 
     if (guardResults.isSuccess === false) {

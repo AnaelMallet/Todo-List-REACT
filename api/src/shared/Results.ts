@@ -1,12 +1,14 @@
 import { DomainError } from "./domainError"
 
 export class Result<T> {
+  code: number
   isSuccess: boolean
   isFailure: boolean
   errors: DomainError[]
   value: T
 
   constructor(isSuccess: boolean, errors?: DomainError[], value?: T) {
+    this.code = errors && errors.length > 0 ? 400 : 200
     this.isSuccess = isSuccess
     this.isFailure = !isSuccess
     this.errors = errors && errors.length > 0 ? [...errors as DomainError[]] : []

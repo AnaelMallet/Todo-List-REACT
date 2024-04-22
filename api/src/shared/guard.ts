@@ -11,14 +11,4 @@ export class Guard {
 
     return Result.ok(prop)
   }
-
-  public static againstNotEquals(propA: any, propB: any, propName: string): Result<any> {
-    const domainError = new DomainError(propName, `againstNotEquals`)
-
-    if (propA !== propB) {
-      return Result.fail(domainError)
-    }
-
-    return Result.ok()
-  }
 }
