@@ -4,7 +4,7 @@ import { Result } from "@shared/Results"
 import { UserDomainRepository } from "../../repositories/implementations/userDomainRepository"
 import { User } from "../../entities/user"
 import { Email } from "../../value-objects/email"
-import { PasswordNotEqualsError } from "../../errors"
+import { EmailAlreadyExistError, PasswordNotEqualsError } from "../../errors"
 import { Password } from "../../value-objects/password"
 
 import { userPropsDto } from "./dto"
@@ -32,6 +32,14 @@ export class CreateUserUseCase implements basicUseCase {
       return Result.fail(emailResult.getErrors())
     }
 
+    const emailValue = emailResult.getValue()
+
+    const foundUserByEmailResult = await this.repository.findOneByEmail(emailValue.value)
+
+    if (foundUserByEmailResult.isSuccess === true) {
+      return Result.fail(new EmailAlreadyExistError())
+    }
+
     if (password !== confirmationPassword) {
       return Result.fail(new PasswordNotEqualsError())
     }
@@ -45,7 +53,7 @@ export class CreateUserUseCase implements basicUseCase {
     const userResult = User.create({
       firstname,
       lastname,
-      email: emailResult.getValue(),
+      email: emailValue,
       username,
       password: passwordResult.getValue()
     })

@@ -8,16 +8,17 @@ export class UserRepository extends BasicRepository<User> implements IUserReposi
   alias = "users"
 
   async findOneByUuid(uuid: string): Promise<User> {
-    const entity = await this.repository
+    return await this.repository
       .createQueryBuilder(this.alias)
       .where(`${this.alias}.uuid = :uuid`, { uuid })
       .getOne()
+  }
 
-    if (entity === undefined) {
-      return undefined
-    }
-
-    return entity
+  async findOneByEmail(email: string): Promise<User> {
+      return await this.repository
+        .createQueryBuilder(this.alias)
+        .where(`${this.alias}.email = :email`, { email })
+        .getOne()
   }
 
   async save(entity: User): Promise<void> {

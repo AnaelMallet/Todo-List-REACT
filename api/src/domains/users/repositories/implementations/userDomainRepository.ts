@@ -16,7 +16,17 @@ export class UserDomainRepository implements IUserDomainRepository {
   async findOneByUuid(uuid: string): Promise<Result<User>> {
       const user = await this.repository.findOneByUuid(uuid)
 
-      if (user === undefined) {
+      if (user === null) {
+        return Result.fail()
+      }
+
+      return await userTransformer.toDomain(user)
+  }
+
+  async findOneByEmail(email: string): Promise<Result<User>> {
+      const user = await this.repository.findOneByEmail(email)
+
+      if (user === null) {
         return Result.fail()
       }
 

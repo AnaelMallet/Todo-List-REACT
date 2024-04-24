@@ -40,8 +40,6 @@ export class Password extends Value<Password, string> {
   }
 
   static comparePassword(password: string, hashedPassword: string): boolean {
-    console.log("password, hashedPassword", password, hashedPassword)
-    
     return bcrypt.compareSync(password, hashedPassword)
   }
 }
