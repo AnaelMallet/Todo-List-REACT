@@ -8,7 +8,7 @@ export class Result<T> {
   value: T
 
   constructor(isSuccess: boolean, errors?: DomainError[], value?: T) {
-    this.code = errors && errors.length > 0 ? 400 : 200
+    this.code = isSuccess ? 200 : 400
     this.isSuccess = isSuccess
     this.isFailure = !isSuccess
     this.errors = errors && errors.length > 0 ? [...errors as DomainError[]] : []
@@ -33,7 +33,7 @@ export class Result<T> {
     return new Result<U>(true, undefined, value)
   }
 
-  public static fail<U> (errors: DomainError[] | DomainError): Result<U> {
+  public static fail<U> (errors?: DomainError[] | DomainError): Result<U> {
     if (errors instanceof DomainError) {
       return new Result<U>(false, [errors], undefined)
     }

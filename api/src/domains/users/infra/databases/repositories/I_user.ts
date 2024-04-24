@@ -1,3 +1,6 @@
+import UserEntity from "../entities/user"
+
 export interface IUserRepository {
-  save(props: any): void
+  findOneByUuid(uuid: string): Promise<UserEntity>
+  save(props: any): Promise<void>
 }

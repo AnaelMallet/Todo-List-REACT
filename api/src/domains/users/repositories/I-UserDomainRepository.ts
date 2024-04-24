@@ -1,3 +1,8 @@
+import { Result } from "@shared/Results"
+
+import { User } from "../entities/user"
+
 export interface IUserDomainRepository {
-  save(props: any): void
+  findOneByUuid(uuid: string): Promise<Result<User>>
+  save(props: any): Promise<void>
 }

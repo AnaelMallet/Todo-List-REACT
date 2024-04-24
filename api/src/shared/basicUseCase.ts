@@ -1,5 +1,6 @@
 import { Result } from "./Results"
 
 export interface basicUseCase {
-  execute(prop?: any): Promise<Result<any>>
+  repository: any
+  execute(props: any): Promise<Result<any>>
 }

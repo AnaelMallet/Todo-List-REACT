@@ -1,3 +1,6 @@
+import { Result } from "@shared/Results"
+
+import { User } from "../../entities/user"
 import { UserRepository } from "../../infra/databases/repositories/implementations/user"
 import { userTransformer } from "../../transformers"
 
@@ -8,6 +11,16 @@ export class UserDomainRepository implements IUserDomainRepository {
 
   constructor(repository: UserRepository) {
     this.repository = repository
+  }
+
+  async findOneByUuid(uuid: string): Promise<Result<User>> {
+      const user = await this.repository.findOneByUuid(uuid)
+
+      if (user === undefined) {
+        return Result.fail()
+      }
+
+      return await userTransformer.toDomain(user)
   }
 
   async save(props: any): Promise<void> {
