@@ -1,16 +1,20 @@
 import { Email } from "../value-objects/email"
+import { Password } from "../value-objects/password"
 
 import { User, UserProps } from "./user"
 
-const emailResult = Email.create("anael.mallet@gmail.com")
+const emailResult = Email.create("john.doe@gmail.com")
 const email = emailResult.getValue()
 
+const passwordResult = Password.create("JohnDoe@9999")
+const password = passwordResult.getValue()
+
 const userProps: UserProps = {
-  firstname: "fabien",
-  lastname: "guichard",
-  username: "fguichard",
+  firstname: "john",
+  lastname: "doe",
+  username: "jdoe",
   email,
-  password: "fguich",
+  password,
 }
 
 test("Should create an user", () => {

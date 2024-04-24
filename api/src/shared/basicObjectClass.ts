@@ -2,15 +2,16 @@ import { v4 as uuid } from "uuid"
 
 import { Result } from "./Results"
 
-export class Entity<T, P> {
-  uuid = uuid()
+export abstract class Entity<T, P> {
+  uuid: string
   props: P
 
-  constructor(props: P) {
+  constructor(props: P, id?: string) {
+    this.uuid = id ? id : uuid()
     this.props = props
   }
 
-  static create (props: any): Result<any> {
+  static create (props: any, id?: string): Result<any> {
     return Result.ok()
   }
 }
@@ -19,7 +20,10 @@ export abstract class ValueObject<T, P> {
   id?: number
   props: P
 
-  constructor(props: P) {}
+  constructor(props: P, id?: number) {
+    this.id = id ? id : undefined
+    this.props = props
+  }
 
   static create(props: any, id?: number): Result<any> {
     return Result.ok()
