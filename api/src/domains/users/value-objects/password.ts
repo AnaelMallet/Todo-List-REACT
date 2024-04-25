@@ -20,9 +20,11 @@ export class Password extends Value<Password, string> {
       return Result.fail(new PasswordNotValidError())
     }
 
-    const hashedPassword = this.hashPassword(value)
+    const hashedpassword = this.isHashed(value) === false
+      ? this.hashPassword(value)
+      : value 
 
-    const password = new Password(hashedPassword)
+    const password = new Password(hashedpassword)
 
     return Result.ok(password)
   }
@@ -34,12 +36,19 @@ export class Password extends Value<Password, string> {
   }
 
   static hashPassword(password: string): string {
-    const hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
+    const hashedPassword = bcrypt.hashSync(password, 10)
 
     return hashedPassword
   }
 
   static comparePassword(password: string, hashedPassword: string): boolean {
     return bcrypt.compareSync(password, hashedPassword)
+  }
+
+  static isHashed(value: string): boolean {
+    return (
+      value.startsWith("$2a$10$")
+      || value.startsWith("$2b$10$")
+    ) && value.length === 60
   }
 }
