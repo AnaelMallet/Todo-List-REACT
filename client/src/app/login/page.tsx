@@ -10,20 +10,20 @@ function LoginPage() {
     <main className="h-screen flex place-items-center place-content-center">
       <div className="w-1/3 bg-[#282c34] rounded-lg">
         <TextTitle/>
-        <div className="grid grid-cols-1 gap-y-10 w-full">
+        <div className="grid grid-cols-1 gap-y-10 w-full text-white">
           <div className="px-5">
-            <label className="bg-transparent text-white" htmlFor="login">adresse email/nom d'utilisateur</label>
+            <label className="bg-transparent" htmlFor="login">Adresse email/Nom d'utilisateur</label>
             <input
-              className="bg-transparent text-white border-white border-2 rounded-2xl h-9 w-full mt-3 pl-2"
+              className="bg-transparent border-white border-2 rounded-2xl h-9 w-full mt-3 pl-2 focus:outline-none"
               type="text"
               id="login"
               placeholder="adresse email/nom d'utilisateur"
             />
           </div>
           <div className="px-5">
-            <label className="bg-transparent text-white" htmlFor="password">Mot de passe</label>
+            <label className="bg-transparent" htmlFor="password">Mot de passe</label>
             <input
-              className="bg-transparent text-white border-white border-2 rounded-2xl h-9 w-full mt-3 pl-2"
+              className="bg-transparent border-white border-2 rounded-2xl h-9 w-full mt-3 pl-2 focus:outline-none"
               type="password"
               id="password"
               placeholder="Mot de passe"
