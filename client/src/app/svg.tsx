@@ -23,9 +23,38 @@ function FullStarIconSVG() {
   )
 }
 
+function CheckIconSVG() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0,0,256,256">
+      <g fill="none" fillRule="nonzero" stroke="none" strokeWidth="1" strokeLinecap="butt" strokeLinejoin="miter" strokeMiterlimit="10" strokeDasharray="" strokeDashoffset="0" fontFamily="none" fontWeight="none" fontSize="none" textAnchor="none">
+        <g transform="scale(5.33333,5.33333)">
+          <path d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z" fill="#ffffff"></path>
+          <path d="M34.602,14.602l-13.602,13.597l-5.602,-5.598l-2.797,2.797l8.399,8.403l16.398,-16.402z" fill="#00d400"></path>
+        </g>
+      </g>
+    </svg>
+  )
+}
+
+function CrossIconSVG() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0,0,256,256">
+      <g fill="none" fillRule="nonzero" stroke="none" strokeWidth="1" strokeLinecap="butt" strokeLinejoin="miter" strokeMiterlimit="10" strokeDasharray="" strokeDashoffset="0" fontFamily="none" fontWeight="none" fontSize="none" textAnchor="none">
+        <g transform="scale(5.33333,5.33333)">
+          <path d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z" fill="#ffffff"></path>
+          <path d="M29.656,15.516l2.828,2.828l-14.14,14.14l-2.828,-2.828z" fill="#d40000"></path>
+          <path d="M32.484,29.656l-2.828,2.828l-14.14,-14.14l2.828,-2.828z" fill="#d40000"></path>
+        </g>
+      </g>
+    </svg>
+  )
+}
+
 
 export {
   AddIconSVG,
   StarIconSVG,
-  FullStarIconSVG
+  FullStarIconSVG,
+  CheckIconSVG,
+  CrossIconSVG
 }
