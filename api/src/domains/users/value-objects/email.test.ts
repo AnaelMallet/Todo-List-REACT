@@ -17,7 +17,7 @@ test("should not create an email because email is undefined", () => {
   const emailResult = Email.create(undefined)
 
   expect(emailResult.isSuccess).toBe(false)
-  expect(emailResult.value).toBe(undefined)
+  expect(emailResult.values).toBe(undefined)
 
   const emailErrors = emailResult.getErrors()
 
@@ -31,7 +31,7 @@ test("should not create an email because email is invalid", () => {
   const emailResult = Email.create(emailValue)
 
   expect(emailResult.isSuccess).toBe(false)
-  expect(emailResult.value).toBe(undefined)
+  expect(emailResult.values).toBe(undefined)
 
   const emailErrors = emailResult.getErrors()
 

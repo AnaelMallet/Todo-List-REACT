@@ -4,7 +4,7 @@ import { UserNotExistError } from "./userNotExistError"
 import { PasswordNotValidError } from "./passwordNotValidError"
 import { EmailAlreadyExistError } from "./emailAlreadyExistError"
 import { LoginNotValidError } from "./loginNotValidError"
-import { UserTokenOutdatedError } from "./UserTokenOutdatedError"
+import { UserTokenOutdatedError } from "./userTokenOutdatedError"
 
 export {
   EmailNotValidError,

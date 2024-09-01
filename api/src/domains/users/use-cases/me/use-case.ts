@@ -2,10 +2,10 @@ import jwt from "jsonwebtoken"
 
 import { BasicUseCase } from "@shared/basicUseCase"
 import { Result } from "@shared/Results"
+import { DomainError } from "@shared/domainError"
 
 import { UserDomainRepository } from "../../repositories/implementations/userDomainRepository"
 import { UserNotExistError, UserTokenOutdatedError } from "../../errors"
-import { DomainError } from "@shared/domainError"
 
 export class UserMeUseCase implements BasicUseCase {
   repository: UserDomainRepository
@@ -24,7 +24,7 @@ export class UserMeUseCase implements BasicUseCase {
     const user = foundUserResult.getValue()
 
     try {
-      jwt.verify(user.props.refreshToken, process.env.JWT_KEY)      
+      jwt.verify(user.props.refreshToken, process.env.JWT_KEY)
     } catch (error) {
       return Result.fail(new UserTokenOutdatedError())
     }
