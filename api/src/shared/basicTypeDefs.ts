@@ -12,7 +12,7 @@ const basicTypeDefs = gql`
     errors: [Error]!
   }
 
-  type QueryResponse {
+  interface QueryResponse {
     code: Int!,
     isSuccess: Boolean!
     errors: [Error]!

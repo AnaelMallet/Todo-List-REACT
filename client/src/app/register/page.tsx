@@ -4,22 +4,20 @@ import { useRouter } from "next/navigation"
 import { Form, Formik, Field } from "formik"
 import classNames from "classnames"
 import { useMutation } from "@apollo/client"
-import { useContext, useState } from "react"
 
 import TextTitle from "@/components/text"
+import { addNotification, useNotification } from "@/components/notifications/NotificationProvider"
 
 import client from "../graphql-api"
 
 import { initialValues, validationSchema } from "./api"
 import { createUserMutation } from "./graphql"
-import { addNotification, NotificationContext } from "@/components/notifications/NotificationProvider"
 
 function RegsiterPage() {
   const router = useRouter()
 
   const [mutateFunction, { loading }] = useMutation(createUserMutation, { client })
-  const [mutationError, setMutationError] = useState("")
-  const { dispatch } = useContext(NotificationContext)
+  const { dispatch } = useNotification()
 
   return (
     <main className=" h-screen flex place-content-center place-items-center">
@@ -35,7 +33,6 @@ function RegsiterPage() {
             if (responseErrors.length > 0) {
               dispatch(addNotification(responseErrors[0].message, false))
             } else {
-              setMutationError("")
               dispatch(addNotification("Votre compte a bien été créé.", true))
               router.push("/")
             }
@@ -115,6 +112,7 @@ function RegsiterPage() {
                     type="password"
                     placeholder="Mot de passe"
                     name="password"
+                    autoComplete="on"
                   />
                   { errors.password && touched.password ? <div className="text-red-500 text-xs -mb-4">{ errors.password }</div> : <></> }
                 </div>
@@ -130,14 +128,14 @@ function RegsiterPage() {
                     type="password"
                     placeholder="Confirmation du mot de passe"
                     name="confirmationPassword"
+                    autoComplete="on"
                   />
                   { errors.confirmationPassword && touched.confirmationPassword ? <div className="text-red-500 text-xs -mb-4">{ errors.confirmationPassword }</div> : <></> }
                 </div>
               </div>
-              {mutationError ? <p className="text-red-500 flex justify-center">{ mutationError }</p> : <></>}
               <div className="flex justify-center pb-6 space-x-10">
                 <button disabled={isSubmitting || loading} type="submit" className="bg-cyan-400 font-bold hover:bg-cyan-500 rounded-md p-2">Valider</button>
-                <button onClick={() => router.back()} className="font-bold p-2 border-white border-2 rounded-md">Annuler</button>
+                <button type="button" onClick={() => router.back()} className="font-bold p-2 border-white border-2 rounded-md">Annuler</button>
               </div>
             </Form>
           )}

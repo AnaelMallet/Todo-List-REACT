@@ -34,6 +34,11 @@ interface RemoveNotificationAction {
 
 export type NotificationAction = AddNotificationAction | RemoveNotificationAction
 
+type NotificationContextType = {
+  state: NotificationState,
+  dispatch: Dispatch<NotificationAction>
+}
+
 function notificationReducer(state: NotificationState, action: NotificationAction): NotificationState {
   switch(action.type) {
     case NotificationActionType.ADD:
@@ -70,13 +75,11 @@ export function removeNotification(uuid: string): RemoveNotificationAction {
   }
 }
 
-export const NotificationContext = createContext<{
-  state: NotificationState,
-  dispatch: Dispatch<NotificationAction>
-}>({
-  state: initialNotificationState,
-  dispatch: () => undefined
-})
+export const NotificationContext = createContext<NotificationContextType>({} as NotificationContextType)
+
+export function useNotification() {
+  return useContext(NotificationContext)
+}
 
 export default function NotificationProvider(props: any) {
   const [ state, dispatch ] = useReducer(notificationReducer, initialNotificationState)

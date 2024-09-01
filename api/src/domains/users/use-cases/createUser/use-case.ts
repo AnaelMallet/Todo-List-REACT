@@ -1,4 +1,4 @@
-import { basicUseCase } from "@shared/basicUseCase"
+import { BasicUseCase } from "@shared/basicUseCase"
 import { Result } from "@shared/Results"
 
 import { UserDomainRepository } from "../../repositories/implementations/userDomainRepository"
@@ -9,7 +9,7 @@ import { Password } from "../../value-objects/password"
 
 import { userPropsDto } from "./dto"
 
-export class CreateUserUseCase implements basicUseCase {
+export class CreateUserUseCase implements BasicUseCase {
   repository: UserDomainRepository
 
   constructor(repository: UserDomainRepository) {

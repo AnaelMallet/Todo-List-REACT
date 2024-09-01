@@ -1,5 +1,7 @@
 import { createUserController } from "../../use-cases/createUser"
 import { updateUserController } from "../../use-cases/updateUser"
+import { loginUserController } from "../../use-cases/login"
+import { userMeController } from "../../use-cases/me"
 
 export type graphqlProps = {
   parent: any
@@ -29,6 +31,26 @@ const resolvers = {
       }
 
       return await updateUserController.executeImplementation(props)
+    },
+    login: async (parent: any, args: any, context: any, info: any) => {
+      const props: graphqlProps = {
+        parent,
+        args,
+        context,
+        info
+      }
+
+      return await loginUserController.executeImplementation(props)
+    },
+    verifyToken: async (parent: any, args: any, context: any, info: any) => {
+      const props: graphqlProps = {
+        parent,
+        args,
+        context,
+        info
+      }
+  
+      return await userMeController.executeImplementation(props)
     }
   }
 }
