@@ -1,9 +1,9 @@
 import classNames from "classnames"
+import { Dispatch, useEffect, useState } from "react"
 
 import { CheckIconSVG, CrossIconSVG } from "@/app/svg"
 
-import { NotificationInterface, NotificationAction, NotificationContext, removeNotification } from "./NotificationProvider"
-import { Dispatch, use, useContext, useEffect, useState } from "react"
+import { NotificationInterface, NotificationAction, removeNotification, useNotification } from "./NotificationProvider"
 
 type Notification = {
   notification: NotificationInterface
@@ -17,7 +17,7 @@ export default function Notification(props: Notification) {
   } = props
 
   const [notificationTimerWidth, setNotificationTimerWidth] = useState(100)
-  const { dispatch } = useContext(NotificationContext)
+  const { dispatch } = useNotification()
 
   const handleStartTimer = () => {
     const interval = setInterval(() => {
@@ -29,7 +29,7 @@ export default function Notification(props: Notification) {
         clearInterval(interval)
         return prev
       })
-    }, 35)
+    }, 40)
   }
 
   useEffect(() => {

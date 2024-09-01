@@ -57,7 +57,7 @@ test("Should not create an user because firstname is undefined", () => {
   const userResult = User.create(props)
 
   expect(userResult.isSuccess).toBe(false)
-  expect(userResult.value).toBe(undefined)
+  expect(userResult.values).toBe(undefined)
 
   const userErrors = userResult.getErrors()
 
@@ -73,7 +73,7 @@ test("Should not create an user because lastname is undefined", () => {
   const userResult = User.create(props)
 
   expect(userResult.isSuccess).toBe(false)
-  expect(userResult.value).toBe(undefined)
+  expect(userResult.values).toBe(undefined)
 
   const userErrors = userResult.getErrors()
 
@@ -89,7 +89,7 @@ test("Should not create an user because email is undefined", () => {
   const userResult = User.create(props)
 
   expect(userResult.isSuccess).toBe(false)
-  expect(userResult.value).toBe(undefined)
+  expect(userResult.values).toBe(undefined)
 
   const userErrors = userResult.getErrors()
 
@@ -105,7 +105,7 @@ test("Should not create an user because password is undefined", () => {
   const userResult = User.create(props)
 
   expect(userResult.isSuccess).toBe(false)
-  expect(userResult.value).toBe(undefined)
+  expect(userResult.values).toBe(undefined)
 
   const userErrors = userResult.getErrors()
 

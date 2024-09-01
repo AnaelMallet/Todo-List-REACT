@@ -11,6 +11,8 @@ export type UserProps = {
   username?: string
   email: Email
   password: Password
+  accessToken?: string
+  refreshToken?: string
 }
 
 export class User extends Entity<User, UserProps> {
@@ -32,6 +34,14 @@ export class User extends Entity<User, UserProps> {
   
   get password(): Password {
     return this.props.password
+  }
+
+  get accessToken(): string {
+    return this.accessToken
+  }
+
+  get refreshToken(): string {
+    return this.refreshToken
   }
   
   static create(props: UserProps, uuid?: string): Result<User> {
@@ -85,6 +95,14 @@ export class User extends Entity<User, UserProps> {
     this.props.password = passwordResult.getValue()
 
     return Result.ok()
+  }
+
+  updateAccessToken(accessToken: string): void {
+    this.props.accessToken = accessToken
+  }
+
+  updateRefreshToken(refreshToken: string): void {
+    this.props.refreshToken = refreshToken
   }
 }
 

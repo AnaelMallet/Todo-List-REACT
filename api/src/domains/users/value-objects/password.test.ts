@@ -18,7 +18,7 @@ test("should not create an password because email is undefined", () => {
   const passwordResult = Password.create(undefined)
 
   expect(passwordResult.isSuccess).toBe(false)
-  expect(passwordResult.value).toBe(undefined)
+  expect(passwordResult.values).toBe(undefined)
 
   const passwordErrors = passwordResult.getErrors()
 
@@ -32,7 +32,7 @@ test("should not create an password because email is invalid", () => {
   const passwordResult = Password.create(passwordValue)
 
   expect(passwordResult.isSuccess).toBe(false)
-  expect(passwordResult.value).toBe(undefined)
+  expect(passwordResult.values).toBe(undefined)
 
   const passwordErrors = passwordResult.getErrors()
 

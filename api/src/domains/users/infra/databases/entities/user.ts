@@ -27,6 +27,12 @@ export default class UserEntity extends BaseEntity {
   @Column("varchar", { length: 64 })
   password: string
 
+  @Column("text", { nullable: true })
+  accessToken: string
+
+  @Column("text", { nullable: true })
+  refreshToken: string
+
   @CreateDateColumn()
   createdDate: Date
 

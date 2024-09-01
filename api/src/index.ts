@@ -1,5 +1,6 @@
 import express from "express"
 import { ApolloServer } from "apollo-server-express"
+import dotenv from "dotenv"
 
 import { createDataSource } from "./ormconfig"
 import { getGraphqlAPI } from "./getFiles"
@@ -15,6 +16,8 @@ const main = async () => {
   app.get("/", (_, res) => {
     res.send("hello world !")
   })
+
+  dotenv.config()
 
   const graphqlPromise = getGraphqlAPI()
 

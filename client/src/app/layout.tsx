@@ -5,13 +5,10 @@ import { Providers } from "./page"
 
 export const metadata: Metadata = {
   title: "Todo-list-REACT"
-};
+}
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+
   return (
     <html lang="en">
         <body className="h-screen bg-gray-100">

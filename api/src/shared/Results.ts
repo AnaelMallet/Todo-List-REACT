@@ -5,14 +5,14 @@ export class Result<T> {
   isSuccess: boolean
   isFailure: boolean
   errors: DomainError[]
-  value: T
+  values: T
 
-  constructor(isSuccess: boolean, errors?: DomainError[], value?: T) {
+  constructor(isSuccess: boolean, errors?: DomainError[], values?: T) {
     this.code = isSuccess ? 200 : 400
     this.isSuccess = isSuccess
     this.isFailure = !isSuccess
     this.errors = errors && errors.length > 0 ? [...errors as DomainError[]] : []
-    this.value = value ? value as T : undefined
+    this.values = values ? values as T : undefined
 
     Object.freeze(this)
   }
@@ -22,7 +22,7 @@ export class Result<T> {
       throw new Error("InvalidOperation: Can't retrieve value from a failed result.")
     }
 
-    return this.value
+    return this.values
   }
 
   public getErrors(): DomainError[] {
