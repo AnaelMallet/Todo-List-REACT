@@ -1,18 +1,26 @@
-import { createContext, Dispatch, SetStateAction, useContext, useEffect, useLayoutEffect, useState } from "react"
-import { useMutation } from "@apollo/client"
+import { createContext, Dispatch, SetStateAction, useCallback, useContext, useEffect, useLayoutEffect, useState } from "react"
+import { useMutation, useQuery } from "@apollo/client"
 import client from "@/app/graphql-api"
 import { useRouter } from "next/navigation"
 
 import { getLocalStorage, removeLocalStorage } from "../utils"
 import { addNotification, useNotification } from "../notifications/NotificationProvider"
 
-import { verifyTokenMutation } from "./graphql"
+import { getMeQuery, verifyTokenMutation } from "./graphql"
+
+type User = {
+  firstname: string
+  lastname: string
+  email: string
+  username: string
+}
 
 type UserContextType = {
   accessToken: string | null,
   setAccessToken: Dispatch<SetStateAction<string | null>>
   isLogged: boolean
-  logout: () => void
+  logout: () => void,
+  user: User | null
 }
 
 export const UserContext = createContext<UserContextType>({} as UserContextType)
@@ -26,14 +34,18 @@ export default function UserProvider(props: any) {
   const [ userId, setUserId ] = useState<string| null>(null)
   const [ isLogged, setIsLogged ] = useState<boolean>(false)
   const [isLoading , setIsLoading] = useState<boolean>(true)
+  const [ user, setUser ] = useState<User | null>(null)
   const [mutateFunction] = useMutation(verifyTokenMutation, { client })
   const { dispatch } = useNotification()
   const router = useRouter()
 
+  const { loading } = useQuery(getMeQuery, { variables: { userId }, onCompleted: (data) => {
+    setUser(data.me.values)
+  } })
+
   const logout = () => {
     removeLocalStorage("userId")
     setUserId(null)
-    location.reload()
   }
 
   useEffect(() => {
@@ -70,10 +82,16 @@ export default function UserProvider(props: any) {
     setIsLoading(false)
   }, [dispatch, mutateFunction, router, userId])
 
-  if (isLoading) return <></>
+  if (loading && isLoading) return <></>
 
   return (
-    <UserContext.Provider value={{ accessToken, setAccessToken, isLogged, logout }}>
+    <UserContext.Provider value={{
+      accessToken,
+      setAccessToken,
+      isLogged,
+      logout,
+      user
+    }}>
       {props.children}
     </UserContext.Provider>
   )

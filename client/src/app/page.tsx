@@ -24,20 +24,20 @@ export function Providers({ children }: Readonly<{ children: React.ReactNode }>)
 
 function Home() {
   const router = useRouter()
-  const { isLogged, logout } = useUser()
+  const { isLogged, logout, user } = useUser()
 
   return (
     <>
       <Sidebar />
       <div className="absolute inline space-x-4 right-0 m-5 text-white">
-        {isLogged === false ?
+        {isLogged === false || !user ?
           <>
             <button onClick={() => router.push("/login")} className="bg-[#282c34] font-bold rounded-md p-2">Se connecter</button>
             <button onClick={() => router.push("/register")} className="bg-cyan-400 font-bold hover:bg-cyan-500 rounded-md p-2">S'inscrire</button>
           </>
           :
           <>
-            <button onClick={() => {}} className="bg-[#282c34] font-bold rounded-md p-2">Bonjour User</button>
+            <button onClick={() => {}} className="bg-[#282c34] font-bold rounded-md p-2">Bonjour { user.username ? user.username : user.firstname}</button>
             <button onClick={() => logout()} className="bg-cyan-400 font-bold hover:bg-cyan-500 rounded-md p-2">Se déconnecter</button>
           </>
         }

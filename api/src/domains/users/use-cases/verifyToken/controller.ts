@@ -3,12 +3,12 @@ import { Result } from "@shared/Results"
 
 import { graphqlProps } from "../../infra/graphql/resolvers"
 
-import { UserMeUseCase } from "./use-case"
+import { UserVerifyTokenUseCase } from "./use-case"
 
-export class UserMeController implements BasicController {
-  useCase: UserMeUseCase
+export class UserVerifyTokenController implements BasicController {
+  useCase: UserVerifyTokenUseCase
 
-  constructor(useCase: UserMeUseCase) {
+  constructor(useCase: UserVerifyTokenUseCase) {
     this.useCase = useCase
   }
 
@@ -23,8 +23,8 @@ export class UserMeController implements BasicController {
       return Result.fail(userMeResult.getErrors())
     }
 
-    const userInfo = userMeResult.getValue()
+    const accessToken = userMeResult.getValue()
 
-    return Result.ok(userInfo)
+    return Result.ok({ accessToken })
   }
 }

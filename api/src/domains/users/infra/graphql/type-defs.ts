@@ -59,11 +59,29 @@ const typeDefs = gql`
     values: TokenResponseData
   }
 
+  type UserData {
+    firstname: String!
+    lastname: String!
+    email: String!
+    username: String
+  }
+
+  type UserResponse implements QueryResponse {
+    code: Int!,
+    isSuccess: Boolean!
+    errors: [Error]!
+    values: UserData
+  }
+
   type Mutation {
     createUser(input: UserInput!): MutationResponse!
     updateUser(input: UserUpdateInput!): MutationResponse!
     login(input: LoginInput!): LoginResponse!
     verifyToken(userId: String!): TokenResponse!
+  }
+
+  extend type Query {
+    me(userId: String): UserResponse!
   }
 `
 

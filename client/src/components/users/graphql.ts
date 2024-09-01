@@ -15,3 +15,22 @@ mutation verifyToken($userId: String!) {
   }
 }
 `
+
+export const getMeQuery = gql`
+  query me($userId: String) {
+    me(userId: $userId) {
+      code
+      isSuccess
+      errors {
+        field
+        message
+      }
+      values {
+        firstname
+        lastname
+        email
+        username
+      }
+    }
+  }
+`
