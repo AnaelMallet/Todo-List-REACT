@@ -22,13 +22,12 @@ const typeDefs = gql`
   }
 
   input UserUpdateInput {
-    uuid: ID
+    uuid: ID!
     firstname: String
     lastname: String
     email: String
     username: String
     password: String
-    confirmationPassword: String
   }
 
   input LoginInput {
@@ -45,7 +44,7 @@ const typeDefs = gql`
     code: Int!,
     isSuccess: Boolean!
     errors: [Error]!
-    values: LoginResponseData!
+    values: LoginResponseData
   }
 
   type TokenResponseData {

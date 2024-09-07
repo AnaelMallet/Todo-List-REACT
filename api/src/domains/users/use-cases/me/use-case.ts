@@ -39,7 +39,7 @@ export class UserMeUseCase implements BasicUseCase {
       email: user.email.value,
       username: user.username
     }
-    
+
     return Result.ok(userInfo)
   }
 }
