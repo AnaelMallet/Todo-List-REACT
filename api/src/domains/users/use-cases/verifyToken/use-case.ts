@@ -31,7 +31,7 @@ export class UserVerifyTokenUseCase implements BasicUseCase {
 
     let newAccessToken = null
 
-    jwt.verify(user.props.accessToken, process.env.JWT_KEY, async (err) => {
+    jwt.verify(user.props.accessToken, process.env.JWT_KEY, (err) => {
       if (err) {
         if (err.message !== "jwt expired") {
           return Result.fail(new DomainError(err.name, err.message))
@@ -56,7 +56,7 @@ export class UserVerifyTokenUseCase implements BasicUseCase {
       return Result.ok(newAccessToken)
 
     } else {
-      return Result.ok()
+      return Result.ok(user.props.accessToken)
     }
   }
 }

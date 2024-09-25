@@ -1,9 +1,6 @@
 const basicResolvers = {
-  Query: {
-    helloFresh() {
-      return "hello world !"
-    }
-  }
+  Query: {},
+  Mutation: {}
 }
 
 export default basicResolvers

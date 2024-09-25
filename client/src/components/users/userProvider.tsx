@@ -1,4 +1,4 @@
-import { createContext, Dispatch, SetStateAction, useCallback, useContext, useEffect, useLayoutEffect, useState } from "react"
+import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
 import { ApolloQueryResult, OperationVariables, useMutation, useQuery } from "@apollo/client"
 import client from "@/app/graphql-api"
 import { useRouter } from "next/navigation"
@@ -25,7 +25,8 @@ type UserContextType = {
   user: User | null,
   userId: string | null,
   refetch: (variables?: Partial<OperationVariables> | undefined) => Promise<ApolloQueryResult<any>>,
-  setUser: Dispatch<SetStateAction<User | null>>
+  setUser: Dispatch<SetStateAction<User | null>>,
+  userContext: any
 }
 
 export const UserContext = createContext<UserContextType>({} as UserContextType)
@@ -40,6 +41,7 @@ export default function UserProvider(props: any) {
   const [ isLogged, setIsLogged ] = useState<boolean>(false)
   const [isLoading , setIsLoading] = useState<boolean>(true)
   const [ user, setUser ] = useState<User | null>(null)
+  const [ userContext, setUserContext ] = useState<any>(null)
   const [mutateFunction] = useMutation(verifyTokenMutation, { client })
   const { dispatch } = useNotification()
   const router = useRouter()
@@ -70,16 +72,23 @@ export default function UserProvider(props: any) {
 
         if (responseErrors.length > 0) {
           dispatch(addNotification(responseErrors[0].message, false))
-          setUserId(null)
-          setIsLogged(false)
+          setUserId(() => {
+            return null
+          })
+          setIsLogged(() => {
+            return false
+          })
           removeLocalStorage("userId")
           router.push("/login")
         }
 
         const newAccessToken = response.data.verifyToken.values.accessToken
 
-        if (newAccessToken) {
-          setAccessToken(newAccessToken)
+        if (newAccessToken !== null) {
+          setAccessToken(() => {
+            return newAccessToken
+          })
+          
         }
       }, 10000)
 
@@ -87,6 +96,16 @@ export default function UserProvider(props: any) {
     }
     setIsLoading(false)
   }, [dispatch, mutateFunction, router, userId])
+
+  useEffect(() => {
+    setUserContext(() => {
+      return {
+        headers: {
+          authorization: `Bearer ${accessToken}`
+        }
+      }
+    })
+  }, [accessToken])
 
   if (loading && isLoading) return <></>
 
@@ -99,7 +118,8 @@ export default function UserProvider(props: any) {
       user,
       userId,
       refetch,
-      setUser
+      setUser,
+      userContext
     }}>
       {props.children}
     </UserContext.Provider>

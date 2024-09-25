@@ -72,9 +72,9 @@ const typeDefs = gql`
     values: UserData
   }
 
-  type Mutation {
+  extend type Mutation {
     createUser(input: UserInput!): MutationResponse!
-    updateUser(input: UserUpdateInput!): MutationResponse!
+    updateUser(input: UserUpdateInput!): MutationResponse! @requireAuth
     login(input: LoginInput!): LoginResponse!
     verifyToken(userId: String!): TokenResponse!
   }
