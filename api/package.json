@@ -39,5 +39,10 @@
     "typescript": "^5.4.5",
     "typescript-eslint": "^7.7.0",
     "uuid": "^9.0.1"
+  },
+  "dependencies": {
+    "@graphql-tools/schema": "^10.0.6",
+    "@graphql-tools/utils": "^10.5.4",
+    "graphql-tools": "^9.0.1"
   }
 }

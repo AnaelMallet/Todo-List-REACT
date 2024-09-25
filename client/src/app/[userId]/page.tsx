@@ -11,15 +11,16 @@ import { useState } from "react"
 import * as Yup from "yup"
 
 import { CrossIconSVG, EditIconSVG } from "../svg"
-import client from "../graphql-api"
 
 import { updateUserMutation } from "./graphql"
+import client from "../graphql-api"
 
 function UserPage() {
-  const { userId, user, refetch, setUser } = useUser()
+  const { userId, user, refetch, setUser, userContext } = useUser()
   const { dispatch } = useNotification()
   const router = useRouter()
-  const [mutateFunction, { loading }] = useMutation(updateUserMutation, { client })
+
+  const [mutateFunction, { loading }] = useMutation(updateUserMutation, { client, context: userContext })
 
   const [ isChangingFirstname, setIsChangingFirstname ] = useState<boolean>(false)
   const [ isChangingLastname, setIsChangingLastname ] = useState<boolean>(false)
@@ -114,6 +115,8 @@ function UserPage() {
 
             const response = await mutateFunction({ variables: { input: sendValues } })
             const responseErrors = response.data.updateUser.errors
+
+            console.log(response.data.updateUser)
 
             if (responseErrors.length > 0) {
               dispatch(addNotification(responseErrors[0].message, false))
