@@ -12,7 +12,7 @@ export class Result<T> {
     this.isSuccess = isSuccess
     this.isFailure = !isSuccess
     this.errors = errors && errors.length > 0 ? [...errors as DomainError[]] : []
-    this.values = values ? values as T : undefined
+    this.values = values !== undefined ? values as T : undefined
 
     Object.freeze(this)
   }

@@ -36,18 +36,18 @@ export class UpdateUserUseCase implements BasicUseCase {
     }
 
     if (props.email && props.email !== user.props.email.value) {
-      const result = user.updateEmail(props.email)
+      const updateEmailResult = user.updateEmail(props.email)
 
-      if (result.isFailure === true) {
-        return Result.fail(result.getErrors())
+      if (updateEmailResult.isFailure === true) {
+        return Result.fail(updateEmailResult.getErrors())
       }
     }
 
     if (props.password && Password.comparePassword(props.password, user.props.password.value) === false) {
-      const result  = user.updatePassword(props.password)
+      const updatePasswordResult  = user.updatePassword(props.password)
 
-      if (result.isFailure === true) {
-        return Result.fail(result.getErrors())
+      if (updatePasswordResult.isFailure === true) {
+        return Result.fail(updatePasswordResult.getErrors())
       }
     }
 

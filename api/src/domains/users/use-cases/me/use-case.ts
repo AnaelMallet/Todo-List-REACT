@@ -1,5 +1,3 @@
-import jwt from "jsonwebtoken"
-
 import { BasicUseCase } from "@shared/basicUseCase"
 import { Result } from "@shared/Results"
 
