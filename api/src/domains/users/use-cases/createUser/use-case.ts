@@ -18,6 +18,7 @@ export class CreateUserUseCase implements BasicUseCase {
 
   async execute(args: userPropsDto): Promise<Result<void>> {
     const {
+      uuid,
       firstname,
       lastname,
       email,
@@ -56,7 +57,7 @@ export class CreateUserUseCase implements BasicUseCase {
       email: emailValue,
       username,
       password: passwordResult.getValue()
-    })
+    }, uuid)
 
     if (userResult.isFailure === true) {
       return Result.fail(userResult.getErrors())

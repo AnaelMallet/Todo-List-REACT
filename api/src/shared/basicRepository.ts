@@ -9,4 +9,8 @@ export default abstract class BasicRepository<T extends ObjectLiteral> {
   constructor(entity: EntityTarget<T>) {
     this.repository = appDataSource.getRepository(entity)
   }
+
+  getRepository() {
+    return this
+  }
 }

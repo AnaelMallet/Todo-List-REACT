@@ -11,9 +11,9 @@ import { useState } from "react"
 import * as Yup from "yup"
 
 import { CrossIconSVG, EditIconSVG } from "../svg"
+import client from "../graphql-api"
 
 import { updateUserMutation } from "./graphql"
-import client from "../graphql-api"
 
 function UserPage() {
   const { userId, user, refetch, setUser, userContext } = useUser()
