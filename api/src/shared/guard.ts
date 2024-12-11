@@ -5,7 +5,7 @@ export class Guard {
   public static againstNullOrUndefined(prop: any, propName: string): Result<any> {
     const domainError = new DomainError(propName, "againstNullOrUndefined")
 
-    if (!prop) {
+    if (prop === null || prop === undefined) {
       return Result.fail(domainError)
     }
 

@@ -134,8 +134,15 @@ function UserPage() {
             }
           }}
         >
-          {({ isSubmitting, errors, touched }) => (
-            <Form className="grid grid-cols-1 gap-y-10 w-full text-white">
+          {({ handleSubmit, isSubmitting, errors, touched }) => (
+            <Form
+              className="grid grid-cols-1 gap-y-10 w-full text-white"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSubmit()
+                }
+              }}
+            >
               <div className="grid grid-cols-2 gap-x-5 px-5 place-items-center">
                 <div>
                   <div className="flex place-items-center gap-3">
