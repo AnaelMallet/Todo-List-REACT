@@ -47,8 +47,15 @@ function LoginPage() {
               }
             }}
           >
-          {({ isSubmitting, errors, touched }) => (
-            <Form className="grid grid-cols-1 gap-y-10 w-full text-white">
+          {({ handleSubmit, isSubmitting, errors, touched }) => (
+            <Form
+              className="grid grid-cols-1 gap-y-10 w-full text-white"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSubmit()
+                }
+              }}
+            >
               <div className="px-5">
                 <label className="bg-transparent" htmlFor="login">Adresse email/Nom d'utilisateur <span className="text-red-600">*</span></label>
                 <Field

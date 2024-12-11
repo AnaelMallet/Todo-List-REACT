@@ -38,8 +38,15 @@ function RegsiterPage() {
             }
           }}
         >
-          {({ isSubmitting, errors, touched }) => (
-            <Form className="grid grid-cols-1 gap-y-10 w-full text-white">
+          {({ handleSubmit, isSubmitting, errors, touched }) => (
+            <Form
+              className="grid grid-cols-1 gap-y-10 w-full text-white"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSubmit()
+                }
+              }}
+            >
               <div className="grid grid-cols-2 gap-x-5 px-5">
                 <div>
                   <label className="bg-transparent" htmlFor="firstname">Prénom <span className="text-red-500">*</span></label>

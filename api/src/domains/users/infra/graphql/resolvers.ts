@@ -1,15 +1,10 @@
+import { graphqlProps } from "@shared/basicResolvers"
+
 import { createUserController } from "../../use-cases/createUser"
 import { updateUserController } from "../../use-cases/updateUser"
 import { loginUserController } from "../../use-cases/login"
 import { userVerifyTokenController } from "../../use-cases/verifyToken"
 import { userMeController } from "../../use-cases/me"
-
-export type graphqlProps = {
-  parent: any
-  args: any
-  context: any
-  info: any
-}
 
 const resolvers = {
   Mutation: {

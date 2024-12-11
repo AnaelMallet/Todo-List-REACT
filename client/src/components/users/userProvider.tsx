@@ -1,7 +1,7 @@
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import { ApolloQueryResult, OperationVariables, useMutation, useQuery } from "@apollo/client"
 import client from "@/app/graphql-api"
-import { useRouter } from "next/navigation"
 
 import { getLocalStorage, removeLocalStorage } from "../utils"
 import { addNotification, useNotification } from "../notifications/NotificationProvider"

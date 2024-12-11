@@ -1,7 +1,6 @@
 import { Result } from "@shared/Results"
-import { BasicController } from "@shared/basicController"
-
-import { graphqlProps } from "../../infra/graphql/resolvers"
+import { BasicController } from "@shared/basicController" 
+import { graphqlProps } from "@shared/basicResolvers"
 
 import { CreateUserUseCase } from "./use-case"
 

@@ -3,9 +3,12 @@ import {
   Column, 
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryColumn,
   UpdateDateColumn
 } from "typeorm"
+
+import ListEntity from "src/domains/lists/infra/databases/entities/list"
 
 @Entity({ name: "users" })
 export default class UserEntity extends BaseEntity {
@@ -32,6 +35,9 @@ export default class UserEntity extends BaseEntity {
 
   @Column("text", { nullable: true })
   refreshToken: string
+
+  @OneToMany(() => ListEntity, list => list.user)
+  lists: ListEntity[]
 
   @CreateDateColumn()
   createdDate: Date

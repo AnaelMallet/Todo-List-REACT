@@ -4,7 +4,7 @@ import dotenv from "dotenv"
 import { defaultFieldResolver, GraphQLSchema } from "graphql"
 import { makeExecutableSchema } from "graphql-tools"
 import { mapSchema, MapperKind, getDirective } from "@graphql-tools/utils"
-import jwt from "jsonwebtoken"
+import jwt, { JwtPayload } from "jsonwebtoken"
 
 import { createDataSource } from "./ormconfig"
 import { getGraphqlAPI } from "./getFiles"
@@ -28,6 +28,18 @@ const main = async () => {
   const graphqlPromise = getGraphqlAPI()
 
   const { typeDefs, resolvers } = await Promise.resolve(graphqlPromise)
+  
+  function tokenIsValid(accessToken: string): boolean {
+    let tokenIsValid = true
+
+    jwt.verify(accessToken, process.env.JWT_KEY, (error) => {
+      if (error) {
+        tokenIsValid = false
+      }
+    })
+
+    return tokenIsValid
+  }
 
   function requireAuthDirective(
     directiveName: string,
@@ -43,7 +55,7 @@ const main = async () => {
             const { resolve = defaultFieldResolver } = fieldConfig
 
             fieldConfig.resolve = async function (source, args, context, info) {
-              if (!context.headers.authorization.substr(7) || !userTokenIsValid(context.headers.authorization.substr(7))) {
+              if (!context.user.authorizationToken.substr(7) || !userTokenIsValid(context.user.authorizationToken.substr(7))) {
                 return Result.fail(new DomainError("authentication", "Your are not authorized to execute this request !"))
               }
 
@@ -57,19 +69,30 @@ const main = async () => {
     }
   }
 
-  function tokenIsValid(accessToken: string): boolean {
-    let tokenIsValid = true
+  const { requireAuthDirectiveTypeDefs, requireAuthDirectiveTransformer } = requireAuthDirective("requireAuth", tokenIsValid)
 
-    jwt.verify(accessToken, process.env.JWT_KEY, (error) => {
-      if (error) {
-        tokenIsValid = false
+  function auth (req, res, next) {
+    if (typeof req.headers.authorization !== 'string') {
+      return next();
+    }
+  
+    const header = req.headers.authorization;
+    const token = header.replace('Bearer ', '');
+    try {
+      const jwtData = jwt.verify(token, process.env.JWT_KEY) as JwtPayload
+
+      if (jwtData && jwtData.userId) {
+        req.headers.userId = jwtData.userId
+      } else {
+        return Result.fail(new DomainError("authentication", "Your are not authorized to execute this request !"))
       }
-    })
-
-    return tokenIsValid
+    } catch (err) {
+      return Result.fail(new DomainError("authentication", "Your are not authorized to execute this request !"))
+    }
+    return next();
   }
 
-  const { requireAuthDirectiveTypeDefs, requireAuthDirectiveTransformer } = requireAuthDirective("requireAuth", tokenIsValid)
+  app.use(auth)
 
   let schema = makeExecutableSchema({
     typeDefs: [
@@ -85,8 +108,9 @@ const main = async () => {
     schema,
     context: ({ req }) => {
       return {
-        headers: {
-          authorization: `${req.headers.authorization}`
+        user: {
+          authorizationToken: req.headers.authorization,
+          userId: req.headers.userId
         }
       }
     }
