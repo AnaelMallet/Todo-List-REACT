@@ -1,12 +1,13 @@
 import { v4 as uuid } from "uuid"
 
+import { userPropsDto } from "src/domains/users/use-cases/createUser/dto"
+import { CreateUserUseCase } from "src/domains/users/use-cases/createUser/use-case"
+import { userTestRepository } from "src/domains/users/infra/databases/repositories"
+
 import { listTestRepository } from "../../infra/databases/repositories"
 
 import { CreateListuseCase } from "./use-case"
 import { listPropsDto } from "./dto"
-import { userPropsDto } from "src/domains/users/use-cases/createUser/dto"
-import { CreateUserUseCase } from "src/domains/users/use-cases/createUser/use-case"
-import { userTestRepository } from "src/domains/users/infra/databases/repositories"
 
 describe("test the createList use-case", () => {
   const createListUseCase = new CreateListuseCase(listTestRepository)
@@ -35,8 +36,8 @@ describe("test the createList use-case", () => {
   })
 
   test("Should create a list", async () => {
-    const cretaeListResult = await createListUseCase.execute(listProps)
+    const createListResult = await createListUseCase.execute(listProps)
 
-    expect(cretaeListResult.isSuccess).toBe(true)
+    expect(createListResult.isSuccess).toBe(true)
   })
 })

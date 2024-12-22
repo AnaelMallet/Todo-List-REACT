@@ -20,7 +20,7 @@ export class UserDomainRepository implements IUserDomainRepository {
         return Result.fail()
       }
 
-      return await userTransformer.toDomain(user)
+      return userTransformer.toDomain(user)
   }
 
   async findOneByEmail(email: string): Promise<Result<User>> {
@@ -30,11 +30,11 @@ export class UserDomainRepository implements IUserDomainRepository {
         return Result.fail()
       }
 
-      return await userTransformer.toDomain(user)
+      return userTransformer.toDomain(user)
   }
 
   async save(props: any): Promise<void> {
-    const user = await userTransformer.toDatabase(props)
+    const user = userTransformer.toDatabase(props)
 
     await this.repository.save(user)
   }

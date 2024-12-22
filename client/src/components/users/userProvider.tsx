@@ -65,11 +65,11 @@ export default function UserProvider(props: any) {
   }, [userId])
 
   useEffect(() => {
-    if (userId) {
-      const interval = setInterval(async () => {
+    const initializeAccessToken = async () => {
+      if (userId) {
         const response = await mutateFunction({ variables: { userId } })
         const responseErrors = response.data.verifyToken.errors
-
+  
         if (responseErrors.length > 0) {
           dispatch(addNotification(responseErrors[0].message, false))
           setUserId(() => {
@@ -81,20 +81,45 @@ export default function UserProvider(props: any) {
           removeLocalStorage("userId")
           router.push("/login")
         }
-
+  
         const newAccessToken = response.data.verifyToken.values.accessToken
-
+  
         if (newAccessToken !== null) {
           setAccessToken(() => {
             return newAccessToken
           })
-          
         }
-      }, 10000)
-
-      return () => clearInterval(interval)
+        const interval = setInterval(async () => {
+          const response = await mutateFunction({ variables: { userId } })
+          const responseErrors = response.data.verifyToken.errors
+  
+          if (responseErrors.length > 0) {
+            dispatch(addNotification(responseErrors[0].message, false))
+            setUserId(() => {
+              return null
+            })
+            setIsLogged(() => {
+              return false
+            })
+            removeLocalStorage("userId")
+            router.push("/login")
+          }
+  
+          const newAccessToken = response.data.verifyToken.values.accessToken
+  
+          if (newAccessToken !== null) {
+            setAccessToken(() => {
+              return newAccessToken
+            })
+            
+          }
+        }, 10000)
+  
+        return () => clearInterval(interval)
+      }
+      setIsLoading(false)
     }
-    setIsLoading(false)
+    initializeAccessToken()
   }, [dispatch, mutateFunction, router, userId])
 
   useEffect(() => {

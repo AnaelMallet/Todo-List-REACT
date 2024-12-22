@@ -7,19 +7,31 @@ import ListEntity from "../infra/databases/entities/list"
 import { List, ListProps } from "../entities/list"
 
 export class ListTransformer extends BasicTransformer<List, ListEntity> {
-  async toDomain(databaseEntity: ListEntity): Promise<Result<List>> {
+  arrayToDomain(databaseEntities: ListEntity[]): Result<List[]> {
+    const domainLists: List[] = []
+    
+    for (const databaseEntity of databaseEntities) {
+      const domainList = this.toDomain(databaseEntity)
+
+      domainLists.push(domainList.getValue())
+    }
+
+    return Result.ok(domainLists)
+  }
+
+  toDomain(databaseEntity: ListEntity): Result<List> {
       const props: ListProps = {
         name: databaseEntity.name,
         isFavorite: databaseEntity.isFavorite,
         userId: databaseEntity.user.uuid
       }
 
-      const domainList = List.create(props, databaseEntity.uuid)
+      const list = List.create(props, databaseEntity.uuid)
 
-      return domainList
+      return list
   }
 
-  async toDatabase(domainEntity: List): Promise<ListEntity> {
+  toDatabase(domainEntity: List): ListEntity {
       const entityList = new ListEntity()
       const userEntity = new UserEntity()
 

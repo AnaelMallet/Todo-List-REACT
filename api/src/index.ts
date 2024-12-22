@@ -55,9 +55,14 @@ const main = async () => {
             const { resolve = defaultFieldResolver } = fieldConfig
 
             fieldConfig.resolve = async function (source, args, context, info) {
-              if (!context.user.authorizationToken.substr(7) || !userTokenIsValid(context.user.authorizationToken.substr(7))) {
+              if (!context.user.authorizationToken || !context.user.authorizationToken.substr(7) || !userTokenIsValid(context.user.authorizationToken.substr(7))) {
                 return Result.fail(new DomainError("authentication", "Your are not authorized to execute this request !"))
               }
+
+              const token = context.user.authorizationToken.substr(7)
+              const jwtData = jwt.verify(token, process.env.JWT_KEY) as JwtPayload
+
+              context.user.userId = jwtData.userId
 
               return await resolve(source, args, context, info)
             }
@@ -70,29 +75,6 @@ const main = async () => {
   }
 
   const { requireAuthDirectiveTypeDefs, requireAuthDirectiveTransformer } = requireAuthDirective("requireAuth", tokenIsValid)
-
-  function auth (req, res, next) {
-    if (typeof req.headers.authorization !== 'string') {
-      return next();
-    }
-  
-    const header = req.headers.authorization;
-    const token = header.replace('Bearer ', '');
-    try {
-      const jwtData = jwt.verify(token, process.env.JWT_KEY) as JwtPayload
-
-      if (jwtData && jwtData.userId) {
-        req.headers.userId = jwtData.userId
-      } else {
-        return Result.fail(new DomainError("authentication", "Your are not authorized to execute this request !"))
-      }
-    } catch (err) {
-      return Result.fail(new DomainError("authentication", "Your are not authorized to execute this request !"))
-    }
-    return next();
-  }
-
-  app.use(auth)
 
   let schema = makeExecutableSchema({
     typeDefs: [

@@ -2,19 +2,30 @@ import { gql } from "apollo-server-express"
 
 const typeDefs = gql`
   type List {
-    uuid: ID
+    uuid: ID!
     name: String!
     isFavorite: Boolean!
-    userId: String!
   }
 
   input ListInput {
-    name: String!
-    isFavorite: Boolean!
+    uuid: ID
+    name: String
+    isFavorite: Boolean
+  }
+
+  type ListResponse implements QueryResponse {
+    code: Int!
+    isSuccess: Boolean!
+    errors: [Error]!
+    values: [List]!
   }
 
   extend type Mutation {
     createList(input: ListInput!): MutationResponse! @requireAuth
+  }
+
+  extend type Query {
+    lists: ListResponse! @requireAuth
   }
 `
 export default typeDefs

@@ -13,17 +13,11 @@ export class ListDomainRepository implements IListDomainRepository {
     this.repository = repository
   }
 
-  async findAll(): Promise<Result<List[]>> {
-      const entityLists = await this.repository.findAll()
-      const domainLists: List[] = []
+  async findAllByUserId(uuid: string): Promise<Result<List[]>> {
+      const entityLists = await this.repository.findAllByUserId(uuid)
+      const domainLists = listTransformer.arrayToDomain(entityLists)
 
-      for (const list of entityLists) {
-        const domainList = await listTransformer.toDomain(list)
-
-        domainLists.push(domainList.getValue())
-      }
-
-      return Result.ok(domainLists)
+      return domainLists
   }
 
   async findOneByUuid(uuid: string): Promise<Result<List>> {
