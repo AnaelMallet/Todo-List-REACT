@@ -9,7 +9,7 @@ function AddIconSVG() {
 
 function StarIconSVG() {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="gold" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
     </svg>
   )
@@ -17,7 +17,7 @@ function StarIconSVG() {
 
 function FullStarIconSVG() {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="gold" stroke="gold" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="gold" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
     </svg>
   )
@@ -52,8 +52,16 @@ function CrossIconSVG() {
 
 function EditIconSVG() {
   return (
-    <svg x="0px" y="0px" width="24" height="24" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+    <svg x="0px" y="0px" fill="#FFFFFF" width="24" height="24" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
       <path d="M30.75 7.002c0-0 0-0.001 0-0.002 0-0.207-0.084-0.395-0.219-0.531l-5-5c-0.136-0.136-0.324-0.22-0.531-0.22s-0.395 0.084-0.531 0.22v0l-20.999 20.999c-0.087 0.088-0.153 0.198-0.189 0.321l-0.001 0.005-2 7c-0.018 0.062-0.029 0.133-0.029 0.207 0 0.413 0.335 0.748 0.748 0.748 0.001 0 0.001 0 0.002 0h-0c0.001 0 0.002 0 0.003 0 0.075 0 0.146-0.011 0.214-0.033l-0.005 0.001 6.788-2c0.124-0.037 0.23-0.101 0.315-0.186l-0 0 21.212-21c0.137-0.135 0.223-0.323 0.223-0.531v-0zM8.395 27.334l-5.299 1.561 1.572-5.502 15.335-15.335 3.931 3.892zM25 10.895l-3.937-3.898 3.937-3.937 3.938 3.937z"></path>
+    </svg>
+  )
+}
+
+function DeleteIconSVG() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
+      <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
     </svg>
   )
 }
@@ -65,5 +73,6 @@ export {
   FullStarIconSVG,
   CheckIconSVG,
   CrossIconSVG,
-  EditIconSVG
+  EditIconSVG,
+  DeleteIconSVG
 }

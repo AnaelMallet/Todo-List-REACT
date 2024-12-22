@@ -7,8 +7,10 @@ export class ListTestRepository implements IListDomainRepository {
   array: List[] = []
   repository: null
 
-  findAll(): Promise<Result<List[]>> {
-    return Promise.resolve(Result.ok(this.array))
+  findAllByUserId(uuid: string): Promise<Result<List[]>> {
+    const foundLists = this.array.filter(list => list.userId === uuid)
+
+    return Promise.resolve(Result.ok(foundLists))
   }
 
   findOneByUuid(uuid: string): Promise<Result<List>> {

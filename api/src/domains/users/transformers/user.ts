@@ -7,7 +7,11 @@ import { Email } from "../value-objects/email"
 import { Password } from "../value-objects/password"
 
 export class UserTransformer extends BasicTransformer<User, UserEntity> {
-  async toDomain(databaseEntity: UserEntity): Promise<Result<User>> {
+  arrayToDomain(databaseEntities: UserEntity[]): Result<User[]> {
+    throw new Error("Method not implemented.")
+  }
+
+  toDomain(databaseEntity: UserEntity): Result<User> {
     const emailResult = Email.create(databaseEntity.email)
     const passwordResult = Password.create(databaseEntity.password)
 
@@ -26,7 +30,7 @@ export class UserTransformer extends BasicTransformer<User, UserEntity> {
     return domainUser
   }
 
-  async toDatabase(domainEntity: User): Promise<UserEntity> {
+  toDatabase(domainEntity: User): UserEntity {
       const entityUser = new UserEntity()
 
       entityUser.uuid = domainEntity.uuid

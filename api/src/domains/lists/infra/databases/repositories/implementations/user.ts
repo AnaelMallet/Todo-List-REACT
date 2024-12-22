@@ -7,9 +7,11 @@ import { IListRepository } from "../I_list"
 export class ListRepository extends BasicRepository<List> implements IListRepository {
   alias = "lists"
   
-  async findAll(): Promise<List[]> {
+  async findAllByUserId(uuid: string): Promise<List[]> {
     return await this.repository
       .createQueryBuilder(this.alias)
+      .innerJoinAndSelect(`${this.alias}.user`, "user_lists")
+      .where(`${this.alias}.user_uuid = :uuid`, { uuid })
       .addOrderBy(`${this.alias}.name`, "ASC")
       .addOrderBy(`${this.alias}.is_favorite`, "ASC")
       .getMany()

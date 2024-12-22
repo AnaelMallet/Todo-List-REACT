@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client"
 
-export const createListMutation = gql`
+const createListMutation = gql`
   mutation CreateList($input: ListInput!) {
     createList(input: $input) {
       code
@@ -11,4 +11,27 @@ export const createListMutation = gql`
       }
     }
   }
-` 
+`
+
+const getUserListsQuery = gql`
+  query Lists {
+    lists {
+      code
+      isSuccess
+      errors {
+        field
+        message
+      }
+      values {
+        uuid
+        name
+        isFavorite
+      }
+    }
+  }
+`
+
+export {
+  createListMutation,
+  getUserListsQuery
+}

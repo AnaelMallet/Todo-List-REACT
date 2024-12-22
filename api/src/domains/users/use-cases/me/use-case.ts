@@ -31,7 +31,7 @@ export class UserMeUseCase implements BasicUseCase {
 
     const user = foundUserResult.getValue()
 
-    const userInfo = {
+    const userInfo: UserInfo = {
       firstname: user.firstname,
       lastname: user.lastname,
       email: user.email.value,
