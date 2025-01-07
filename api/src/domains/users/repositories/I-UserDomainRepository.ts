@@ -5,5 +5,5 @@ import { User } from "../entities/user"
 export interface IUserDomainRepository {
   findOneByUuid(uuid: string): Promise<Result<User>>
   findOneByEmail(email: string): Promise<Result<User>>
-  save(props: any): Promise<void>
+  save(props: User): Promise<void>
 }

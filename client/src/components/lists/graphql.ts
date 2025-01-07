@@ -31,7 +31,21 @@ const getUserListsQuery = gql`
   }
 `
 
+const toggleFavoriteMutation = gql`
+  mutation ToggleIsFavorite($listUuid: String!) {
+    toggleIsFavorite(listUuid: $listUuid) {
+      code
+      isSuccess
+      errors {
+        field
+        message
+      }
+    }
+  }
+`
+
 export {
   createListMutation,
-  getUserListsQuery
+  getUserListsQuery,
+  toggleFavoriteMutation
 }

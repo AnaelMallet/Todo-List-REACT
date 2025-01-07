@@ -6,11 +6,11 @@ import { userTestRepository } from "src/domains/users/infra/databases/repositori
 
 import { listTestRepository } from "../../infra/databases/repositories"
 
-import { CreateListuseCase } from "./use-case"
+import { CreateListUseCase } from "./use-case"
 import { listPropsDto } from "./dto"
 
 describe("test the createList use-case", () => {
-  const createListUseCase = new CreateListuseCase(listTestRepository)
+  const createListUseCase = new CreateListUseCase(listTestRepository)
 
   const userUuid = uuid()
   const listProps: listPropsDto = {

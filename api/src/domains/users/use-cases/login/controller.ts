@@ -12,9 +12,7 @@ export class LoginUserController implements BasicController {
   }
 
   async executeImplementation(props: graphqlProps): Promise<Result<any>> {
-    const {
-      args
-    } = props
+    const { args } = props
 
     const loginUserResult = await this.useCase.execute(args.input)
 

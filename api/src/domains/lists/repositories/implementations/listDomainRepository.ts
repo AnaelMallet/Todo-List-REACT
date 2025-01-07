@@ -27,11 +27,11 @@ export class ListDomainRepository implements IListDomainRepository {
         return Result.fail()
       }
 
-      return await listTransformer.toDomain(list)
+      return listTransformer.toDomain(list)
   }
 
-  async save(props: any): Promise<void> {
-    const list = await listTransformer.toDatabase(props)
+  async save(props: List): Promise<void> {
+    const list = listTransformer.toDatabase(props)
 
     await this.repository.save(list)
   }

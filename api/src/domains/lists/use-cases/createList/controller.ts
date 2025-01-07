@@ -1,12 +1,13 @@
 import { BasicController } from "@shared/basicController"
 import { graphqlProps } from "@shared/basicResolvers"
 import { Result } from "@shared/Results"
-import { CreateListuseCase } from "./use-case"
+import { CreateListUseCase } from "./use-case"
+import { listPropsDto } from "./dto"
 
 export class CreateListController implements BasicController {
-  useCase: CreateListuseCase
+  useCase: CreateListUseCase
 
-  constructor(useCase: CreateListuseCase) {
+  constructor(useCase: CreateListUseCase) {
     this.useCase = useCase
   }
 
@@ -16,12 +17,12 @@ export class CreateListController implements BasicController {
       context
     } = props
 
-    const input = {
+    const dto: listPropsDto = {
       ...args.input,
       userId: context.user.userId
     }
 
-    const createListResult = await this.useCase.execute(input)
+    const createListResult = await this.useCase.execute(dto)
 
     if (createListResult.isFailure === true) {
       return Result.fail(createListResult.getErrors())
