@@ -60,7 +60,7 @@ describe("test the me use-case" , () => {
     expect(me).toBe(null)
   })
 
-  test("should not return the user because the user not exist", async () => {
+  test("should not return the user because the user ", async () => {
     const meResult = await meUseCase.execute(uuid())
 
     expect(meResult.isSuccess).toBe(false)

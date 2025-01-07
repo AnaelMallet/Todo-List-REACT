@@ -5,5 +5,5 @@ import { List } from "../entities/list"
 export interface IListDomainRepository {
   findAllByUserId(uuid: string): Promise<Result<List[]>>
   findOneByUuid(uuid: string): Promise<Result<List>>
-  save(props: any): Promise<void>
+  save(props: List): Promise<void>
 }

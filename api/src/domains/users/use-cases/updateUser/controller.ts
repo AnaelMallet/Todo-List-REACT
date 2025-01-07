@@ -12,9 +12,7 @@ export class UpdateUserController implements BasicController {
   }
   
   async executeImplementation(props: graphqlProps): Promise<Result<any>> {
-    const {
-      args
-    } = props
+    const { args } = props
 
     const userResult = await this.useCase.execute(args.input)
 

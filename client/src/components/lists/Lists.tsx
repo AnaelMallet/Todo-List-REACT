@@ -3,26 +3,27 @@
 import {
   ApolloError,
   ApolloQueryResult,
-  LazyQueryExecFunction,
   OperationVariables,
   useLazyQuery,
   useMutation
 } from "@apollo/client"
-import client from "@/app/graphql-api"
 import { Field, Form, Formik } from "formik"
 import { Dispatch, SetStateAction, useEffect } from "react"
 
-import { addNotification, useNotification } from "../notifications/NotificationProvider"
-import { useUser } from "../users/userProvider"
-
-import { initialValues, validationSchema } from "./api"
-import { createListMutation, getUserListsQuery } from "./graphql"
+import client from "@/app/graphql-api"
 import {
   DeleteIconSVG,
   EditIconSVG,
   FullStarIconSVG,
   StarIconSVG
 } from "@/app/svg"
+
+import { addNotification, useNotification } from "../notifications/NotificationProvider"
+import { useUser } from "../users/userProvider"
+
+import { initialValues, validationSchema } from "./api"
+import { createListMutation, getUserListsQuery, toggleFavoriteMutation } from "./graphql"
+
 
 interface ListProps {
   uuid: string
@@ -40,6 +41,10 @@ function ListsArray(props: ListsArrayProps) {
     lists
   } = props
 
+  const { dispatch } = useNotification()
+  const { userContext } = useUser()
+  const [mutateFunction] = useMutation(toggleFavoriteMutation, { client, context: userContext })
+
   return (
     <div className="mt-7 space-y-4 pt-1 pb-3 mr-3 overflow-y-auto max-h-[49.09rem] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-lg [&::-webkit-scrollbar]:pr-3">
       {
@@ -50,7 +55,24 @@ function ListsArray(props: ListsArrayProps) {
                 <span onClick={() => {}} className="cursor-pointer text-lg truncate hover:bg-gray-700 w-full rounded-md pl-2">{list.name}</span>
                 <span className="flex space-x-2">
                   <button><EditIconSVG/></button>
-                  <button>{ list.isFavorite ? <FullStarIconSVG/> : <StarIconSVG/> }</button>
+                  <button
+                    onClick={async () => {
+                      const response = await mutateFunction({ variables: { listUuid: list.uuid } })
+                      const responseErrors = response.data.toggleIsFavorite.errors
+
+                      if (responseErrors.length > 0) {
+                        dispatch(addNotification(responseErrors[0].message, false))
+
+                        return
+                      }
+
+                      list.isFavorite
+                      ? dispatch(addNotification(`La liste "${list.name}" n'est plus en favoris.`, true))
+                      : dispatch(addNotification(`La liste "${list.name}" a été mise en favoris.`, true))
+
+                      props.refetch()
+                    }}
+                  >{ list.isFavorite ? <FullStarIconSVG/> : <StarIconSVG/> }</button>
                   <button><DeleteIconSVG/></button>
                 </span>
               </div>
@@ -72,10 +94,10 @@ interface QueryInfo {
 }
 
 function ListsArrayComponent(props: QueryInfo) {
+  if (!props.userIsLogged) return <p className="mt-7 flex justify-center text-lg">Connectez-vous pour voir vos listes.</p>
   if (props.loading) return <p className="mt-7 flex justify-center text-lg">Chargement ...</p>
   if (props.error) return <p className="mt-7 flex justify-center text-lg">Une erreur est survenu.</p>
   if (!props.data || props.data.lists.values.length === 0) return <p className="mt-7 flex justify-center text-lg">... Aucune liste pour le moment.</p>
-  if (!props.userIsLogged) return <p className="mt-7 flex justify-center text-lg">Connectez-vous pour voir vos listes.</p>
 
   return (
     <ListsArray lists={props.data.lists.values} refetch={props.refetch}/>

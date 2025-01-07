@@ -12,9 +12,7 @@ export class UserVerifyTokenController implements BasicController {
   }
 
   async executeImplementation(props: graphqlProps): Promise<Result<any>> {
-    const {
-      args
-    } = props
+    const { args } = props
 
     const userMeResult = await this.useCase.execute(args.userId)
 

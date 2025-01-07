@@ -33,7 +33,7 @@ export class UserDomainRepository implements IUserDomainRepository {
       return userTransformer.toDomain(user)
   }
 
-  async save(props: any): Promise<void> {
+  async save(props: User): Promise<void> {
     const user = userTransformer.toDatabase(props)
 
     await this.repository.save(user)

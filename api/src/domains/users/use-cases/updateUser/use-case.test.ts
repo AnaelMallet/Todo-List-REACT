@@ -102,7 +102,7 @@ describe("test the updateUser use-case", () => {
     expect(updateUserResult.isSuccess).toBe(true)
   })
 
-  test("should not update the user because the user not exist", async () => {
+  test("should not update the user because the user don't exist", async () => {
     const updateUserProps = {...userProps}
     
     updateUserProps.uuid = uuid()

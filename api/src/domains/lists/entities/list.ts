@@ -36,4 +36,8 @@ export class List extends Entity<List, ListProps> {
 
     return Result.ok(list)
   }
+
+  toggleIsFavorite(): void {
+    this.props.isFavorite = !this.props.isFavorite
+  }
 }

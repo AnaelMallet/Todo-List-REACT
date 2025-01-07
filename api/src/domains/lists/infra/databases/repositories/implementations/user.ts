@@ -12,14 +12,15 @@ export class ListRepository extends BasicRepository<List> implements IListReposi
       .createQueryBuilder(this.alias)
       .innerJoinAndSelect(`${this.alias}.user`, "user_lists")
       .where(`${this.alias}.user_uuid = :uuid`, { uuid })
+      .addOrderBy(`${this.alias}.is_favorite`, "DESC")
       .addOrderBy(`${this.alias}.name`, "ASC")
-      .addOrderBy(`${this.alias}.is_favorite`, "ASC")
       .getMany()
   }
 
   async findOneByUuid(uuid: string): Promise<List> {
       return await this.repository
         .createQueryBuilder(this.alias)
+        .innerJoinAndSelect(`${this.alias}.user`, "user_lists")
         .where(`${this.alias}.uuid = :uuid`, { uuid })
         .getOne()
   }

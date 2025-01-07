@@ -6,7 +6,7 @@ import { List } from "../../entities/list"
 
 import { listPropsDto } from "./dto"
 
-export class CreateListuseCase implements BasicUseCase {
+export class CreateListUseCase implements BasicUseCase {
   repository: ListDomainRepository
 
   constructor(repository: ListDomainRepository) {
