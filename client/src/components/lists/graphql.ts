@@ -44,8 +44,22 @@ const toggleFavoriteMutation = gql`
   }
 `
 
+const updateListMutation = gql`
+  mutation UpdateListName($input: UpdateListInput!) {
+    updateList(input: $input) {
+      code
+      isSuccess
+      errors {
+        field
+        message
+      }
+    }
+  }
+`
+
 export {
   createListMutation,
   getUserListsQuery,
-  toggleFavoriteMutation
+  toggleFavoriteMutation,
+  updateListMutation
 }

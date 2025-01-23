@@ -3,7 +3,12 @@ import { Dispatch, useEffect, useState } from "react"
 
 import { CheckIconSVG, CrossIconSVG } from "@/app/svg"
 
-import { NotificationInterface, NotificationAction, removeNotification, useNotification } from "./NotificationProvider"
+import {
+  NotificationInterface,
+  NotificationAction,
+  removeNotification,
+  useNotification
+} from "./NotificationProvider"
 
 type Notification = {
   notification: NotificationInterface

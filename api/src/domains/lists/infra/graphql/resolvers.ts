@@ -3,6 +3,7 @@ import { graphqlProps } from "@shared/basicResolvers"
 import { createListController } from "../../use-cases/createList"
 import { listsController } from "../../use-cases/lists"
 import { toggleFavoriteListController } from "../../use-cases/toggleFavoriteList"
+import { updateLIstController } from "../../use-cases/updateList"
 
 const resolvers = {
   Mutation: {
@@ -25,6 +26,16 @@ const resolvers = {
       }
 
       return await toggleFavoriteListController.executeImplementation(props)
+    },
+    updateList: async(parent: any, args: any, context: any, info: any) => {
+      const props: graphqlProps = {
+        parent,
+        args,
+        context,
+        info
+      }
+
+      return await updateLIstController.executeImplementation(props)
     }
   },
   Query: {

@@ -8,7 +8,12 @@ import {
   useMutation
 } from "@apollo/client"
 import { Field, Form, Formik } from "formik"
-import { Dispatch, SetStateAction, useEffect } from "react"
+import {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState
+} from "react"
 
 import client from "@/app/graphql-api"
 import {
@@ -22,13 +27,89 @@ import { addNotification, useNotification } from "../notifications/NotificationP
 import { useUser } from "../users/userProvider"
 
 import { initialValues, validationSchema } from "./api"
-import { createListMutation, getUserListsQuery, toggleFavoriteMutation } from "./graphql"
-
+import {
+  createListMutation,
+  getUserListsQuery,
+  toggleFavoriteMutation,
+  updateListMutation
+} from "./graphql"
 
 interface ListProps {
   uuid: string
   name: string
   isFavorite: boolean
+}
+
+interface UpdateListNameComponentProps {
+  list: ListProps,
+  handleIsUpdateListName: (uuid: string) => void,
+  refetch: (variables?: Partial<OperationVariables> | undefined) => Promise<ApolloQueryResult<any>>,
+}
+
+function UpdateListNameForm(props: UpdateListNameComponentProps) {
+  const {
+    list,
+    handleIsUpdateListName,
+    refetch
+  } = props
+
+  const { dispatch } = useNotification()
+  const { userContext } = useUser()
+  const [updateListMutate] = useMutation(updateListMutation, { client, context: userContext })
+
+  return (
+    <div>
+      <Formik
+        initialValues={{
+          name: list.name
+        }}
+        validationSchema={validationSchema}
+        onSubmit={async values => {
+          if (values.name === list.name) {
+            handleIsUpdateListName(list.uuid)
+            return
+          }
+
+          const response = await updateListMutate({ variables: { input: { uuid: list.uuid, ...values } } })
+          const responseErrors = response.data.updateList.errors
+
+          if (responseErrors.length > 0) {
+            dispatch(addNotification(responseErrors[0].message, false))
+          } else {
+            dispatch(addNotification(`La liste a été mise à jour.`, true))
+          }
+
+          handleIsUpdateListName(list.uuid)
+          refetch()
+        }}
+      >
+        {({ handleSubmit, submitForm, isSubmitting }) => (
+          <Form
+            onSubmit={() => handleSubmit}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleSubmit()
+              }
+            }}
+          >
+            <Field
+              className="text-lg bg-transparent w-full pl-2 focus:outline-none"
+              id="name"
+              type="text"
+              placeholder="Sans nom"
+              name="name"
+              autoFocus={true}
+              values={list.name}
+              onBlur={() => {
+                setTimeout(submitForm, 0)
+              }}
+              disabled={isSubmitting}
+            />
+          </Form>
+        )}
+      </Formik>
+    </div>
+  )
 }
 
 interface ListsArrayProps {
@@ -38,12 +119,32 @@ interface ListsArrayProps {
 
 function ListsArray(props: ListsArrayProps) {
   const {
-    lists
+    lists,
+    refetch
   } = props
+
+  const displayLists = lists.map(list => ({ listId: list.uuid, isUpdateListName: false }))
 
   const { dispatch } = useNotification()
   const { userContext } = useUser()
-  const [mutateFunction] = useMutation(toggleFavoriteMutation, { client, context: userContext })
+  const [toggleFavoriteMutate] = useMutation(toggleFavoriteMutation, { client, context: userContext })
+  const [stateLists, setStateLists] = useState(displayLists)
+
+  function handleIsUpdateListName(id: string) {
+    const newList = stateLists.map(list => {
+      if (list.listId === id) {
+        const updatedList = {
+          ...list,
+          isUpdateListName: !list.isUpdateListName
+        }
+
+        return updatedList
+      }
+      return list
+    })
+
+    setStateLists(newList)
+  }
 
   return (
     <div className="mt-7 space-y-4 pt-1 pb-3 mr-3 overflow-y-auto max-h-[49.09rem] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-lg [&::-webkit-scrollbar]:pr-3">
@@ -52,12 +153,26 @@ function ListsArray(props: ListsArrayProps) {
           return (
             <div key={list.uuid} className="ml-3 mr-3 space-y-1">
               <div className="flex place-items-center justify-between space-x-2">
-                <span onClick={() => {}} className="cursor-pointer text-lg truncate hover:bg-gray-700 w-full rounded-md pl-2">{list.name}</span>
+                {
+                  stateLists
+                    .find((displayList: any) => displayList.listId === list.uuid)
+                    ?.isUpdateListName
+                    ? <UpdateListNameForm
+                      list={list}
+                      handleIsUpdateListName={handleIsUpdateListName}
+                      refetch={refetch}
+                    />
+                    : <span onClick={() => { }} className="cursor-pointer text-lg truncate hover:bg-gray-700 w-full rounded-md pl-2">{list.name}</span>
+                }
                 <span className="flex space-x-2">
-                  <button><EditIconSVG/></button>
+                  <button 
+                    onClick={() => {
+                      handleIsUpdateListName(list.uuid)
+                    }}
+                  ><EditIconSVG /></button>
                   <button
                     onClick={async () => {
-                      const response = await mutateFunction({ variables: { listUuid: list.uuid } })
+                      const response = await toggleFavoriteMutate({ variables: { listUuid: list.uuid } })
                       const responseErrors = response.data.toggleIsFavorite.errors
 
                       if (responseErrors.length > 0) {
@@ -67,13 +182,13 @@ function ListsArray(props: ListsArrayProps) {
                       }
 
                       list.isFavorite
-                      ? dispatch(addNotification(`La liste "${list.name}" n'est plus en favoris.`, true))
-                      : dispatch(addNotification(`La liste "${list.name}" a été mise en favoris.`, true))
+                        ? dispatch(addNotification(`La liste "${list.name}" n'est plus en favoris.`, true))
+                        : dispatch(addNotification(`La liste "${list.name}" a été mise en favoris.`, true))
 
-                      props.refetch()
+                      refetch()
                     }}
-                  >{ list.isFavorite ? <FullStarIconSVG/> : <StarIconSVG/> }</button>
-                  <button><DeleteIconSVG/></button>
+                  >{list.isFavorite ? <FullStarIconSVG /> : <StarIconSVG />}</button>
+                  <button><DeleteIconSVG /></button>
                 </span>
               </div>
               <hr />
@@ -100,7 +215,7 @@ function ListsArrayComponent(props: QueryInfo) {
   if (!props.data || props.data.lists.values.length === 0) return <p className="mt-7 flex justify-center text-lg">... Aucune liste pour le moment.</p>
 
   return (
-    <ListsArray lists={props.data.lists.values} refetch={props.refetch}/>
+    <ListsArray lists={props.data.lists.values} refetch={props.refetch} />
   )
 }
 
@@ -163,8 +278,7 @@ function ListForm(props: ListsFormProps) {
                 setTimeout(submitForm, 0)
               }}
               disabled={isSubmitting}
-              />
-
+            />
           </Form>
         )}
 

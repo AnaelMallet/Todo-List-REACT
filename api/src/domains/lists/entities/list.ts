@@ -40,4 +40,8 @@ export class List extends Entity<List, ListProps> {
   toggleIsFavorite(): void {
     this.props.isFavorite = !this.props.isFavorite
   }
+
+  updateName(name: string): void {
+    this.props.name = name
+  }
 }
