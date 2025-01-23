@@ -20,9 +20,15 @@ const typeDefs = gql`
     values: [List]!
   }
 
+  input UpdateListInput {
+    uuid: ID!
+    name: String!
+  }
+
   extend type Mutation {
     createList(input: ListInput!): MutationResponse! @requireAuth
     toggleIsFavorite(listUuid: String!): MutationResponse! @requireAuth
+    updateList(input: UpdateListInput!): MutationResponse! @requireAuth
   }
 
   extend type Query {
