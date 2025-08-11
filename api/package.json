@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "start": "nodemon --exec ts-node -r tsconfig-paths/register src/index.ts",
+    "start": "nodemon --legacy-watch --exec ts-node -r tsconfig-paths/register src/index.ts",
     "test": "jest --setupFiles dotenv/config"
   },
   "keywords": [],
