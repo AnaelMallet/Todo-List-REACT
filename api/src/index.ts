@@ -1,15 +1,16 @@
 import express from "express"
-import { ApolloServer, AuthenticationError } from "apollo-server-express"
+import { ApolloServer } from "apollo-server-express"
 import dotenv from "dotenv"
 import { defaultFieldResolver, GraphQLSchema } from "graphql"
 import { makeExecutableSchema } from "graphql-tools"
 import { mapSchema, MapperKind, getDirective } from "@graphql-tools/utils"
 import jwt, { JwtPayload } from "jsonwebtoken"
 
+import { DomainError } from "@shared/domainError"
+import { Result } from "@shared/Results"
+
 import { createDataSource } from "./ormconfig"
 import { getGraphqlAPI } from "./getFiles"
-import { Result } from "@shared/Results"
-import { DomainError } from "@shared/domainError"
 
 const main = async () => {
   await createDataSource()
