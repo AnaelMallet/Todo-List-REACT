@@ -116,8 +116,6 @@ function UserPage() {
             const response = await mutateFunction({ variables: { input: sendValues } })
             const responseErrors = response.data.updateUser.errors
 
-            console.log(response.data.updateUser)
-
             if (responseErrors.length > 0) {
               dispatch(addNotification(responseErrors[0].message, false))
             } else {
@@ -134,15 +132,8 @@ function UserPage() {
             }
           }}
         >
-          {({ handleSubmit, isSubmitting, errors, touched }) => (
-            <Form
-              className="grid grid-cols-1 gap-y-10 w-full text-white"
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleSubmit()
-                }
-              }}
-            >
+          {({ isSubmitting, errors, touched }) => (
+            <Form className="grid grid-cols-1 gap-y-10 w-full text-white">
               <div className="grid grid-cols-2 gap-x-5 px-5 place-items-center">
                 <div>
                   <div className="flex place-items-center gap-3">

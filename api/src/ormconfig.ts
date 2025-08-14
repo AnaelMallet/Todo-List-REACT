@@ -23,7 +23,7 @@ export async function createDataSource() {
   })
 
   appDataSource.initialize().then(() => {
-    console.log("database is initialized")
+    console.info("database is initialized")
   }).catch((err) => {
     console.error(err)
   })

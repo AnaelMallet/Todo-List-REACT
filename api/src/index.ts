@@ -18,7 +18,7 @@ const main = async () => {
   const app = express()
 
   app.listen(3001, () => {
-    console.log("server started on port 3001...")
+    console.info("server started on port 3001...")
   })
   app.get("/", (_, res) => {
     res.send("hello world !")
