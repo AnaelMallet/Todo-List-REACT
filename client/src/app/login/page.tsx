@@ -8,7 +8,6 @@ import { useMutation } from "@apollo/client"
 import TextTitle from "@/components/text"
 import { addNotification, useNotification } from "@/components/notifications/NotificationProvider"
 import { setLocalStorage } from "@/components/utils"
-import { useUser } from "@/components/users/userProvider"
 
 import client from "../graphql-api"
 
@@ -19,7 +18,6 @@ function LoginPage() {
   const router = useRouter()
   const [mutateFunction, { loading }] = useMutation(loginUserMutation, { client })
   const { dispatch } = useNotification()
-  const { setAccessToken } = useUser()
 
   return (
     <main className="h-screen flex place-items-center place-content-center">
@@ -41,21 +39,14 @@ function LoginPage() {
                 const accessToken = response.data.login.values.accessToken
 
                 setLocalStorage("userId", userId)
-                setAccessToken(accessToken)
-                
+                setLocalStorage("token", accessToken)
+
                 location.replace("/")
               }
             }}
           >
-          {({ handleSubmit, isSubmitting, errors, touched }) => (
-            <Form
-              className="grid grid-cols-1 gap-y-10 w-full text-white"
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleSubmit()
-                }
-              }}
-            >
+          {({ isSubmitting, errors, touched }) => (
+            <Form className="grid grid-cols-1 gap-y-10 w-full text-white">
               <div className="px-5">
                 <label className="bg-transparent" htmlFor="login">Adresse email/Nom d'utilisateur <span className="text-red-600">*</span></label>
                 <Field

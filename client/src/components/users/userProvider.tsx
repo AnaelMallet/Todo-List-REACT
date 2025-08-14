@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation"
 import { ApolloQueryResult, OperationVariables, useMutation, useQuery } from "@apollo/client"
 import client from "@/app/graphql-api"
 
-import { getLocalStorage, removeLocalStorage } from "../utils"
+import { getLocalStorage, removeLocalStorage, setLocalStorage } from "../utils"
 import { addNotification, useNotification } from "../notifications/NotificationProvider"
 
 import { getMeQuery, verifyTokenMutation } from "./graphql"
@@ -18,8 +18,6 @@ type User = {
 }
 
 type UserContextType = {
-  accessToken: string | null,
-  setAccessToken: Dispatch<SetStateAction<string | null>>
   isLogged: boolean
   logout: () => void,
   user: User | null,
@@ -36,7 +34,6 @@ export function useUser() {
 }
 
 export default function UserProvider(props: any) {
-  const [ accessToken, setAccessToken ] = useState<string | null>(null)
   const [ userId, setUserId ] = useState<string| null>(null)
   const [ isLogged, setIsLogged ] = useState<boolean>(false)
   const [isLoading , setIsLoading] = useState<boolean>(true)
@@ -52,8 +49,10 @@ export default function UserProvider(props: any) {
 
   const logout = () => {
     removeLocalStorage("userId")
+    removeLocalStorage("token")
     setUserId(null)
     setIsLogged(false)
+    dispatch(addNotification("Vous êtes déconnecté !", true))
   }
 
   useEffect(() => {
@@ -65,9 +64,8 @@ export default function UserProvider(props: any) {
   }, [userId])
 
   useEffect(() => {
-    const initializeAccessToken = async () => {
-      if (userId) {
-        const response = await mutateFunction({ variables: { userId } })
+    const fetchAccessToken = async () => {
+      const response = await mutateFunction({ variables: { userId } })
         const responseErrors = response.data.verifyToken.errors
   
         if (responseErrors.length > 0) {
@@ -82,36 +80,19 @@ export default function UserProvider(props: any) {
           router.push("/login")
         }
   
-        const newAccessToken = response.data.verifyToken.values.accessToken
+        return response.data.verifyToken.values.accessToken
+    }
+    const initializeAccessToken = async () => {
+      if (userId) {
   
-        if (newAccessToken !== null) {
-          setAccessToken(() => {
-            return newAccessToken
-          })
-        }
+        setLocalStorage("token", await fetchAccessToken())
+
         const interval = setInterval(async () => {
-          const response = await mutateFunction({ variables: { userId } })
-          const responseErrors = response.data.verifyToken.errors
-  
-          if (responseErrors.length > 0) {
-            dispatch(addNotification(responseErrors[0].message, false))
-            setUserId(() => {
-              return null
-            })
-            setIsLogged(() => {
-              return false
-            })
-            removeLocalStorage("userId")
-            router.push("/login")
-          }
-  
-          const newAccessToken = response.data.verifyToken.values.accessToken
-  
-          if (newAccessToken !== null) {
-            setAccessToken(() => {
-              return newAccessToken
-            })
-            
+          const newAccessToken = await fetchAccessToken()
+
+          if (newAccessToken !== getLocalStorage("token")) {
+            setLocalStorage("token", newAccessToken)
+            window.dispatchEvent(new StorageEvent("storage"))
           }
         }, 10000)
   
@@ -123,21 +104,28 @@ export default function UserProvider(props: any) {
   }, [dispatch, mutateFunction, router, userId])
 
   useEffect(() => {
-    setUserContext(() => {
-      return {
-        headers: {
-          authorization: `Bearer ${accessToken}`
+    const handleStorage = () => {
+      setUserContext(() => {
+        const accessToken = getLocalStorage("token")
+
+        return {
+          headers: {
+            authorization: `Bearer ${accessToken}`
+          }
         }
-      }
-    })
-  }, [accessToken])
+      })
+    }
+
+    handleStorage()
+    window.addEventListener("storage", handleStorage)
+
+    return () => window.removeEventListener("storage", handleStorage)
+  }, [])
 
   if (loading && isLoading) return <></>
 
   return (
     <UserContext.Provider value={{
-      accessToken,
-      setAccessToken,
       isLogged,
       logout,
       user,

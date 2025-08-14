@@ -31,10 +31,11 @@ import {
   createListMutation,
   getUserListsQuery,
   toggleFavoriteMutation,
-  updateListMutation
+  updateListMutation,
+  deleteListMutation
 } from "./graphql"
 
-interface ListProps {
+export interface ListProps {
   uuid: string
   name: string
   isFavorite: boolean
@@ -83,15 +84,8 @@ function UpdateListNameForm(props: UpdateListNameComponentProps) {
           refetch()
         }}
       >
-        {({ handleSubmit, submitForm, isSubmitting }) => (
-          <Form
-            onSubmit={() => handleSubmit}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleSubmit()
-              }
-            }}
-          >
+        {({ values, isSubmitting }) => (
+          <Form>
             <Field
               className="text-lg bg-transparent w-full pl-2 focus:outline-none"
               id="name"
@@ -101,7 +95,9 @@ function UpdateListNameForm(props: UpdateListNameComponentProps) {
               autoFocus={true}
               values={list.name}
               onBlur={() => {
-                setTimeout(submitForm, 0)
+                if (values.name === list.name) {
+                  handleIsUpdateListName(list.uuid)
+                }
               }}
               disabled={isSubmitting}
             />
@@ -123,12 +119,16 @@ function ListsArray(props: ListsArrayProps) {
     refetch
   } = props
 
-  const displayLists = lists.map(list => ({ listId: list.uuid, isUpdateListName: false }))
+  const settingsLists = lists.map(list => ({
+    listId: list.uuid,
+    isUpdateListName: false,
+    isDeleteList: false
+  }))
 
   const { dispatch } = useNotification()
   const { userContext } = useUser()
   const [toggleFavoriteMutate] = useMutation(toggleFavoriteMutation, { client, context: userContext })
-  const [stateLists, setStateLists] = useState(displayLists)
+  const [stateLists, setStateLists] = useState(settingsLists)
 
   function handleIsUpdateListName(id: string) {
     const newList = stateLists.map(list => {
@@ -146,12 +146,28 @@ function ListsArray(props: ListsArrayProps) {
     setStateLists(newList)
   }
 
+  function handleIsDeleteList(id: string) {
+    const newList = stateLists.map(list => {
+      if (list.listId === id) {
+        const updatedList = {
+          ...list,
+          isDeleteList: !list.isDeleteList
+        }
+
+        return updatedList
+      }
+      return list
+    })
+
+    setStateLists(newList)
+  }
+
   return (
     <div className="mt-7 space-y-4 pt-1 pb-3 mr-3 overflow-y-auto max-h-[49.09rem] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-lg [&::-webkit-scrollbar]:pr-3">
       {
         lists.map(list => {
           return (
-            <div key={list.uuid} className="ml-3 mr-3 space-y-1">
+            <div key={list.uuid} className="ml-3 mr-5 space-y-1">
               <div className="flex place-items-center justify-between space-x-2">
                 {
                   stateLists
@@ -169,7 +185,9 @@ function ListsArray(props: ListsArrayProps) {
                     onClick={() => {
                       handleIsUpdateListName(list.uuid)
                     }}
-                  ><EditIconSVG /></button>
+                  >
+                    <EditIconSVG />
+                  </button>
                   <button
                     onClick={async () => {
                       const response = await toggleFavoriteMutate({ variables: { listUuid: list.uuid } })
@@ -188,7 +206,13 @@ function ListsArray(props: ListsArrayProps) {
                       refetch()
                     }}
                   >{list.isFavorite ? <FullStarIconSVG /> : <StarIconSVG />}</button>
-                  <button><DeleteIconSVG /></button>
+                  <button
+                    onClick={() => {
+                      handleIsDeleteList(list.uuid)
+                    }}
+                  >
+                    <DeleteIconSVG />
+                  </button>
                 </span>
               </div>
               <hr />
@@ -212,7 +236,7 @@ function ListsArrayComponent(props: QueryInfo) {
   if (!props.userIsLogged) return <p className="mt-7 flex justify-center text-lg">Connectez-vous pour voir vos listes.</p>
   if (props.loading) return <p className="mt-7 flex justify-center text-lg">Chargement ...</p>
   if (props.error) return <p className="mt-7 flex justify-center text-lg">Une erreur est survenu.</p>
-  if (!props.data || props.data.lists.values.length === 0) return <p className="mt-7 flex justify-center text-lg">... Aucune liste pour le moment.</p>
+  if (!props.data || props.data.lists.values.length === 0) return <p className="mt-7 flex justify-center text-lg">...Aucune liste pour le moment.</p>
 
   return (
     <ListsArray lists={props.data.lists.values} refetch={props.refetch} />
@@ -258,15 +282,8 @@ function ListForm(props: ListsFormProps) {
           props.setIsAddingList(false)
         }}
       >
-        {({ handleSubmit, submitForm, isSubmitting }) => (
-          <Form
-            onSubmit={() => handleSubmit}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleSubmit()
-              }
-            }}
-          >
+        {({ isSubmitting, values }) => (
+          <Form>
             <Field
               id="name"
               className="bg-transparent border-2 rounded-2xl h-9 w-full mt-3 pl-2 focus:outline-none border-white"
@@ -275,7 +292,9 @@ function ListForm(props: ListsFormProps) {
               name="name"
               autoFocus={true}
               onBlur={() => {
-                setTimeout(submitForm, 0)
+                if (values.name === "") {
+                  props.setIsAddingList(false)
+                }
               }}
               disabled={isSubmitting}
             />
@@ -292,7 +311,7 @@ interface ListsFormComponentProps {
   setIsAddingList: Dispatch<SetStateAction<boolean>>
 }
 
-function ListsComponent(props: ListsFormComponentProps) {
+export function ListsComponent(props: ListsFormComponentProps) {
   const { isLogged, userContext } = useUser()
   const [getAllLists, { loading, refetch, data, error }] = useLazyQuery(getUserListsQuery, { context: userContext })
 
@@ -318,8 +337,4 @@ function ListsComponent(props: ListsFormComponentProps) {
       />
     </div>
   )
-}
-
-export {
-  ListsComponent
 }
