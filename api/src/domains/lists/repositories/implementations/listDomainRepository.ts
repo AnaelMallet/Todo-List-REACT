@@ -35,4 +35,8 @@ export class ListDomainRepository implements IListDomainRepository {
 
     await this.repository.save(list)
   }
+
+  async deleteOneByUuid(uuid: string): Promise<void> {
+      await this.repository.deleteOneByUuid(uuid)
+  }
 }

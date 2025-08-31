@@ -1,19 +1,16 @@
 import classNames from "classnames"
-import { Dispatch, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 
 import { CheckIconSVG, CrossIconSVG } from "@/app/svg"
 
 import {
   NotificationInterface,
-  NotificationAction,
   removeNotification,
   useNotification
 } from "./NotificationProvider"
 
 type Notification = {
   notification: NotificationInterface
-  dispatch: Dispatch<NotificationAction>
-  key: string
 }
 
 export default function Notification(props: Notification) {

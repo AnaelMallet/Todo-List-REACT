@@ -80,7 +80,7 @@ function LoginPage() {
               </div>
               <div className="flex justify-center text-white pb-6 space-x-10">
                 <button type="submit" disabled={isSubmitting || loading} className="bg-cyan-400 font-bold hover:bg-cyan-500 rounded-md p-2">Valider</button>
-                <button type="button" onClick={() => router.push("/")} className="font-bold p-2 border-white border-2 rounded-md">Annuler</button>
+                <button type="button" onClick={() => router.push("/")} className="font-bold p-2 border-white hover:bg-[#181c24] border-2 rounded-md">Annuler</button>
               </div>
             </Form>
           )}

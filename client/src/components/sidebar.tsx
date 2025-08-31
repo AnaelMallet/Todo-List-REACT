@@ -4,7 +4,7 @@ import { useState } from "react"
 
 import { AddIconSVG } from "../app/svg"
 
-import { ListsComponent } from "./lists/Lists"
+import { ListsComponent } from "./lists/ListComponent"
 import { addNotification, useNotification } from "./notifications/NotificationProvider"
 import TextTitle from "./text"
 import { useUser } from "./users/userProvider"
