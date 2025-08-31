@@ -3,6 +3,7 @@ import BasicRepository from "@shared/basicRepository"
 import List from "../../entities/list"
 
 import { IListRepository } from "../I_list"
+import { Repository } from "typeorm"
 
 export class ListRepository extends BasicRepository<List> implements IListRepository {
   alias = "lists"
@@ -27,5 +28,14 @@ export class ListRepository extends BasicRepository<List> implements IListReposi
 
   async save(entity: List): Promise<void> {
     await this.repository.save(entity)
+  }
+
+  async deleteOneByUuid(uuid: string): Promise<void> {
+    await this.repository
+      .createQueryBuilder(this.alias)
+      .delete()
+      .from(List)
+      .where(`${this.alias}.uuid = :uuid`, { uuid })
+      .execute()
   }
 }

@@ -20,7 +20,7 @@ function RegsiterPage() {
   const { dispatch } = useNotification()
 
   return (
-    <main className=" h-screen flex place-content-center place-items-center">
+    <main className="h-screen flex place-content-center place-items-center">
       <div className="w-1/3 bg-[#282c34] rounded-lg">
         <TextTitle/>
         <Formik
@@ -135,7 +135,7 @@ function RegsiterPage() {
               </div>
               <div className="flex justify-center pb-6 space-x-10">
                 <button disabled={isSubmitting || loading} type="submit" className="bg-cyan-400 font-bold hover:bg-cyan-500 rounded-md p-2">Valider</button>
-                <button type="button" onClick={() => router.push("/")} className="font-bold p-2 border-white border-2 rounded-md">Annuler</button>
+                <button type="button" onClick={() => router.push("/")} className="font-bold p-2 border-white hover:bg-[#181c24] border-2 rounded-md">Annuler</button>
               </div>
             </Form>
           )}

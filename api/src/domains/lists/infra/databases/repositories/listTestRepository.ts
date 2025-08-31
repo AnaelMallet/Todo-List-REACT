@@ -30,4 +30,10 @@ export class ListTestRepository implements IListDomainRepository {
 
     return Promise.resolve()
   }
+
+  deleteOneByUuid(uuid: string): Promise<void> {
+    this.array.filter(list => list.uuid !== uuid)
+    
+    return Promise.resolve()
+  }
 }

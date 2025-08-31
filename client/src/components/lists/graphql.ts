@@ -57,9 +57,23 @@ const updateListMutation = gql`
   }
 `
 
+const deleteListMutation = gql`
+  mutation DeleteList($listUuid: String!) {
+    deleteList(listUuid: $listUuid) {
+      code
+      isSuccess
+      errors {
+        field
+        message
+      }
+    }
+  }
+`
+
 export {
   createListMutation,
   getUserListsQuery,
   toggleFavoriteMutation,
-  updateListMutation
+  updateListMutation,
+  deleteListMutation
 }

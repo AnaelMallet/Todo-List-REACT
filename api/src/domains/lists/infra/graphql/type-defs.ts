@@ -29,6 +29,7 @@ const typeDefs = gql`
     createList(input: ListInput!): MutationResponse! @requireAuth
     toggleIsFavorite(listUuid: String!): MutationResponse! @requireAuth
     updateList(input: UpdateListInput!): MutationResponse! @requireAuth
+    deleteList(listUuid: String!): MutationResponse! @requireAuth
   }
 
   extend type Query {
