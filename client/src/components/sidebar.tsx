@@ -1,8 +1,7 @@
 'use client'
 
 import { useState } from "react"
-
-import { AddIconSVG } from "../app/svg"
+import { Plus } from "lucide-react"
 
 import { ListsComponent } from "./lists/ListComponent"
 import { addNotification, useNotification } from "./notifications/NotificationProvider"
@@ -31,9 +30,9 @@ function Sidebar() {
       <TextTitle/>
       <div className="flex place-items-center space-x-10 ml-4 mt-5">
         <p className="text-3xl pb-1">Mes listes</p>
-        <button onClick={addList} className="flex place-items-center justify-center space-x-2 bg-cyan-400 hover:bg-cyan-500 font-bold rounded-md px-3 py-1">
+        <button onClick={addList} className="flex  space-x-2 bg-cyan-400 hover:bg-cyan-500 font-bold rounded-md px-3 py-1">
           <p>Ajouter</p>
-          <AddIconSVG />
+          <Plus />
         </button>
       </div>
       <ListsComponent isAddingList={isAddingList} setIsAddingList={setIsAddingList}/>

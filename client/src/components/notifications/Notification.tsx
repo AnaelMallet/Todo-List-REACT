@@ -1,7 +1,6 @@
 import classNames from "classnames"
 import { useEffect, useState } from "react"
-
-import { CheckIconSVG, CrossIconSVG } from "@/app/svg"
+import { CircleX, CircleCheck } from "lucide-react"
 
 import {
   NotificationInterface,
@@ -56,7 +55,7 @@ export default function Notification(props: Notification) {
       })}
     >
         <div className="flex place-items-center mt-2">
-            <p className="ml-3">{notification.isSuccess ? <CheckIconSVG/> : <CrossIconSVG/>}</p>
+            <p className="ml-3">{notification.isSuccess ? <CircleCheck className="text-[#00c400] bg-white rounded-full"/> : <CircleX className="text-[#a40000] bg-white rounded-full"/>}</p>
             <p className="ml-2 mr-5 text-lg text-white">{notification.message}</p>
         </div>
         <div className={classNames({

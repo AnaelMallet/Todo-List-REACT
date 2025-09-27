@@ -9,8 +9,8 @@ import classNames from "classnames"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import * as Yup from "yup"
+import { Pencil, CircleX } from 'lucide-react'
 
-import { CrossIconSVG, EditIconSVG } from "../svg"
 import client from "../graphql-api"
 
 import { updateUserMutation } from "./graphql"
@@ -137,7 +137,7 @@ function UserPage() {
               <div className="grid grid-cols-2 gap-x-5 px-5 place-items-center">
                 <div>
                   <div className="flex place-items-center gap-3">
-                    <button type="button" onClick={() => setIsChangingLastname(!isChangingLastname)}className="bg-white rounded-md p-1">{isChangingLastname === false ? <EditIconSVG/> : <CrossIconSVG/>}</button>
+                    <button type="button" onClick={() => setIsChangingLastname(!isChangingLastname)}className="rounded-md p-0.5">{isChangingLastname === false ? <Pencil/> : <CircleX className="text-red-500"/>}</button>
                     <label htmlFor="lastname" className="bg-transparent">Nom</label>
                   </div>
                   <Field
@@ -157,7 +157,7 @@ function UserPage() {
                 </div>
                 <div>
                   <div className="flex place-items-center gap-3">
-                    <button type="button" onClick={() => setIsChangingFirstname(!isChangingFirstname)}className="bg-white rounded-md p-1">{ isChangingFirstname === false ? <EditIconSVG/> : <CrossIconSVG/> }</button>
+                    <button type="button" onClick={() => setIsChangingFirstname(!isChangingFirstname)}className="rounded-md p-0.5">{ isChangingFirstname === false ? <Pencil/> : <CircleX className="text-red-500"/> }</button>
                     <label htmlFor="firstname" className="bg-transparent">Prénom</label>
                   </div>
                   <Field
@@ -179,7 +179,7 @@ function UserPage() {
               <div className="grid grid-cols-2 gap-x-5 px-5 place-items-center">
                 <div>
                   <div className="flex place-items-center gap-3">
-                    <button type="button" onClick={() => setIsChangingEmail(!isChangingEmail)} className="bg-white rounded-md p-1">{ isChangingEmail === false ? <EditIconSVG/> : <CrossIconSVG/> }</button>
+                    <button type="button" onClick={() => setIsChangingEmail(!isChangingEmail)} className="rounded-md p-0.5">{ isChangingEmail === false ? <Pencil/> : <CircleX className="text-red-500"/> }</button>
                     <label htmlFor="email" className="bg-transparent">Adresse email</label>
                   </div>
                   <Field
@@ -199,7 +199,7 @@ function UserPage() {
                 </div>
                 <div>
                   <div className="flex place-items-center gap-3">
-                    <button type="button" onClick={() => setIsChangingUsername(!isChangingUsername)}className="bg-white rounded-md p-1">{ isChangingUsername === false ? <EditIconSVG/> : <CrossIconSVG/> }</button>
+                    <button type="button" onClick={() => setIsChangingUsername(!isChangingUsername)}className="rounded-md p-0.5">{ isChangingUsername === false ? <Pencil/> : <CircleX className="text-red-500"/> }</button>
                     <label htmlFor="username" className="bg-transparent">Nom d'utilisateur</label>
                   </div>
                   <Field

@@ -6,11 +6,10 @@ import {
   useMutation
 } from "@apollo/client"
 import { useState } from "react"
+import { Pencil, Trash2 } from "lucide-react"
 
 import client from "@/app/graphql-api"
 import {
-  DeleteIconSVG,
-  EditIconSVG,
   FullStarIconSVG,
   StarIconSVG
 } from "@/app/svg"
@@ -109,7 +108,7 @@ function ListsArray(props: ListsArrayProps) {
                       handleIsUpdateListName(list.uuid)
                     }}
                   >
-                    <EditIconSVG />
+                    <Pencil />
                   </button>
                   <button
                     onClick={async () => {
@@ -141,7 +140,7 @@ function ListsArray(props: ListsArrayProps) {
                       })
                     }}
                   >
-                    <DeleteIconSVG />
+                    <Trash2 />
                   </button>
                 </span>
               </div>
