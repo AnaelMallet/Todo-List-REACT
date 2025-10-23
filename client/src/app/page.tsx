@@ -3,10 +3,12 @@
 import { useRouter } from 'next/navigation'
 import { ApolloProvider } from '@apollo/client'
 
+import SelectListProvider from "../components/lists/SelectListProvider"
 import NotificationProvider from '../components/notifications/NotificationProvider'
-import ModalProvider from '../components/confirmationModal/modalProvider'
-import UserProvider, { useUser } from "../components/users/userProvider"
+import ModalProvider from '../components/confirmationModal/ModalProvider'
+import UserProvider, { useUser } from "../components/users/UserProvider"
 import Sidebar from '../components/sidebar'
+import Task from '../components/tasks/Task'
 
 import client from "./graphql-api"
 
@@ -17,7 +19,9 @@ export function Providers({ children }: Readonly<{ children: React.ReactNode }>)
       <NotificationProvider>
         <UserProvider>
           <ModalProvider>
-            {children}
+            <SelectListProvider>
+              {children}
+            </SelectListProvider>
           </ModalProvider>
         </UserProvider>
       </NotificationProvider>
@@ -37,7 +41,8 @@ function Home() {
   return (
     <>
       <Sidebar />
-      <div className="absolute inline space-x-4 right-0 m-5 text-white">
+      <Task />
+      <div className="absolute inline space-x-4 right-0 top-0 m-5 text-white">
         {!isLogged || !user ?
           <>
             <button onClick={() => router.push("/login")} className="bg-cyan-400 font-bold hover:bg-cyan-500 rounded-md p-2">Se connecter</button>

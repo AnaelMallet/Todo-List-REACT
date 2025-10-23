@@ -3,7 +3,7 @@ import { OperationVariables, ApolloQueryResult, useMutation } from "@apollo/clie
 import { Formik, Form, Field } from "formik"
 
 import { useNotification, addNotification } from "../notifications/NotificationProvider"
-import { useUser } from "../users/userProvider"
+import { useUser } from "../users/UserProvider"
 
 import { validationSchema } from "./api"
 import { updateListMutation } from "./graphql"

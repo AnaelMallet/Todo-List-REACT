@@ -60,7 +60,7 @@ function LoginPage() {
                   type="text"
                   placeholder="adresse email/nom d'utilisateur"
                 />
-                { errors.login && touched.login ? <div className="text-red-500 text-xs -mb-4">{ errors.login }</div> : <></> }
+                { errors.login && touched.login ? <div className="text-red-600 text-xs -mb-4">{ errors.login }</div> : <></> }
               </div>
               <div className="px-5">
                 <label className="bg-transparent" htmlFor="password">Mot de passe <span className="text-red-600">*</span></label>
@@ -76,7 +76,7 @@ function LoginPage() {
                   placeholder="Mot de passe"
                   autoComplete="on"
                 />
-                { errors.password && touched.password ? <div className="text-red-500 text-xs -mb-4">{ errors.password }</div> : <></> }
+                { errors.password && touched.password ? <div className="text-red-600 text-xs -mb-4">{ errors.password }</div> : <></> }
               </div>
               <div className="flex justify-center text-white pb-6 space-x-10">
                 <button type="submit" disabled={isSubmitting || loading} className="bg-cyan-400 font-bold hover:bg-cyan-500 rounded-md p-2">Valider</button>

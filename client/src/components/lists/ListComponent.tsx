@@ -10,7 +10,7 @@ import {
     SetStateAction,
 } from "react"
 
-import { useUser } from "../users/userProvider"
+import { useUser } from "../users/UserProvider"
 
 import { getUserListsQuery } from "./graphql"
 import AddListForm from "./AddListForm"

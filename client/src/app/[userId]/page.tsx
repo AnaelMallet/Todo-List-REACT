@@ -1,7 +1,7 @@
 'use client'
 
 import TextTitle from "@/components/text"
-import { useUser } from "@/components/users/userProvider"
+import { useUser } from "@/components/users/UserProvider"
 import { useMutation } from "@apollo/client"
 import { addNotification, useNotification } from "@/components/notifications/NotificationProvider"
 import { Field, Form, Formik } from "formik"
@@ -137,13 +137,13 @@ function UserPage() {
               <div className="grid grid-cols-2 gap-x-5 px-5 place-items-center">
                 <div>
                   <div className="flex place-items-center gap-3">
-                    <button type="button" onClick={() => setIsChangingLastname(!isChangingLastname)}className="rounded-md p-0.5">{isChangingLastname === false ? <Pencil/> : <CircleX className="text-red-500"/>}</button>
+                    <button type="button" onClick={() => setIsChangingLastname(!isChangingLastname)}className="rounded-md p-0.5">{isChangingLastname === false ? <Pencil/> : <CircleX className="text-red-600"/>}</button>
                     <label htmlFor="lastname" className="bg-transparent">Nom</label>
                   </div>
                   <Field
                     className={classNames({
                       "bg-transparent rounded-2xl h-9 w-full mt-3 pl-2 focus:outline-none": true,
-                      "border-2 border-red-500": isChangingLastname && errors.lastname && touched.lastname,
+                      "border-2 border-red-600": isChangingLastname && errors.lastname && touched.lastname,
                       "border-2 border-white": isChangingLastname && !errors.lastname,
                       "border-2 border-transparent": !isChangingLastname
                     })}
@@ -153,17 +153,17 @@ function UserPage() {
                     name="lastname"
                     disabled={!isChangingLastname}
                   />
-                  { isChangingLastname && errors.lastname && touched.lastname ? <div className="text-red-500 text-xs -mb-4">{ errors.lastname }</div> : <></> }
+                  { isChangingLastname && errors.lastname && touched.lastname ? <div className="text-red-600 text-xs -mb-4">{ errors.lastname }</div> : <></> }
                 </div>
                 <div>
                   <div className="flex place-items-center gap-3">
-                    <button type="button" onClick={() => setIsChangingFirstname(!isChangingFirstname)}className="rounded-md p-0.5">{ isChangingFirstname === false ? <Pencil/> : <CircleX className="text-red-500"/> }</button>
+                    <button type="button" onClick={() => setIsChangingFirstname(!isChangingFirstname)}className="rounded-md p-0.5">{ isChangingFirstname === false ? <Pencil/> : <CircleX className="text-red-600"/> }</button>
                     <label htmlFor="firstname" className="bg-transparent">Prénom</label>
                   </div>
                   <Field
                     className={classNames({
                       "bg-transparent rounded-2xl h-9 w-full mt-3 pl-2 focus:outline-none": true,
-                      "border-2 border-red-500": isChangingFirstname && errors.firstname && touched.firstname,
+                      "border-2 border-red-600": isChangingFirstname && errors.firstname && touched.firstname,
                       "border-2 border-white": isChangingFirstname && !errors.firstname,
                       "border-2 border-transparent": !isChangingFirstname
                     })}
@@ -173,19 +173,19 @@ function UserPage() {
                     name="firstname"
                     disabled={!isChangingFirstname}
                   />
-                  { isChangingFirstname && errors.firstname && touched.firstname ? <div className="text-red-500 text-xs -mb-4">{ errors.firstname }</div> : <></> }
+                  { isChangingFirstname && errors.firstname && touched.firstname ? <div className="text-red-600 text-xs -mb-4">{ errors.firstname }</div> : <></> }
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-x-5 px-5 place-items-center">
                 <div>
                   <div className="flex place-items-center gap-3">
-                    <button type="button" onClick={() => setIsChangingEmail(!isChangingEmail)} className="rounded-md p-0.5">{ isChangingEmail === false ? <Pencil/> : <CircleX className="text-red-500"/> }</button>
+                    <button type="button" onClick={() => setIsChangingEmail(!isChangingEmail)} className="rounded-md p-0.5">{ isChangingEmail === false ? <Pencil/> : <CircleX className="text-red-600"/> }</button>
                     <label htmlFor="email" className="bg-transparent">Adresse email</label>
                   </div>
                   <Field
                     className={classNames({
                       "bg-transparent rounded-2xl h-9 w-full mt-3 pl-2 focus:outline-none": true,
-                      "border-2 border-red-500": isChangingEmail && errors.email && touched.email,
+                      "border-2 border-red-600": isChangingEmail && errors.email && touched.email,
                       "border-2 border-white": isChangingEmail && !errors.email,
                       "border-2 border-transparent": !isChangingEmail
                     })}
@@ -195,11 +195,11 @@ function UserPage() {
                     name="email"
                     disabled={!isChangingEmail}
                   />
-                  { isChangingEmail && errors.email && touched.email ? <div className="text-red-500 text-xs -mb-4">{ errors.email }</div> : <></> }
+                  { isChangingEmail && errors.email && touched.email ? <div className="text-red-600 text-xs -mb-4">{ errors.email }</div> : <></> }
                 </div>
                 <div>
                   <div className="flex place-items-center gap-3">
-                    <button type="button" onClick={() => setIsChangingUsername(!isChangingUsername)}className="rounded-md p-0.5">{ isChangingUsername === false ? <Pencil/> : <CircleX className="text-red-500"/> }</button>
+                    <button type="button" onClick={() => setIsChangingUsername(!isChangingUsername)}className="rounded-md p-0.5">{ isChangingUsername === false ? <Pencil/> : <CircleX className="text-red-600"/> }</button>
                     <label htmlFor="username" className="bg-transparent">Nom d'utilisateur</label>
                   </div>
                   <Field
@@ -227,7 +227,7 @@ function UserPage() {
                     <Field
                       className={classNames({
                         "bg-transparent border-2 rounded-2xl h-9 w-full mt-3 pl-2 focus:outline-none": true,
-                        "border-red-500": isChangingPassword && errors.password && touched.password,
+                        "border-red-600": isChangingPassword && errors.password && touched.password,
                         "border-white": isChangingPassword && !errors.password
                       })}
                       id="password"
@@ -236,14 +236,14 @@ function UserPage() {
                       name="password"
                       autoComplete="on"
                     />
-                    { isChangingPassword && errors.password && touched.password ? <div className="text-red-500 text-xs -mb-4">{ errors.password }</div> : <></> }
+                    { isChangingPassword && errors.password && touched.password ? <div className="text-red-600 text-xs -mb-4">{ errors.password }</div> : <></> }
                   </div>
                   <div>
                     <label className="bg-transparent" htmlFor="confirmationPassword">Confirmation du mot de passe</label>
                       <Field
                         className={classNames({
                           "bg-transparent border-2 rounded-2xl h-9 w-full mt-3 pl-2 focus:outline-none": true,
-                          'border-red-500': isChangingPassword && errors.confirmationPassword && touched.confirmationPassword,
+                          'border-red-600': isChangingPassword && errors.confirmationPassword && touched.confirmationPassword,
                           "border-white": isChangingPassword && !errors.confirmationPassword
                         })}
                         id="confirmationPassword"
@@ -252,7 +252,7 @@ function UserPage() {
                         name="confirmationPassword"
                         autoComplete="on"
                       />
-                      { isChangingPassword && errors.confirmationPassword && touched.confirmationPassword ? <div className="text-red-500 text-xs -mb-4">{ errors.confirmationPassword }</div> : <></> }
+                      { isChangingPassword && errors.confirmationPassword && touched.confirmationPassword ? <div className="text-red-600 text-xs -mb-4">{ errors.confirmationPassword }</div> : <></> }
                   </div>
                 </div> : 
                 <></>

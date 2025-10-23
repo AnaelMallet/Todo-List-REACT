@@ -4,7 +4,7 @@ import { Formik, Form, Field } from "formik"
 import { Dispatch, SetStateAction } from "react"
 
 import { useNotification, addNotification } from "../notifications/NotificationProvider"
-import { useUser } from "../users/userProvider"
+import { useUser } from "../users/UserProvider"
 
 import { initialValues, validationSchema } from "./api"
 import { createListMutation } from "./graphql"

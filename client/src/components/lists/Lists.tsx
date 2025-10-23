@@ -5,21 +5,21 @@ import {
   OperationVariables,
   useMutation
 } from "@apollo/client"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Pencil, Trash2 } from "lucide-react"
+import classNames from "classnames"
 
 import client from "@/app/graphql-api"
-import {
-  FullStarIconSVG,
-  StarIconSVG
-} from "@/app/svg"
+import { FullStarIconSVG, StarIconSVG } from "@/app/svg"
 
 import { addNotification, useNotification } from "../notifications/NotificationProvider"
-import { useUser } from "../users/userProvider"
-import { useModal } from "../confirmationModal/modalProvider"
+import { useUser } from "../users/UserProvider"
+import { useModal } from "../confirmationModal/ModalProvider"
+import { getSessionStorage } from "../utils"
 
 import { toggleFavoriteMutation, deleteListMutation } from "./graphql"
 import UpdateListNameForm from "./UpdateListNameForm"
+import { useSelectList } from "./SelectListProvider"
 
 export interface ListProps {
   uuid: string
@@ -46,9 +46,14 @@ function ListsArray(props: ListsArrayProps) {
   const { dispatch } = useNotification()
   const { openModal, closeModal } = useModal()
   const { userContext } = useUser()
+  const { selectedList, setSelectedList } = useSelectList()
   const [toggleFavoriteMutate] = useMutation(toggleFavoriteMutation, { client, context: userContext })
   const [deleteListMutate] = useMutation(deleteListMutation, { client, context: userContext })
   const [stateLists, setStateLists] = useState(settingsLists)
+
+  useEffect(() => {
+    setStateLists(() => settingsLists)
+  }, [lists])
 
   function handleIsUpdateListName(id: string) {
     const newList = stateLists.map(list => {
@@ -60,6 +65,7 @@ function ListsArray(props: ListsArrayProps) {
 
         return updatedList
       }
+
       return list
     })
 
@@ -90,20 +96,26 @@ function ListsArray(props: ListsArrayProps) {
         lists.map(list => {
           return (
             <div key={list.uuid} className="ml-3 mr-5 space-y-1">
-              <div className="flex place-items-center justify-between space-x-2">
+              <div className="flex place-items-center justify-between space-x-2 mb-2">
                 {
                   stateLists
-                    .find((displayList: any) => displayList.listId === list.uuid)
-                    ?.isUpdateListName
+                    .find((displayList: any) => displayList.listId === list.uuid)?.isUpdateListName
                     ? <UpdateListNameForm
                       list={list}
                       handleIsUpdateListName={handleIsUpdateListName}
                       refetch={refetch}
                     />
-                    : <span onClick={() => { }} className="cursor-pointer text-lg truncate hover:bg-gray-700 w-full rounded-md pl-2">{list.name}</span>
+                    : <span
+                      onClick={() => { setSelectedList(() => list.uuid) }}
+                      className={classNames({
+                        "cursor-pointer text-lg truncate w-full rounded-md pl-2": true,
+                        "hover:bg-gray-700": list.uuid !== selectedList || (selectedList === "" || getSessionStorage("SelectedList") === null),
+                        "hover:bg-gray-400 bg-gray-500": list.uuid === selectedList && (selectedList !== "" || getSessionStorage("SelectedList") !== null)
+                      })}
+                    >{list.name}</span>
                 }
                 <span className="flex space-x-2">
-                  <button 
+                  <button
                     onClick={() => {
                       handleIsUpdateListName(list.uuid)
                     }}
@@ -123,8 +135,8 @@ function ListsArray(props: ListsArrayProps) {
 
                       dispatch(addNotification(
                         list.isFavorite
-                        ? `La liste "${list.name}" n'est plus en favoris.`
-                        : `La liste "${list.name}" a été mise en favoris.`,
+                          ? `La liste "${list.name}" n'est plus en favoris.`
+                          : `La liste "${list.name}" a été mise en favoris.`,
                         true
                       ))
 
@@ -135,8 +147,8 @@ function ListsArray(props: ListsArrayProps) {
                     onClick={() => {
                       openModal({
                         title: "Confirmation",
-                        description: `Souhaitez-vous vraiment supprimer la liste "${list.name}" ?`,
-                        function: async function() { await handleDeleteList(list.uuid) }
+                        description: `Êtes-vous sûr de vouloir supprimer la liste "${list.name}" ?`,
+                        function: async function () { await handleDeleteList(list.uuid) }
                       })
                     }}
                   >

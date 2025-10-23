@@ -42,11 +42,11 @@ function RegsiterPage() {
             <Form className="grid grid-cols-1 gap-y-10 w-full text-white">
               <div className="grid grid-cols-2 gap-x-5 px-5">
                 <div>
-                  <label className="bg-transparent" htmlFor="firstname">Prénom <span className="text-red-500">*</span></label>
+                  <label className="bg-transparent" htmlFor="firstname">Prénom <span className="text-red-600">*</span></label>
                   <Field
                     className={classNames({
                       "bg-transparent border-2 rounded-2xl h-9 w-full mt-3 pl-2 focus:outline-none": true,
-                      "border-red-500": errors.firstname && touched.firstname,
+                      "border-red-600": errors.firstname && touched.firstname,
                       "border-white": !errors.firstname
                     })}
                     id="firstname"
@@ -54,14 +54,14 @@ function RegsiterPage() {
                     placeholder="Prénom"
                     name="firstname"
                   />
-                  { errors.firstname && touched.firstname ? <div className="text-red-500 text-xs -mb-4">{ errors.firstname }</div> : <></> }
+                  { errors.firstname && touched.firstname ? <div className="text-red-600 text-xs -mb-4">{ errors.firstname }</div> : <></> }
                 </div>
                 <div>
-                  <label className="bg-transparent" htmlFor="lastname">Nom <span className="text-red-500">*</span></label>
+                  <label className="bg-transparent" htmlFor="lastname">Nom <span className="text-red-600">*</span></label>
                   <Field
                     className={classNames({
                       "bg-transparent border-2 rounded-2xl h-9 w-full mt-3 pl-2 focus:outline-none": true,
-                      "border-red-500": errors.lastname && touched.lastname,
+                      "border-red-600": errors.lastname && touched.lastname,
                       "border-white": !errors.lastname
                     })}
                     id="lastname"
@@ -69,16 +69,16 @@ function RegsiterPage() {
                     placeholder="Nom"
                     name="lastname"
                   />
-                  { errors.lastname && touched.lastname ? <div className="text-red-500 text-xs -mb-4">{ errors.lastname }</div> : <></> }
+                  { errors.lastname && touched.lastname ? <div className="text-red-600 text-xs -mb-4">{ errors.lastname }</div> : <></> }
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-x-5 px-5">
                 <div>
-                  <label className="bg-transparent" htmlFor="email">Adresse email <span className="text-red-500">*</span></label>
+                  <label className="bg-transparent" htmlFor="email">Adresse email <span className="text-red-600">*</span></label>
                   <Field
                     className={classNames({
                       "bg-transparent border-2 rounded-2xl h-9 w-full mt-3 pl-2 focus:outline-none": true,
-                      "border-red-500": errors.email && touched.email,
+                      "border-red-600": errors.email && touched.email,
                       "border-white": !errors.email
                     })}
                     id="email"
@@ -86,7 +86,7 @@ function RegsiterPage() {
                     placeholder="Adresse email"
                     name="email"
                   />
-                  { errors.email && touched.email ? <div className="text-red-500 text-xs -mb-4">{ errors.email }</div> : <></> }
+                  { errors.email && touched.email ? <div className="text-red-600 text-xs -mb-4">{ errors.email }</div> : <></> }
                 </div>
                 <div>
                   <label className="bg-transparent" htmlFor="username">Nom d'utilisateur</label>
@@ -101,11 +101,11 @@ function RegsiterPage() {
               </div>
               <div className="grid grid-cols-2 gap-x-5 px-5">
                 <div>
-                  <label className="bg-transparent" htmlFor="password">Mot de passe <span className="text-red-500">*</span></label>
+                  <label className="bg-transparent" htmlFor="password">Mot de passe <span className="text-red-600">*</span></label>
                   <Field
                     className={classNames({
                       "bg-transparent border-2 rounded-2xl h-9 w-full mt-3 pl-2 focus:outline-none": true,
-                      "border-red-500": errors.password && touched.password,
+                      "border-red-600": errors.password && touched.password,
                       "border-white": !errors.password
                     })}
                     id="password"
@@ -114,14 +114,14 @@ function RegsiterPage() {
                     name="password"
                     autoComplete="on"
                   />
-                  { errors.password && touched.password ? <div className="text-red-500 text-xs -mb-4">{ errors.password }</div> : <></> }
+                  { errors.password && touched.password ? <div className="text-red-600 text-xs -mb-4">{ errors.password }</div> : <></> }
                 </div>
                 <div>
-                  <label className="bg-transparent" htmlFor="confirmationPassword">Confirmation du mot de passe <span className="text-red-500">*</span></label>
+                  <label className="bg-transparent" htmlFor="confirmationPassword">Confirmation du mot de passe <span className="text-red-600">*</span></label>
                   <Field
                     className={classNames({
                       "bg-transparent border-2 rounded-2xl h-9 w-full mt-3 pl-2 focus:outline-none": true,
-                      'border-red-500': errors.confirmationPassword && touched.confirmationPassword,
+                      'border-red-600': errors.confirmationPassword && touched.confirmationPassword,
                       "border-white": !errors.confirmationPassword
                     })}
                     id="confirmationPassword"
@@ -130,7 +130,7 @@ function RegsiterPage() {
                     name="confirmationPassword"
                     autoComplete="on"
                   />
-                  { errors.confirmationPassword && touched.confirmationPassword ? <div className="text-red-500 text-xs -mb-4">{ errors.confirmationPassword }</div> : <></> }
+                  { errors.confirmationPassword && touched.confirmationPassword ? <div className="text-red-600 text-xs -mb-4">{ errors.confirmationPassword }</div> : <></> }
                 </div>
               </div>
               <div className="flex justify-center pb-6 space-x-10">

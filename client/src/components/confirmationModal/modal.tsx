@@ -1,4 +1,4 @@
-import { useModal } from "./modalProvider"
+import { useModal } from "./ModalProvider"
 
 type Modal = {
     title: string
