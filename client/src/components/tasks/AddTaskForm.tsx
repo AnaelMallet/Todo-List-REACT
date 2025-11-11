@@ -17,7 +17,7 @@ export default function AddTaskForm(props: AddTaskFormProps) {
     const { openModal, closeModal } = useModal()
 
     return (
-        <div className="border-2 border-gray-400 rounded-lg">
+        <section className="border-2 border-gray-400 rounded-lg">
             <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
@@ -25,10 +25,8 @@ export default function AddTaskForm(props: AddTaskFormProps) {
             >
                 {({ isSubmitting, values, errors, touched }) => (
                     <Form className="grid grid-cols-1 w-full text-[#282c34]">
-                        <div className="p-3">
-                            <div>
-                                <label htmlFor="title">Titre de la tâche<span className="text-red-600">*</span></label>
-                            </div>
+                        <p className="p-3">
+                            <label htmlFor="title">Titre de la tâche<span className="text-red-600">*</span></label>
                             <Field
                                 id="title"
                                 name="title"
@@ -41,11 +39,9 @@ export default function AddTaskForm(props: AddTaskFormProps) {
                                 })}
                             />
                             {errors.title && touched.title ? <div className="text-red-600 text-xs">{errors.title}</div> : <></>}
-                        </div>
-                        <div className="p-3">
-                            <div>
-                                <label htmlFor="description">Description de la tâche<span className="text-red-600">*</span></label>
-                            </div>
+                        </p>
+                        <p className="p-3">
+                            <label htmlFor="description">Description de la tâche<span className="text-red-600">*</span></label>
                             <Field
                                 id="description"
                                 name="description"
@@ -58,8 +54,8 @@ export default function AddTaskForm(props: AddTaskFormProps) {
                                 placeholder="Description de la tâche"
                             />
                             {errors.description && touched.description ? <div className="text-red-600 text-xs">{errors.description}</div> : <></>}
-                        </div>
-                        <div className="text-white flex p-3 gap-3">
+                        </p>
+                        <p className="text-white flex p-3 gap-3">
                             <button type="submit" disabled={isSubmitting} className="bg-cyan-400 font-bold hover:bg-cyan-500 rounded-md p-2">Valider</button>
                             <button
                                 type="button"
@@ -70,6 +66,7 @@ export default function AddTaskForm(props: AddTaskFormProps) {
                                         return
                                         
                                     }
+
                                     openModal({
                                             title: "Annuler la saisis d'une tâche",
                                             description: "Les informations du formulaire ne seront pas enregistrées.",
@@ -80,10 +77,10 @@ export default function AddTaskForm(props: AddTaskFormProps) {
                                         })
                                 }}
                             >Annuler</button>
-                        </div>
+                        </p>
                     </Form>
                 )}
             </Formik>
-        </div>
+        </section>
     )
 }

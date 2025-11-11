@@ -79,6 +79,7 @@ function ListsArray(props: ListsArrayProps) {
     const responseErrors = response.data.deleteList.errors
 
     refetch()
+    closeModal()
 
     if (responseErrors.length > 0) {
       dispatch(addNotification(responseErrors[0].message, false))
@@ -86,16 +87,14 @@ function ListsArray(props: ListsArrayProps) {
     else {
       dispatch(addNotification(`La liste "${list?.name}" à bien été supprimée.`, true))
     }
-
-    closeModal()
   }
 
   return (
-    <div className="mt-7 space-y-4 pt-1 pb-3 mr-3 overflow-y-auto max-h-[49.09rem] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-lg [&::-webkit-scrollbar]:pr-3">
+    <ul className="mt-7 space-y-4 pt-1 pb-3 mx-2 overflow-y-auto max-h-[49.09rem] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-lg [&::-webkit-scrollbar]:pr-3">
       {
         lists.map(list => {
           return (
-            <div key={list.uuid} className="ml-3 mr-5 space-y-1">
+            <li key={list.uuid} className="ml-3 mr-5 space-y-1">
               <div className="flex place-items-center justify-between space-x-2 mb-2">
                 {
                   stateLists
@@ -108,7 +107,7 @@ function ListsArray(props: ListsArrayProps) {
                     : <span
                       onClick={() => { setSelectedList(() => list.uuid) }}
                       className={classNames({
-                        "cursor-pointer text-lg truncate w-full rounded-md pl-2": true,
+                        "cursor-pointer text-lg truncate w-full rounded-md pl-1": true,
                         "hover:bg-gray-700": list.uuid !== selectedList || (selectedList === "" || getSessionStorage("SelectedList") === null),
                         "hover:bg-gray-400 bg-gray-500": list.uuid === selectedList && (selectedList !== "" || getSessionStorage("SelectedList") !== null)
                       })}
@@ -157,11 +156,11 @@ function ListsArray(props: ListsArrayProps) {
                 </span>
               </div>
               <hr />
-            </div>
+            </li>
           )
         })
       }
-    </div>
+    </ul>
   )
 }
 

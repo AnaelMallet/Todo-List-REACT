@@ -85,8 +85,8 @@ export default function Task() {
     }
 
     return (
-        <div className="fixed pt-[5rem] pb-5 w-full h-full overflow-y-auto flex justify-center [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-lg [&::-webkit-scrollbar]:pr-3">
-            <div className="grid grid-cols-1 gap-10 h-max w-[40vw] ml-[10rem]">
+        <main className="fixed pt-[5rem] pb-5 w-full h-full overflow-y-auto flex justify-center [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-lg [&::-webkit-scrollbar]:pr-3">
+            <section className="grid grid-cols-1 gap-10 h-max w-[35vw] ml-[10rem]">
                 <div className="flex justify-center space-x-10 ml-4 mt-5">
                     <p className="pb-1 text-3xl">Lorem, ipsum dolor.</p>
                     <button onClick={() => setDisplayTaskForm(() => true)} className="flex place-items-center space-x-2 bg-cyan-400 hover:bg-cyan-500 text-white font-bold rounded-md px-3">
@@ -120,7 +120,7 @@ export default function Task() {
                         </div>
                         : <p className="flex justify-center text text-lg">...Aucune tâche dans cette liste pour le moment.</p>
                 }
-            </div>
-        </div>
+            </section>
+        </main>
     )
 }

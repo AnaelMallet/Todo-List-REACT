@@ -26,17 +26,17 @@ function Sidebar() {
   }
 
   return (
-    <div className="absolute inline w-[20rem] z-10 h-screen bg-[#282c34] text-white">
+    <aside className="absolute inline w-[20rem] z-10 h-screen bg-[#282c34] text-white">
       <TextTitle />
-      <div className="flex place-items-center space-x-10 ml-4 mt-5">
+      <section className="flex place-items-center space-x-10 ml-4 mt-5">
         <p className="text-3xl pb-1">Mes listes</p>
         <button onClick={addList} className="flex space-x-2 bg-cyan-400 hover:bg-cyan-500 font-bold rounded-md px-3 py-1">
           <p>Ajouter</p>
           <Plus />
         </button>
-      </div>
+      </section>
       <ListsComponent isAddingList={isAddingList} setIsAddingList={setIsAddingList}/>
-    </div>
+    </aside>
   )
 }
 

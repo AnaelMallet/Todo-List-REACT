@@ -21,7 +21,7 @@ function LoginPage() {
 
   return (
     <main className="h-screen flex place-items-center place-content-center">
-      <div className="w-1/3 bg-[#282c34] rounded-lg">
+      <section className="w-1/3 bg-[#282c34] rounded-lg">
         <TextTitle/>
           <Formik
             initialValues={initialValues}
@@ -47,7 +47,7 @@ function LoginPage() {
           >
           {({ isSubmitting, errors, touched }) => (
             <Form className="grid grid-cols-1 gap-y-10 w-full text-white">
-              <div className="px-5">
+              <p className="px-5">
                 <label className="bg-transparent" htmlFor="login">Adresse email/Nom d'utilisateur <span className="text-red-600">*</span></label>
                 <Field
                   className={classNames({
@@ -61,8 +61,8 @@ function LoginPage() {
                   placeholder="adresse email/nom d'utilisateur"
                 />
                 { errors.login && touched.login ? <div className="text-red-600 text-xs -mb-4">{ errors.login }</div> : <></> }
-              </div>
-              <div className="px-5">
+              </p>
+              <p className="px-5">
                 <label className="bg-transparent" htmlFor="password">Mot de passe <span className="text-red-600">*</span></label>
                 <Field
                   className={classNames({
@@ -77,15 +77,15 @@ function LoginPage() {
                   autoComplete="on"
                 />
                 { errors.password && touched.password ? <div className="text-red-600 text-xs -mb-4">{ errors.password }</div> : <></> }
-              </div>
-              <div className="flex justify-center text-white pb-6 space-x-10">
+              </p>
+              <p className="flex justify-center text-white pb-6 space-x-10">
                 <button type="submit" disabled={isSubmitting || loading} className="bg-cyan-400 font-bold hover:bg-cyan-500 rounded-md p-2">Valider</button>
                 <button type="button" onClick={() => router.push("/")} className="font-bold p-2 border-white hover:bg-[#181c24] border-2 rounded-md">Annuler</button>
-              </div>
+              </p>
             </Form>
           )}
         </Formik>
-      </div>
+      </section>
     </main>
   )
 }

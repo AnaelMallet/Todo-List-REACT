@@ -56,7 +56,7 @@ export function ListsComponent(props: ListsFormComponentProps) {
   }, [getLists, isLogged])
 
   return (
-    <div>
+    <section>
       <AddListForm
         isAddingList={props.isAddingList}
         setIsAddingList={props.setIsAddingList}
@@ -69,6 +69,6 @@ export function ListsComponent(props: ListsFormComponentProps) {
         userIsLogged={isLogged}
         refetch={refetch}
       />
-    </div>
+    </section>
   )
 }

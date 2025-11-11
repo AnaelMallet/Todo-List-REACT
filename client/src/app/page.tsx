@@ -39,10 +39,10 @@ function Home() {
   } = useUser()
 
   return (
-    <>
+    <main>
       <Sidebar />
       <Task />
-      <div className="absolute inline space-x-4 right-0 top-0 m-5 text-white">
+      <nav className="absolute inline space-x-4 right-0 top-0 m-5 text-white">
         {!isLogged || !user ?
           <>
             <button onClick={() => router.push("/login")} className="bg-cyan-400 font-bold hover:bg-cyan-500 rounded-md p-2">Se connecter</button>
@@ -54,8 +54,8 @@ function Home() {
             <button onClick={() => logout()} className="bg-[#282c34] hover:bg-[#181c24] font-bold rounded-md p-2">Se déconnecter</button>
           </>
         }
-      </div>
-    </>
+      </nav>
+    </main>
   )
 }
 

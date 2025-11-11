@@ -23,8 +23,8 @@ function AddListForm(props: ListsFormProps) {
   if (!props.isAddingList) return <></>
 
   return (
-    <div
-      className="mt-2 flex justify-center text-lg"
+    <section
+      className="-mb-2 mt-2 flex justify-center text-lg"
     >
       <Formik
         initialValues={initialValues}
@@ -68,7 +68,7 @@ function AddListForm(props: ListsFormProps) {
         )}
 
       </Formik>
-    </div>
+    </section>
   )
 }
 
