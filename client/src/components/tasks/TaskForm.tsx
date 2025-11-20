@@ -1,31 +1,42 @@
 import { Field, Form, Formik } from "formik"
-import { Dispatch, SetStateAction } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import classNames from "classnames"
 
 import { useModal } from "../confirmationModal/ModalProvider"
 
-import {
-    initialValues,
-    validationSchema
-} from "./api"
-import classNames from "classnames"
+import { validationSchema, initialValues } from "./api"
+import { Task } from "./Task"
 
 interface AddTaskFormProps {
-    setDisplayTaskForm: Dispatch<SetStateAction<boolean>>
+    setDisplayTaskForm: Dispatch<SetStateAction<boolean>>,
+    handleSettings: (id: number, setting: string) => Error | void,
+    task: Task | undefined
 }
 
 export default function AddTaskForm(props: AddTaskFormProps) {
     const { openModal, closeModal } = useModal()
+    const {
+        setDisplayTaskForm,
+        handleSettings,
+        task
+    } = props
+    const [ initialTaskValues, setInitialValues ] = useState(task)
+
+    useEffect(() => {
+        setInitialValues(() => task)
+    }, [task])
 
     return (
         <section className="border-2 border-gray-400 rounded-lg">
             <Formik
-                initialValues={initialValues}
+                initialValues={initialTaskValues ?? initialValues}
                 validationSchema={validationSchema}
+                enableReinitialize={true}
                 onSubmit={() => {}}
             >
-                {({ isSubmitting, values, errors, touched }) => (
+                {({ isSubmitting, values, errors, touched, initialValues }) => (
                     <Form className="grid grid-cols-1 w-full text-[#282c34]">
-                        <p className="p-3">
+                        <div className="p-3">
                             <label htmlFor="title">Titre de la tâche<span className="text-red-600">*</span></label>
                             <Field
                                 id="title"
@@ -38,9 +49,9 @@ export default function AddTaskForm(props: AddTaskFormProps) {
                                     "border-red-600": errors.title && touched.title
                                 })}
                             />
-                            {errors.title && touched.title ? <div className="text-red-600 text-xs">{errors.title}</div> : <></>}
-                        </p>
-                        <p className="p-3">
+                            {errors.title && touched.title ? <p className="text-red-600 text-xs">{errors.title}</p> : <></>}
+                        </div>
+                        <div className="p-3">
                             <label htmlFor="description">Description de la tâche<span className="text-red-600">*</span></label>
                             <Field
                                 id="description"
@@ -53,31 +64,36 @@ export default function AddTaskForm(props: AddTaskFormProps) {
                                 })}
                                 placeholder="Description de la tâche"
                             />
-                            {errors.description && touched.description ? <div className="text-red-600 text-xs">{errors.description}</div> : <></>}
-                        </p>
-                        <p className="text-white flex p-3 gap-3">
+                            {errors.description && touched.description ? <p className="text-red-600 text-xs">{errors.description}</p> : <></>}
+                        </div>
+                        <div className="text-white flex p-3 gap-3">
                             <button type="submit" disabled={isSubmitting} className="bg-cyan-400 font-bold hover:bg-cyan-500 rounded-md p-2">Valider</button>
                             <button
                                 type="button"
                                 className="font-bold p-2 bg-[#282c34] hover:bg-[#181c24] rounded-md"
                                 onClick={() => {
-                                    if (values.title === "" && values.description === "") {
-                                        props.setDisplayTaskForm(() => false)
-                                        return
-                                        
+                                    if (values.title == "" && values.description == "") {
+                                        setDisplayTaskForm(() => false)
+                                        return 
                                     }
 
                                     openModal({
-                                            title: "Annuler la saisis d'une tâche",
-                                            description: "Les informations du formulaire ne seront pas enregistrées.",
-                                            function: function () {
-                                                props.setDisplayTaskForm(() => false)
-                                                closeModal()
+                                        title: "Annuler la saisis d'une tâche",
+                                        description: "Les informations du formulaire ne seront pas enregistrées.",
+                                        function: function () {
+                                            if (task) {
+                                                handleSettings(task.id, "isUpdating")
                                             }
-                                        })
+
+                                            setDisplayTaskForm(() => false)
+                                            initialValues.title = ""
+                                            initialValues.description = ""
+                                            closeModal()
+                                        }
+                                    })
                                 }}
                             >Annuler</button>
-                        </p>
+                        </div>
                     </Form>
                 )}
             </Formik>

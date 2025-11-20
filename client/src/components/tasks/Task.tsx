@@ -2,19 +2,26 @@ import { useState } from "react"
 import { Plus } from "lucide-react"
 
 import { useSelectList } from "../lists/SelectListProvider"
+import { Dictionary } from "../utils"
 
 import TaskComponent from "./TaskComponent"
-import AddTaskForm from "./AddTaskForm"
+import TaskForm from "./TaskForm"
 
 export interface ITaskState {
     taskId: number
-    isUnroll: boolean
-    isChecked: boolean
+    isUpdating: boolean
+    taskOptionIsVisible: boolean
+}
+
+export interface Task {
+    id: number
+    title: string
+    description: string
 }
 
 export default function Task() {
     const int = 1
-    const tasks = [
+    const tasks: Task[] = [
         {
             id: 1,
             title: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minima, fugit.",
@@ -43,60 +50,67 @@ export default function Task() {
     ]
     const settingsTasks: ITaskState[] = tasks.map(task => ({
         taskId: task.id,
-        isUnroll: false,
-        isChecked: false
+        isUpdating: false,
+        taskOptionIsVisible: false
     }))
     const [taskStates, setTaskStates] = useState<ITaskState[]>(settingsTasks)
-    const [displayTaskForm, setDisplayTaskForm] = useState(false)
+    const [taskFormIsVisible, setTaskFormIsVisible] = useState(false)
     const { selectedList } = useSelectList()
-
-    function handleIsUnroll(id: number) {
-        const newtaskStates = taskStates.map(taskState => {
-            if (taskState.taskId === id) {
-                const updatedTaskState = {
-                    ...taskState,
-                    isUnroll: !taskState.isUnroll
-                }
-
-                return updatedTaskState
-            }
-
-            return taskState
-        })
-
-        setTaskStates(newtaskStates)
+    const dictSettings: Dictionary<Function> = {
+        "isUpdating": handleIsUpdating,
+        "optionIsVisible": handleOptionIsVisible
     }
 
-    function handleIsChecked(id: number) {
-        const newtaskStates = taskStates.map(taskState => {
-            if (taskState.taskId === id) {
-                const updatedTaskState = {
-                    ...taskState,
-                    isChecked: !taskState.isChecked
-                }
+    function handleSettings(id: number, setting: string): Error | void {
+        const handleSetting = dictSettings[setting]
 
-                return updatedTaskState
-            }
+        if (handleSetting === undefined) {
+            return Error("Wrong setting")
+        }
 
-            return taskState
-        })
+        handleSetting(id)
+    }
 
-        setTaskStates(newtaskStates)
+    function handleIsUpdating(id: number) {
+        const updatedTaskStates = [...taskStates]
+        const taskState = updatedTaskStates.find(state => state.taskId === id) as ITaskState
+
+        taskState.isUpdating = !taskState.isUpdating
+
+        setTaskStates(() => updatedTaskStates)
+    }
+
+    function handleOptionIsVisible(id: number) {
+        const updatedTaskStates = [...taskStates]
+        const taskState = updatedTaskStates.find(state => state.taskId === id) as ITaskState
+        const otherTaskState = updatedTaskStates.find(state => state.taskOptionIsVisible === true && state.taskId !== id)
+
+        if (otherTaskState) {
+            otherTaskState.taskOptionIsVisible = false
+        }
+
+        taskState.taskOptionIsVisible = !taskState.taskOptionIsVisible
+
+        setTaskStates(() => updatedTaskStates)
     }
 
     return (
         <main className="fixed pt-[5rem] pb-5 w-full h-full overflow-y-auto flex justify-center [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-lg [&::-webkit-scrollbar]:pr-3">
             <section className="grid grid-cols-1 gap-10 h-max w-[35vw] ml-[10rem]">
                 <div className="flex justify-center space-x-10 ml-4 mt-5">
-                    <p className="pb-1 text-3xl">Lorem, ipsum dolor.</p>
-                    <button onClick={() => setDisplayTaskForm(() => true)} className="flex place-items-center space-x-2 bg-cyan-400 hover:bg-cyan-500 text-white font-bold rounded-md px-3">
+                    <p className="pb-1 text-3xl">Lorem, ipsum dolor.</p> { /* TODO: ListName */ }
+                    <button onClick={() => setTaskFormIsVisible(() => true)} className="flex place-items-center space-x-2 bg-cyan-400 hover:bg-cyan-500 text-white font-bold rounded-md px-3">
                         <p>Ajouter une tâche</p>
                         <Plus />
                     </button>
                 </div>
                 {
-                    displayTaskForm
-                        ? <AddTaskForm setDisplayTaskForm={setDisplayTaskForm} />
+                    taskFormIsVisible
+                        ? <TaskForm
+                            setDisplayTaskForm={setTaskFormIsVisible}
+                            handleSettings={handleSettings}
+                            task={tasks.find(task => taskStates.find(taskState => taskState.isUpdating === true)?.taskId === task.id)}
+                        />
                         : <></>
                 }
                 {
@@ -111,8 +125,8 @@ export default function Task() {
                                             title={task.title}
                                             description={task.description}
                                             taskStates={taskStates}
-                                            handleIsUnroll={handleIsUnroll}
-                                            handleIsChecked={handleIsChecked}
+                                            handleSettings={handleSettings}
+                                            setTaskFormIsVisible={setTaskFormIsVisible}
                                         />
                                     )
                                 })

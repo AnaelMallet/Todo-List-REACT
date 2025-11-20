@@ -1,5 +1,9 @@
 "use client"
 
+export interface Dictionary<T> {
+    [key: string]: T;
+}
+
 function setLocalStorage(name: string, value: string) {
   localStorage.setItem(name, value)
 }

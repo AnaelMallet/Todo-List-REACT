@@ -1,11 +1,11 @@
 import * as Yup from "yup"
 
-const initialValues = {
-    title: "",
+export const initialValues = {
+    title : "",
     description: ""
 }
 
-const validationSchema = Yup.object().shape({
+export const validationSchema = Yup.object().shape({
     title: Yup
         .string()
         .required("Le titre est obligatoire."),
@@ -13,8 +13,3 @@ const validationSchema = Yup.object().shape({
         .string()
         .required("La description est obligatoire.")
 })
-
-export {
-    initialValues,
-    validationSchema
-}

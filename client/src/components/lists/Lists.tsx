@@ -27,6 +27,11 @@ export interface ListProps {
   isFavorite: boolean
 }
 
+export interface IListState {
+    listId: string
+    isUpdateListName: boolean
+}
+
 interface ListsArrayProps {
   lists: ListProps[]
   refetch: (variables?: Partial<OperationVariables> | undefined) => Promise<ApolloQueryResult<any>>
@@ -38,7 +43,7 @@ function ListsArray(props: ListsArrayProps) {
     refetch
   } = props
 
-  const settingsLists = lists.map(list => ({
+  const settingsLists: IListState[] = lists.map(list => ({
     listId: list.uuid,
     isUpdateListName: false
   }))
@@ -49,27 +54,19 @@ function ListsArray(props: ListsArrayProps) {
   const { selectedList, setSelectedList } = useSelectList()
   const [toggleFavoriteMutate] = useMutation(toggleFavoriteMutation, { client, context: userContext })
   const [deleteListMutate] = useMutation(deleteListMutation, { client, context: userContext })
-  const [stateLists, setStateLists] = useState(settingsLists)
+  const [stateLists, setStateLists] = useState<IListState[]>(settingsLists)
 
   useEffect(() => {
     setStateLists(() => settingsLists)
   }, [lists])
 
   function handleIsUpdateListName(id: string) {
-    const newList = stateLists.map(list => {
-      if (list.listId === id) {
-        const updatedList = {
-          ...list,
-          isUpdateListName: !list.isUpdateListName
-        }
+    const updatedListSettings = [...stateLists]
+    const listSetting = updatedListSettings.find(state => state.listId === id) as IListState
 
-        return updatedList
-      }
+    listSetting.isUpdateListName = !listSetting.isUpdateListName
 
-      return list
-    })
-
-    setStateLists(newList)
+    setStateLists(() => updatedListSettings)
   }
 
   async function handleDeleteList(id: string): Promise<void> {
@@ -145,7 +142,7 @@ function ListsArray(props: ListsArrayProps) {
                   <button
                     onClick={() => {
                       openModal({
-                        title: "Confirmation",
+                        title: "Suppression d'une liste",
                         description: `Êtes-vous sûr de vouloir supprimer la liste "${list.name}" ?`,
                         function: async function () { await handleDeleteList(list.uuid) }
                       })
