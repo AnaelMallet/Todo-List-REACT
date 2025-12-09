@@ -6,6 +6,7 @@ import { Dictionary } from "../utils"
 
 import TaskComponent from "./TaskComponent"
 import TaskForm from "./TaskForm"
+import { useUser } from "../users/UserProvider"
 
 export interface ITaskState {
     taskId: number
@@ -56,6 +57,10 @@ export default function Task() {
     const [taskStates, setTaskStates] = useState<ITaskState[]>(settingsTasks)
     const [taskFormIsVisible, setTaskFormIsVisible] = useState(false)
     const { selectedList } = useSelectList()
+    const {
+        isLogged,
+        user
+    } = useUser()
     const dictSettings: Dictionary<Function> = {
         "isUpdating": handleIsUpdating,
         "optionIsVisible": handleOptionIsVisible
@@ -93,6 +98,9 @@ export default function Task() {
 
         setTaskStates(() => updatedTaskStates)
     }
+
+    if (!isLogged || !user) return <p className="fixed pt-[5rem] pb-5 w-full h-full overflow-y-auto flex justify-center text-2xl">Vous devez vous connecter vous visualiser vos tâches.</p>
+    if (selectedList === "") return <p className="fixed pt-[5rem] pb-5 w-full h-full overflow-y-auto flex justify-center text-2xl">Selectionnez une liste pour voir ces tâches associées.</p>
 
     return (
         <main className="fixed pt-[5rem] pb-5 w-full h-full overflow-y-auto flex justify-center [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-lg [&::-webkit-scrollbar]:pr-3">

@@ -35,7 +35,7 @@ function AddListForm(props: ListsFormProps) {
             return
           }
 
-          const response = await mutateFunction({ variables: { input: { ...values, isFavorite: false } } })
+          const response = await mutateFunction({ variables: { name: values.name } })
           const responseErrors = response.data.createList.errors
 
           if (responseErrors.length > 0) {

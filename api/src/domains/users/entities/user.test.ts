@@ -1,3 +1,5 @@
+import { AgainstNullOrUndefinedError } from "@shared/basicErrors"
+
 import { Email } from "../value-objects/email"
 import { Password } from "../value-objects/password"
 
@@ -63,7 +65,7 @@ describe("test the user entity", () => {
     const userErrors = userResult.getErrors()
   
     expect(userErrors.length).toBe(1)
-    expect(userErrors[0].message).toBe("againstNullOrUndefined")
+    expect(userErrors[0]).toBeInstanceOf(AgainstNullOrUndefinedError)
   })
   
   test("Should not create an user because lastname is undefined", () => {
@@ -79,7 +81,7 @@ describe("test the user entity", () => {
     const userErrors = userResult.getErrors()
   
     expect(userErrors.length).toBe(1)
-    expect(userErrors[0].message).toBe("againstNullOrUndefined")
+    expect(userErrors[0]).toBeInstanceOf(AgainstNullOrUndefinedError)
   })
   
   test("Should not create an user because email is undefined", () => {
@@ -95,7 +97,7 @@ describe("test the user entity", () => {
     const userErrors = userResult.getErrors()
   
     expect(userErrors.length).toBe(1)
-    expect(userErrors[0].message).toBe("againstNullOrUndefined")
+    expect(userErrors[0]).toBeInstanceOf(AgainstNullOrUndefinedError)
   })
   
   test("Should not create an user because password is undefined", () => {
@@ -111,6 +113,6 @@ describe("test the user entity", () => {
     const userErrors = userResult.getErrors()
   
     expect(userErrors.length).toBe(1)
-    expect(userErrors[0].message).toBe("againstNullOrUndefined")
+    expect(userErrors[0]).toBeInstanceOf(AgainstNullOrUndefinedError)
   })
 })

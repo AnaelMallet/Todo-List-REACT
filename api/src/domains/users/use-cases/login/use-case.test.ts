@@ -1,8 +1,8 @@
 import { userTestRepository } from "../../infra/databases/repositories"
+import { LoginNotValidError } from "../../errors"
 
 import { CreateUserUseCase } from "../createUser/use-case"
 import { userPropsDto } from "../createUser/dto"
-import { LoginNotValidError } from "../../errors"
 
 import { loginUserPropsDto } from "./dto"
 import { LoginUserUseCase } from "./use-case"

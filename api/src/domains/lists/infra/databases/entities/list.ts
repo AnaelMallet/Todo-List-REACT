@@ -5,9 +5,11 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryColumn,
   UpdateDateColumn
 } from "typeorm"
+import TaskEntity from "./task"
 
 @Entity({ name: "lists" })
 export default class ListEntity extends BaseEntity {
@@ -22,6 +24,9 @@ export default class ListEntity extends BaseEntity {
 
   @ManyToOne(() => UserEntity, user => user.lists)
   user: UserEntity
+
+  @OneToMany(() => TaskEntity, task => task.list)
+  tasks: TaskEntity[]
 
   @CreateDateColumn()
   createdDate: Date

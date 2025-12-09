@@ -1,12 +1,13 @@
 import { v4 as uuid } from "uuid"
 
+import { AgainstNullOrUndefinedError } from "@shared/basicErrors"
+
 import { List, ListProps } from "./list"
 
 describe("test the list entity", () => {
   const userUuid = uuid()
   const listProps: ListProps = {
     name: "custom list",
-    isFavorite: false,
     userId: userUuid
   }
 
@@ -29,23 +30,7 @@ describe("test the list entity", () => {
     const listErrors = listResult.getErrors()
 
     expect(listErrors.length).toBe(1)
-    expect(listErrors[0].message).toBe("againstNullOrUndefined")
-  })
-
-  test("should not create a list entity because isFavorite is undefined", async () => {
-    const props = {...listProps}
-
-    props.isFavorite = undefined
-
-    const listResult = List.create(props)
-
-    expect(listResult.isSuccess).toBe(false)
-    expect(listResult.values).toBe(undefined)
-
-    const listErrors = listResult.getErrors()
-
-    expect(listErrors.length).toBe(1)
-    expect(listErrors[0].message).toBe("againstNullOrUndefined")
+    expect(listErrors[0]).toBeInstanceOf(AgainstNullOrUndefinedError)
   })
 
   test("should not create a list entity because userId is undefined", async () => {
@@ -61,6 +46,6 @@ describe("test the list entity", () => {
     const listErrors = listResult.getErrors()
 
     expect(listErrors.length).toBe(1)
-    expect(listErrors[0].message).toBe("againstNullOrUndefined")
+    expect(listErrors[0]).toBeInstanceOf(AgainstNullOrUndefinedError)
   })
 })

@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client"
 
 const createListMutation = gql`
-  mutation CreateList($input: ListInput!) {
-    createList(input: $input) {
+  mutation CreateList($name: String!) {
+    createList(name: $name) {
       code
       isSuccess
       errors {

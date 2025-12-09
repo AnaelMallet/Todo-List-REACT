@@ -7,10 +7,6 @@ import { Email } from "../value-objects/email"
 import { Password } from "../value-objects/password"
 
 export class UserTransformer extends BasicTransformer<User, UserEntity> {
-  arrayToDomain(databaseEntities: UserEntity[]): Result<User[]> {
-    throw new Error("Method not implemented.")
-  }
-
   toDomain(databaseEntity: UserEntity): Result<User> {
     const emailResult = Email.create(databaseEntity.email)
     const passwordResult = Password.create(databaseEntity.password)
@@ -33,7 +29,10 @@ export class UserTransformer extends BasicTransformer<User, UserEntity> {
   toDatabase(domainEntity: User): UserEntity {
       const entityUser = new UserEntity()
 
-      entityUser.uuid = domainEntity.uuid
+      if (domainEntity.uuid) {
+        entityUser.uuid = domainEntity.uuid
+      }
+
       entityUser.firstrname = domainEntity.props.firstname
       entityUser.lastname = domainEntity.props.lastname
       entityUser.username = domainEntity.props.username

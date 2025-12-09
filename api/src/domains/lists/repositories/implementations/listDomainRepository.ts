@@ -1,10 +1,10 @@
 import { Result } from "@shared/Results"
 
 import { List } from "../../entities/list"
-import { ListRepository } from "../../infra/databases/repositories/implementations/user"
+import { ListRepository } from "../../infra/databases/repositories/implementations/list"
 import { listTransformer } from "../../transformers"
 
-import { IListDomainRepository } from "../I-ListDomainRepository"
+import { IListDomainRepository } from "../I_ListDomainRepository"
 
 export class ListDomainRepository implements IListDomainRepository {
   repository: ListRepository
