@@ -21,13 +21,14 @@ export function useSelectList() {
 }
 
 export default function SelectListProvider(props: any) {
+      const selectedListUuid = getSessionStorage("selectedList")
       const [ selectedList, setSelectedList ] = useState<string>(
-    () => getSessionStorage("selectedList")
+    () => selectedListUuid
   )
 
   useEffect(() => {
     setSessionStorage("selectedList", selectedList)
-  }, [selectedList])
+  }, [selectedListUuid, selectedList])
 
   return (
     <SelectListContext.Provider value={{ selectedList, setSelectedList }}>

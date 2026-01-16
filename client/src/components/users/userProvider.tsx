@@ -1,4 +1,11 @@
-import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState
+} from "react"
 import { useRouter } from "next/navigation"
 import { ApolloQueryResult, OperationVariables, useMutation, useQuery } from "@apollo/client"
 import client from "@/app/graphql-api"
@@ -55,36 +62,56 @@ export default function UserProvider(props: any) {
     dispatch(addNotification("Vous êtes déconnecté !", true))
   }
 
-  useEffect(() => {
-    setUserId(getLocalStorage("userId"))
+  const handleStorage = () => {
+    setUserContext(() => {
+      return {
+        headers: {
+          authorization: `Bearer ${getLocalStorage("token")}`,
+          userId: getLocalStorage("userId")
+        }
+      }
+    })
+  }
 
-    if (userId) {
+  useEffect(() => {
+    const localStorageUserId = getLocalStorage("userId")
+
+    setUserId(localStorageUserId)
+
+    if (localStorageUserId !== "") {
       setIsLogged(true)
+      handleStorage()
+      window.addEventListener("storage", handleStorage)
     }
-  }, [userId])
+
+    return () => window.removeEventListener("storage", handleStorage)
+  }, [])
 
   useEffect(() => {
     const fetchAccessToken = async () => {
       const response = await mutateFunction({ variables: { userId } })
-        const responseErrors = response.data.verifyToken.errors
+      const responseErrors = response.data.verifyToken.errors
   
-        if (responseErrors.length > 0) {
-          dispatch(addNotification(responseErrors[0].message, false))
-          setUserId(() => {
-            return null
-          })
-          setIsLogged(() => {
-            return false
-          })
-          removeLocalStorage("userId")
-          router.push("/login")
-        }
-  
-        return response.data.verifyToken.values.accessToken
+      if (responseErrors.length > 0) {
+        dispatch(addNotification(responseErrors[0].message, false))
+
+        setUserId(() => {
+          return null
+        })
+
+        setIsLogged(() => {
+          return false
+        })
+
+        removeLocalStorage("userId")
+
+        router.push("/login")
+      }
+
+      return response.data.verifyToken.values.accessToken
     }
     const initializeAccessToken = async () => {
       if (userId) {
-  
         setLocalStorage("token", await fetchAccessToken())
 
         const interval = setInterval(async () => {
@@ -92,8 +119,8 @@ export default function UserProvider(props: any) {
 
           if (newAccessToken !== getLocalStorage("token")) {
             setLocalStorage("token", newAccessToken)
-            window.dispatchEvent(new StorageEvent("storage"))
           }
+          window.dispatchEvent(new StorageEvent("storage"))
         }, 10000)
   
         return () => clearInterval(interval)
@@ -103,26 +130,7 @@ export default function UserProvider(props: any) {
     initializeAccessToken()
   }, [dispatch, mutateFunction, router, userId])
 
-  useEffect(() => {
-    const handleStorage = () => {
-      setUserContext(() => {
-        const accessToken = getLocalStorage("token")
-
-        return {
-          headers: {
-            authorization: `Bearer ${accessToken}`
-          }
-        }
-      })
-    }
-
-    handleStorage()
-    window.addEventListener("storage", handleStorage)
-
-    return () => window.removeEventListener("storage", handleStorage)
-  }, [])
-
-  if (loading && isLoading) return <></>
+  if (loading || isLoading) return <></>
 
   return (
     <UserContext.Provider value={{

@@ -20,6 +20,8 @@ export class TaskRepository extends BasicRepository<TaskEntity> implements ITask
         .createQueryBuilder(this.alias)
         .where(`${this.alias}.list_uuid = :uuid`, { uuid })
         .innerJoinAndSelect(`${this.alias}.list`, "list_tasks")
+        .addOrderBy(`${this.alias}.is_done`, "ASC")
+        .addOrderBy(`${this.alias}.title`, "ASC")
         .getMany()
     }
 

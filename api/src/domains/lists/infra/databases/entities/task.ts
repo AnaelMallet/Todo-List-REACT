@@ -24,7 +24,9 @@ export default class TaskEntity extends BaseEntity {
     @Column("bool", { default: false })
     isDone: boolean
 
-    @ManyToOne(() => ListEntity, list => list.tasks)
+    @ManyToOne(() => ListEntity, list => list.tasks, {
+        onDelete: "CASCADE"
+    })
     list: ListEntity
 
     @CreateDateColumn()

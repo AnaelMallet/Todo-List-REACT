@@ -27,8 +27,8 @@ interface QueryInfo {
 function ListsArrayComponent(props: QueryInfo) {
   if (!props.userIsLogged) return <p className="mt-7 flex justify-center text-lg">Connectez-vous pour voir vos listes.</p>
   if (props.loading) return <p className="mt-7 flex justify-center text-lg">Chargement ...</p>
-  if (props.error) return <p className="mt-7 flex justify-center text-lg">Une erreur est survenu.</p>
-  if (!props.data || props.data.lists.values.length === 0) return <p className="mt-7 flex justify-center text-lg">...Aucune liste pour le moment.</p>
+  if (!props.data || !props.data.lists || props.error) return <p className="mt-7 flex justify-center text-lg">Une erreur est survenu.</p>
+  if (!props.data.lists.values || props.data.lists.values.length === 0) return <p className="mt-7 flex justify-center text-lg">...Aucune liste pour le moment.</p>
 
   return (
     <ListsArray lists={props.data.lists.values} refetch={props.refetch} />

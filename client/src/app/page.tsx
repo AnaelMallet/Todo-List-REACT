@@ -8,7 +8,8 @@ import NotificationProvider from '../components/notifications/NotificationProvid
 import ModalProvider from '../components/confirmationModal/ModalProvider'
 import UserProvider, { useUser } from "../components/users/UserProvider"
 import Sidebar from '../components/sidebar'
-import Task from '../components/tasks/Task'
+import TaskSettingManagerProvider from '../components/tasks/taskSettingManagerProvider'
+import { TasksComponent } from "../components/tasks/TaskComponent"
 
 import client from "./graphql-api"
 
@@ -20,7 +21,9 @@ export function Providers({ children }: Readonly<{ children: React.ReactNode }>)
         <UserProvider>
           <ModalProvider>
             <SelectListProvider>
-              {children}
+              <TaskSettingManagerProvider>
+                {children}
+              </TaskSettingManagerProvider>
             </SelectListProvider>
           </ModalProvider>
         </UserProvider>
@@ -41,7 +44,7 @@ function Home() {
   return (
     <main>
       <Sidebar />
-      <Task />
+      <TasksComponent />
       <nav className="absolute inline space-x-4 right-0 top-0 m-5 text-white">
         {!isLogged || !user ?
           <>

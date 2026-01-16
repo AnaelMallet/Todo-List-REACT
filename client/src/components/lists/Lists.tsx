@@ -15,7 +15,7 @@ import { FullStarIconSVG, StarIconSVG } from "@/app/svg"
 import { addNotification, useNotification } from "../notifications/NotificationProvider"
 import { useUser } from "../users/UserProvider"
 import { useModal } from "../confirmationModal/ModalProvider"
-import { getSessionStorage } from "../utils"
+import { getSessionStorage, removeSessionStorage } from "../utils"
 
 import { toggleFavoriteMutation, deleteListMutation } from "./graphql"
 import UpdateListNameForm from "./UpdateListNameForm"
@@ -80,10 +80,12 @@ function ListsArray(props: ListsArrayProps) {
 
     if (responseErrors.length > 0) {
       dispatch(addNotification(responseErrors[0].message, false))
+      return
     }
-    else {
-      dispatch(addNotification(`La liste "${list?.name}" à bien été supprimée.`, true))
-    }
+
+    dispatch(addNotification(`La liste "${list?.name}" à bien été supprimée.`, true))
+    removeSessionStorage("selectedList")
+    setSelectedList(() => "")
   }
 
   return (

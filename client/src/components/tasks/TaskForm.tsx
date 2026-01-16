@@ -1,26 +1,40 @@
 import { Field, Form, Formik } from "formik"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import classNames from "classnames"
+import { ApolloQueryResult, OperationVariables, useMutation } from "@apollo/client"
+
+import client from "@/app/graphql-api"
 
 import { useModal } from "../confirmationModal/ModalProvider"
+import { useUser } from "../users/UserProvider"
 
 import { validationSchema, initialValues } from "./api"
 import { Task } from "./Task"
+import { upsertTaskMutation } from "./graphql"
+import { useNotification, addNotification } from "../notifications/NotificationProvider"
+import { useTaskSettingManager } from "./taskSettingManagerProvider"
 
 interface AddTaskFormProps {
     setDisplayTaskForm: Dispatch<SetStateAction<boolean>>,
-    handleSettings: (id: number, setting: string) => Error | void,
-    task: Task | undefined
+    task: Task | undefined,
+    list: {uuid: string, name: string},
+    refetch: (variables?: Partial<OperationVariables> | undefined) => Promise<ApolloQueryResult<any>>
 }
 
 export default function AddTaskForm(props: AddTaskFormProps) {
-    const { openModal, closeModal } = useModal()
     const {
         setDisplayTaskForm,
-        handleSettings,
-        task
+        task,
+        list,
+        refetch
     } = props
+
+    const { userContext } = useUser()
+    const { dispatch } = useNotification()
+    const { openModal, closeModal } = useModal()
+    const { handleIsUpdating } = useTaskSettingManager()
     const [ initialTaskValues, setInitialValues ] = useState(task)
+    const [mutateFunction] = useMutation(upsertTaskMutation, { client, context: userContext })
 
     useEffect(() => {
         setInitialValues(() => task)
@@ -32,9 +46,27 @@ export default function AddTaskForm(props: AddTaskFormProps) {
                 initialValues={initialTaskValues ?? initialValues}
                 validationSchema={validationSchema}
                 enableReinitialize={true}
-                onSubmit={() => {}}
+                onSubmit={async values => {
+                    const response = await mutateFunction({ variables: { input: {
+                        uuid: task?.uuid,
+                        title: values.title,
+                        description: values.description,
+                        listId: list.uuid
+                    } } })
+                    const responseErrors = response.data.upsertTask.errors
+
+                    if (responseErrors.length > 0) {
+                        dispatch(addNotification(responseErrors[0].message, false))
+                    } else {
+                        dispatch(addNotification(`La tâche "${values.title}" à bien été ajouté à la liste "${list.name}".`, true))
+                    }
+
+                    setDisplayTaskForm(() => false)
+                    if (task) handleIsUpdating(task.uuid)
+                    refetch()
+                }}
             >
-                {({ isSubmitting, values, errors, touched, initialValues }) => (
+                {({ isSubmitting, values, errors, touched }) => (
                     <Form className="grid grid-cols-1 w-full text-[#282c34]">
                         <div className="p-3">
                             <label htmlFor="title">Titre de la tâche<span className="text-red-600">*</span></label>
@@ -44,7 +76,7 @@ export default function AddTaskForm(props: AddTaskFormProps) {
                                 type="text"
                                 placeholder="Titre de la tâche"
                                 className={classNames({
-                                     "border-gray-400 border-2 rounded-2xl h-9 w-full pl-2 focus:outline-none": true,
+                                    "border-gray-400 border-2 rounded-2xl h-9 w-full pl-2 focus:outline-none": true,
                                     "border-gray-400": !errors.title,
                                     "border-red-600": errors.title && touched.title
                                 })}
@@ -81,13 +113,9 @@ export default function AddTaskForm(props: AddTaskFormProps) {
                                         title: "Annuler la saisis d'une tâche",
                                         description: "Les informations du formulaire ne seront pas enregistrées.",
                                         function: function () {
-                                            if (task) {
-                                                handleSettings(task.id, "isUpdating")
-                                            }
+                                            if (task) handleIsUpdating(task.uuid)
 
                                             setDisplayTaskForm(() => false)
-                                            initialValues.title = ""
-                                            initialValues.description = ""
                                             closeModal()
                                         }
                                     })

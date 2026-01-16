@@ -4,29 +4,31 @@ import classNames from "classnames"
 
 import { useModal } from "../confirmationModal/ModalProvider"
 
-import { ITaskState } from "./Task"
+import { useTaskSettingManager } from "./taskSettingManagerProvider"
+import { TaskProps } from "./TaskComponent"
+import { ApolloQueryResult, OperationVariables, useMutation } from "@apollo/client"
+import { deleteTaskMutation, toggleTaskIsDoneMutation } from "./graphql"
+import { useUser } from "../users/UserProvider"
+import { addNotification, useNotification } from "../notifications/NotificationProvider"
 
 interface PopoverTaskProps {
-    id: number
-    title: string
-    taskIsDone: boolean
-    taskStates: ITaskState[],
-    setTaskIsDone: Dispatch<SetStateAction<boolean>>
-    handleSettings: (id: number, setting: string) => Error | void,
-    setTaskFormIsVisible: Dispatch<SetStateAction<boolean>>
+    task: TaskProps
+    setTaskFormIsVisible: Dispatch<SetStateAction<boolean>>,
+    refetch: (variables?: Partial<OperationVariables> | undefined) => Promise<ApolloQueryResult<any>>
 }
 
 export default function TaskOptionPopover(props: PopoverTaskProps) {
-    const { openModal, closeModal } = useModal()
     const {
-        id,
-        title,
-        taskIsDone,
-        taskStates,
-        setTaskIsDone,
-        handleSettings,
-        setTaskFormIsVisible
+        task,
+        setTaskFormIsVisible,
+        refetch
     } = props
+    const { openModal, closeModal } = useModal()
+    const { userContext } = useUser()
+    const { dispatch } = useNotification()
+    const { settings, handleOptionIsVisible, handleIsUpdating } = useTaskSettingManager()
+    const [mutateFunction] = useMutation(toggleTaskIsDoneMutation, { context: userContext })
+    const [deleteTaskMutate] = useMutation(deleteTaskMutation, { context: userContext })
     
     return (
         <section className="absolute flex -right-[10.1rem] w-[10rem] h-max z-10">
@@ -34,20 +36,35 @@ export default function TaskOptionPopover(props: PopoverTaskProps) {
             <div className="bg-[#282c34] rounded-lg w-full h-full py-1 place-content-center space-y-1">
                 <button
                     className="w-full rounded-t-lg flex place-items-center place-content-center space-x-2 hover:bg-[#181c24]"
-                    onClick={() => {
-                        setTaskIsDone(() => !taskIsDone)
-                        handleSettings(id, "optionIsVisible")
+                    onClick={async () => {
+                        const response = await mutateFunction({ variables: { taskUuid: task.uuid } })
+
+                        const responseErrors = response.data.toggleIsDone.errors
+                        
+                        if (responseErrors.length > 0) {
+                            dispatch(addNotification(responseErrors[0].message, false))
+                            return 
+                        }
+                        
+                        dispatch(addNotification(
+                            task.isDone
+                            ? `La tâche "${task.title}" n'est pas terminée.`
+                            : `La tâche "${task.title}" est terminée.`
+                        , true))
+
+                        handleOptionIsVisible(task.uuid)
+                        refetch()
                     }}
                 >
                     {
-                        !taskIsDone
+                        task.isDone
                             ? <>
-                                <ThumbsUp className="size-5"/>
-                                <p>Terminer</p>
-                            </>
-                            : <>
                                 <ThumbsDown className="size-5"/>
                                 <p>Non terminer</p>
+                            </>
+                            : <>
+                                <ThumbsUp className="size-5"/>
+                                <p>Terminer</p>
                             </>
                     }
                     
@@ -56,14 +73,14 @@ export default function TaskOptionPopover(props: PopoverTaskProps) {
                 <button
                     className={classNames({
                         "w-full flex place-items-center place-content-center space-x-2 enabled:hover:bg-[#181c24]": true,
-                        "text-gray-400": !!taskStates.find(taskState => taskState.isUpdating === true)
+                        "text-gray-400": !!settings.find(taskState => taskState.isUpdating === true)
                     })}
                     onClick={() => {
-                        handleSettings(id, "optionIsVisible")
-                        handleSettings(id, "isUpdating")
+                        handleOptionIsVisible(task.uuid)
+                        handleIsUpdating(task.uuid)
                         setTaskFormIsVisible(() => true)
                     }}
-                    disabled={!!taskStates.find(taskState => taskState.isUpdating === true)}
+                    disabled={!!settings.find(taskState => taskState.isUpdating === true)}
                 >
                     <Pencil className="size-5"/>
                     <p>Modifier</p>
@@ -72,13 +89,23 @@ export default function TaskOptionPopover(props: PopoverTaskProps) {
                 <button
                     className="w-full rounded-b-lg flex place-items-center place-content-center space-x-2 hover:bg-[#181c24]"
                     onClick={() => {
-                        handleSettings(id, "optionIsVisible")
+                        handleOptionIsVisible(task.uuid)
                         openModal({
                         title: "Suppression d'une liste",
-                        description: `Êtes-vous sûr de vouloir supprimer la tâche "${title}" ?`,
-                        function: function () {
-                            console.log("Tâche supprimé !")
+                        description: `Êtes-vous sûr de vouloir supprimer la tâche "${task.title}" ?`,
+                        function: async function () {
+                            const response = await deleteTaskMutate({ variables: { taskUuid: task.uuid } })
+
+                            const responseErrors = response.data.deleteTask.errors
+                        
+                            refetch()
                             closeModal()
+
+                            if (responseErrors.length > 0) {
+                                dispatch(addNotification(responseErrors[0].message, false))
+                            } else {
+                                dispatch(addNotification(`La tâche ${task.title} à bien été supprimée.`, true))
+                            }
                         }
                     })}}
                 >

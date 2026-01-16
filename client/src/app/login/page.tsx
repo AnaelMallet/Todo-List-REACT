@@ -48,7 +48,7 @@ function LoginPage() {
           {({ isSubmitting, errors, touched }) => (
             <Form className="grid grid-cols-1 gap-y-10 w-full text-white">
               <p className="px-5">
-                <label className="bg-transparent" htmlFor="login">Adresse email/Nom d'utilisateur <span className="text-red-600">*</span></label>
+                <label className="bg-transparent" htmlFor="login">Adresse email <span className="text-red-600">*</span></label>
                 <Field
                   className={classNames({
                     "bg-transparent border-2 rounded-2xl h-9 w-full mt-3 pl-2 focus:outline-none": true,
@@ -58,7 +58,7 @@ function LoginPage() {
                   id="login"
                   name="login"
                   type="text"
-                  placeholder="adresse email/nom d'utilisateur"
+                  placeholder="adresse email"
                 />
                 { errors.login && touched.login ? <div className="text-red-600 text-xs -mb-4">{ errors.login }</div> : <></> }
               </p>
