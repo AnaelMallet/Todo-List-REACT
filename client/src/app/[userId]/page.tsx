@@ -1,7 +1,7 @@
 'use client'
 
 import TextTitle from "@/components/text"
-import { useUser } from "@/components/users/userProvider"
+import { useUser } from "@/components/users/UserProvider"
 import { useMutation } from "@apollo/client"
 import { addNotification, useNotification } from "@/components/notifications/NotificationProvider"
 import { Field, Form, Formik } from "formik"
@@ -50,7 +50,7 @@ function UserPage() {
       }),
     lastname: Yup
       .string()
-      .test("isChangingFirstname", "Le nom est obligatoire.", (value) => {
+      .test("isChangingLastname", "Le nom est obligatoire.", (value) => {
         if (value) {
           return true
         }
@@ -63,7 +63,7 @@ function UserPage() {
         /^[\w\-\.]+@([\w-]+\.)+[\w-]{2,}$/g,
         "L'adresse email n'est pas valide."
       )
-      .test("isChangingFirstname", "L'adresse email est obligatoire.", (value) => {
+      .test("isChangingEmail", "L'adresse email est obligatoire.", (value) => {
         if (value) {
           return true
         }
@@ -77,7 +77,7 @@ function UserPage() {
         /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/g,
         "Le mot de passe n'est pas valide."
       )
-      .test("isChangingFirstname", "Le mot de passe est obligatoire.", (value) => {
+      .test("isChangingPassword", "Le mot de passe est obligatoire.", (value) => {
         if (value) {
           return true
         }
@@ -87,7 +87,7 @@ function UserPage() {
     confirmationPassword: Yup
       .string()
       .oneOf([Yup.ref("password")], "La confirmation du mot de passe n'est pas identique.")
-      .test("isChangingFirstname", "La confirmation du mot de passe est obligatoire.", (value) => {
+      .test("isChangingPassword", "La confirmation du mot de passe est obligatoire.", (value) => {
         if (value) {
           return true
         }
@@ -98,7 +98,7 @@ function UserPage() {
 
   return (
     <main className="h-screen flex place-content-center place-items-center">
-      <div className="w-2/5 bg-[#282c34] rounded-lg">
+      <section className="w-2/5 bg-[#282c34] rounded-lg">
         <TextTitle/>
         <Formik
           initialValues={initialValues}
@@ -135,15 +135,15 @@ function UserPage() {
           {({ isSubmitting, errors, touched }) => (
             <Form className="grid grid-cols-1 gap-y-10 w-full text-white">
               <div className="grid grid-cols-2 gap-x-5 px-5 place-items-center">
-                <div>
+                <p>
                   <div className="flex place-items-center gap-3">
-                    <button type="button" onClick={() => setIsChangingLastname(!isChangingLastname)}className="rounded-md p-0.5">{isChangingLastname === false ? <Pencil/> : <CircleX className="text-red-500"/>}</button>
+                    <button type="button" onClick={() => setIsChangingLastname(!isChangingLastname)}className="rounded-md p-0.5">{isChangingLastname === false ? <Pencil/> : <CircleX className="text-red-600"/>}</button>
                     <label htmlFor="lastname" className="bg-transparent">Nom</label>
                   </div>
                   <Field
                     className={classNames({
                       "bg-transparent rounded-2xl h-9 w-full mt-3 pl-2 focus:outline-none": true,
-                      "border-2 border-red-500": isChangingLastname && errors.lastname && touched.lastname,
+                      "border-2 border-red-600": isChangingLastname && errors.lastname && touched.lastname,
                       "border-2 border-white": isChangingLastname && !errors.lastname,
                       "border-2 border-transparent": !isChangingLastname
                     })}
@@ -153,17 +153,17 @@ function UserPage() {
                     name="lastname"
                     disabled={!isChangingLastname}
                   />
-                  { isChangingLastname && errors.lastname && touched.lastname ? <div className="text-red-500 text-xs -mb-4">{ errors.lastname }</div> : <></> }
-                </div>
-                <div>
-                  <div className="flex place-items-center gap-3">
-                    <button type="button" onClick={() => setIsChangingFirstname(!isChangingFirstname)}className="rounded-md p-0.5">{ isChangingFirstname === false ? <Pencil/> : <CircleX className="text-red-500"/> }</button>
+                  { isChangingLastname && errors.lastname && touched.lastname ? <div className="text-red-600 text-xs -mb-4">{ errors.lastname }</div> : <></> }
+                </p>
+                <p>
+                  <p className="flex place-items-center gap-3">
+                    <button type="button" onClick={() => setIsChangingFirstname(!isChangingFirstname)}className="rounded-md p-0.5">{ isChangingFirstname === false ? <Pencil/> : <CircleX className="text-red-600"/> }</button>
                     <label htmlFor="firstname" className="bg-transparent">Prénom</label>
-                  </div>
+                  </p>
                   <Field
                     className={classNames({
                       "bg-transparent rounded-2xl h-9 w-full mt-3 pl-2 focus:outline-none": true,
-                      "border-2 border-red-500": isChangingFirstname && errors.firstname && touched.firstname,
+                      "border-2 border-red-600": isChangingFirstname && errors.firstname && touched.firstname,
                       "border-2 border-white": isChangingFirstname && !errors.firstname,
                       "border-2 border-transparent": !isChangingFirstname
                     })}
@@ -173,19 +173,19 @@ function UserPage() {
                     name="firstname"
                     disabled={!isChangingFirstname}
                   />
-                  { isChangingFirstname && errors.firstname && touched.firstname ? <div className="text-red-500 text-xs -mb-4">{ errors.firstname }</div> : <></> }
-                </div>
+                  { isChangingFirstname && errors.firstname && touched.firstname ? <div className="text-red-600 text-xs -mb-4">{ errors.firstname }</div> : <></> }
+                </p>
               </div>
               <div className="grid grid-cols-2 gap-x-5 px-5 place-items-center">
-                <div>
+                <p>
                   <div className="flex place-items-center gap-3">
-                    <button type="button" onClick={() => setIsChangingEmail(!isChangingEmail)} className="rounded-md p-0.5">{ isChangingEmail === false ? <Pencil/> : <CircleX className="text-red-500"/> }</button>
+                    <button type="button" onClick={() => setIsChangingEmail(!isChangingEmail)} className="rounded-md p-0.5">{ isChangingEmail === false ? <Pencil/> : <CircleX className="text-red-600"/> }</button>
                     <label htmlFor="email" className="bg-transparent">Adresse email</label>
                   </div>
                   <Field
                     className={classNames({
                       "bg-transparent rounded-2xl h-9 w-full mt-3 pl-2 focus:outline-none": true,
-                      "border-2 border-red-500": isChangingEmail && errors.email && touched.email,
+                      "border-2 border-red-600": isChangingEmail && errors.email && touched.email,
                       "border-2 border-white": isChangingEmail && !errors.email,
                       "border-2 border-transparent": !isChangingEmail
                     })}
@@ -195,13 +195,13 @@ function UserPage() {
                     name="email"
                     disabled={!isChangingEmail}
                   />
-                  { isChangingEmail && errors.email && touched.email ? <div className="text-red-500 text-xs -mb-4">{ errors.email }</div> : <></> }
-                </div>
-                <div>
-                  <div className="flex place-items-center gap-3">
-                    <button type="button" onClick={() => setIsChangingUsername(!isChangingUsername)}className="rounded-md p-0.5">{ isChangingUsername === false ? <Pencil/> : <CircleX className="text-red-500"/> }</button>
+                  { isChangingEmail && errors.email && touched.email ? <div className="text-red-600 text-xs -mb-4">{ errors.email }</div> : <></> }
+                </p>
+                <p>
+                  <p className="flex place-items-center gap-3">
+                    <button type="button" onClick={() => setIsChangingUsername(!isChangingUsername)}className="rounded-md p-0.5">{ isChangingUsername === false ? <Pencil/> : <CircleX className="text-red-600"/> }</button>
                     <label htmlFor="username" className="bg-transparent">Nom d'utilisateur</label>
-                  </div>
+                  </p>
                   <Field
                     className={classNames({
                       "bg-transparent rounded-2xl h-9 w-full mt-3 pl-2 focus:outline-none": true,
@@ -214,20 +214,20 @@ function UserPage() {
                     name="username"
                     disabled={!isChangingUsername}
                   />
-                </div>
+                </p>
               </div>
-              <div className="flex justify-center space-x-10">
+              <p className="flex justify-center space-x-10">
                 <button type="button" disabled={isSubmitting} onClick={() => setIsChangingPassword(!isChangingPassword)} className="font-bold p-2 border-white hover:bg-[#181c24] border-2 rounded-md">Changer de mot de passe</button>
-              </div>
+              </p>
               {
                 isChangingPassword === true ?
-                <div className="grid grid-cols-2 gap-x-5 px-5">
-                  <div>
+                <section className="grid grid-cols-2 gap-x-5 px-5">
+                  <p>
                     <label className="bg-transparent" htmlFor="password">Mot de passe</label>
                     <Field
                       className={classNames({
                         "bg-transparent border-2 rounded-2xl h-9 w-full mt-3 pl-2 focus:outline-none": true,
-                        "border-red-500": isChangingPassword && errors.password && touched.password,
+                        "border-red-600": isChangingPassword && errors.password && touched.password,
                         "border-white": isChangingPassword && !errors.password
                       })}
                       id="password"
@@ -236,14 +236,14 @@ function UserPage() {
                       name="password"
                       autoComplete="on"
                     />
-                    { isChangingPassword && errors.password && touched.password ? <div className="text-red-500 text-xs -mb-4">{ errors.password }</div> : <></> }
-                  </div>
-                  <div>
+                    { isChangingPassword && errors.password && touched.password ? <div className="text-red-600 text-xs -mb-4">{ errors.password }</div> : <></> }
+                  </p>
+                  <p>
                     <label className="bg-transparent" htmlFor="confirmationPassword">Confirmation du mot de passe</label>
                       <Field
                         className={classNames({
                           "bg-transparent border-2 rounded-2xl h-9 w-full mt-3 pl-2 focus:outline-none": true,
-                          'border-red-500': isChangingPassword && errors.confirmationPassword && touched.confirmationPassword,
+                          'border-red-600': isChangingPassword && errors.confirmationPassword && touched.confirmationPassword,
                           "border-white": isChangingPassword && !errors.confirmationPassword
                         })}
                         id="confirmationPassword"
@@ -252,19 +252,19 @@ function UserPage() {
                         name="confirmationPassword"
                         autoComplete="on"
                       />
-                      { isChangingPassword && errors.confirmationPassword && touched.confirmationPassword ? <div className="text-red-500 text-xs -mb-4">{ errors.confirmationPassword }</div> : <></> }
-                  </div>
-                </div> : 
+                      { isChangingPassword && errors.confirmationPassword && touched.confirmationPassword ? <div className="text-red-600 text-xs -mb-4">{ errors.confirmationPassword }</div> : <></> }
+                  </p>
+                </section> : 
                 <></>
               }
-              <div className="flex justify-center pb-6 space-x-10">
+              <p className="flex justify-center pb-6 space-x-10">
                 <button disabled={isSubmitting ||loading} type="submit" className="bg-cyan-400 font-bold hover:bg-cyan-500 rounded-md p-2">Valider</button>
                 <button type="button" onClick={() => (router.push("/"))} className="font-bold p-2 border-white hover:bg-[#181c24] border-2 rounded-md">Annuler</button>
-              </div>
+              </p>
             </Form>
           )}
         </Formik>
-      </div>
+      </section>
     </main>
   )
 }

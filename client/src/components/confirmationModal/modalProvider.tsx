@@ -1,5 +1,10 @@
-import { createContext, useContext, useState } from "react"
-import Modal from "./modal"
+import {
+    createContext,
+    useContext,
+    useState
+} from "react"
+
+import Modal from "./Modal"
 
 type ModalContextType = {
     openModal: (props: ModalType) => void
@@ -41,7 +46,6 @@ export default function ModalProvider(props: any) {
 
     return (
         <ModalContext.Provider value={{ openModal, closeModal }}>
-            {console.log(isOpen)}
             {isOpen ?
                 <Modal
                     title={modalValues.title}

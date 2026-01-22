@@ -3,7 +3,7 @@ import { OperationVariables, ApolloQueryResult, useMutation } from "@apollo/clie
 import { Formik, Form, Field } from "formik"
 
 import { useNotification, addNotification } from "../notifications/NotificationProvider"
-import { useUser } from "../users/userProvider"
+import { useUser } from "../users/UserProvider"
 
 import { validationSchema } from "./api"
 import { updateListMutation } from "./graphql"
@@ -27,52 +27,50 @@ function UpdateListNameForm(props: UpdateListNameComponentProps) {
   const [updateListMutate] = useMutation(updateListMutation, { client, context: userContext })
 
   return (
-    <div>
-      <Formik
-        initialValues={{
-          name: list.name
-        }}
-        validationSchema={validationSchema}
-        onSubmit={async values => {
-          if (values.name === list.name) {
-            handleIsUpdateListName(list.uuid)
-            return
-          }
-
-          const response = await updateListMutate({ variables: { input: { uuid: list.uuid, ...values } } })
-          const responseErrors = response.data.updateList.errors
-
-          if (responseErrors.length > 0) {
-            dispatch(addNotification(responseErrors[0].message, false))
-          } else {
-            dispatch(addNotification(`La liste a été mise à jour.`, true))
-          }
-
+    <Formik
+      initialValues={{
+        name: list.name
+      }}
+      validationSchema={validationSchema}
+      onSubmit={async values => {
+        if (values.name === list.name) {
           handleIsUpdateListName(list.uuid)
-          refetch()
-        }}
-      >
-        {({ values, isSubmitting }) => (
-          <Form>
-            <Field
-              className="text-lg bg-transparent w-full pl-2 focus:outline-none"
-              id="name"
-              type="text"
-              placeholder="Sans nom"
-              name="name"
-              autoFocus={true}
-              values={list.name}
-              onBlur={() => {
-                if (values.name === list.name) {
-                  handleIsUpdateListName(list.uuid)
-                }
-              }}
-              disabled={isSubmitting}
-            />
-          </Form>
-        )}
-      </Formik>
-    </div>
+          return
+        }
+
+        const response = await updateListMutate({ variables: { input: { uuid: list.uuid, ...values } } })
+        const responseErrors = response.data.updateList.errors
+
+        if (responseErrors.length > 0) {
+          dispatch(addNotification(responseErrors[0].message, false))
+        } else {
+          dispatch(addNotification(`La liste a été mise à jour.`, true))
+        }
+
+        handleIsUpdateListName(list.uuid)
+        refetch()
+      }}
+    >
+      {({ values, isSubmitting }) => (
+        <Form>
+          <Field
+            className="text-lg bg-transparent w-full pl-1 focus:outline-none"
+            id="name"
+            type="text"
+            placeholder="Sans nom"
+            name="name"
+            autoFocus={true}
+            values={list.name}
+            onBlur={() => {
+              if (values.name === list.name) {
+                handleIsUpdateListName(list.uuid)
+              }
+            }}
+            disabled={isSubmitting}
+          />
+        </Form>
+      )}
+    </Formik>
   )
 }
 

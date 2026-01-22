@@ -5,26 +5,31 @@ import {
   OperationVariables,
   useMutation
 } from "@apollo/client"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Pencil, Trash2 } from "lucide-react"
+import classNames from "classnames"
 
 import client from "@/app/graphql-api"
-import {
-  FullStarIconSVG,
-  StarIconSVG
-} from "@/app/svg"
+import { FullStarIconSVG, StarIconSVG } from "@/app/svg"
 
 import { addNotification, useNotification } from "../notifications/NotificationProvider"
-import { useUser } from "../users/userProvider"
-import { useModal } from "../confirmationModal/modalProvider"
+import { useUser } from "../users/UserProvider"
+import { useModal } from "../confirmationModal/ModalProvider"
+import { getSessionStorage, removeSessionStorage } from "../utils"
 
 import { toggleFavoriteMutation, deleteListMutation } from "./graphql"
 import UpdateListNameForm from "./UpdateListNameForm"
+import { useSelectList } from "./SelectListProvider"
 
 export interface ListProps {
   uuid: string
   name: string
   isFavorite: boolean
+}
+
+export interface IListState {
+    listId: string
+    isUpdateListName: boolean
 }
 
 interface ListsArrayProps {
@@ -38,7 +43,7 @@ function ListsArray(props: ListsArrayProps) {
     refetch
   } = props
 
-  const settingsLists = lists.map(list => ({
+  const settingsLists: IListState[] = lists.map(list => ({
     listId: list.uuid,
     isUpdateListName: false
   }))
@@ -46,24 +51,22 @@ function ListsArray(props: ListsArrayProps) {
   const { dispatch } = useNotification()
   const { openModal, closeModal } = useModal()
   const { userContext } = useUser()
+  const { selectedList, setSelectedList } = useSelectList()
   const [toggleFavoriteMutate] = useMutation(toggleFavoriteMutation, { client, context: userContext })
   const [deleteListMutate] = useMutation(deleteListMutation, { client, context: userContext })
-  const [stateLists, setStateLists] = useState(settingsLists)
+  const [stateLists, setStateLists] = useState<IListState[]>(settingsLists)
+
+  useEffect(() => {
+    setStateLists(() => settingsLists)
+  }, [lists])
 
   function handleIsUpdateListName(id: string) {
-    const newList = stateLists.map(list => {
-      if (list.listId === id) {
-        const updatedList = {
-          ...list,
-          isUpdateListName: !list.isUpdateListName
-        }
+    const updatedListSettings = [...stateLists]
+    const listSetting = updatedListSettings.find(state => state.listId === id) as IListState
 
-        return updatedList
-      }
-      return list
-    })
+    listSetting.isUpdateListName = !listSetting.isUpdateListName
 
-    setStateLists(newList)
+    setStateLists(() => updatedListSettings)
   }
 
   async function handleDeleteList(id: string): Promise<void> {
@@ -73,37 +76,44 @@ function ListsArray(props: ListsArrayProps) {
     const responseErrors = response.data.deleteList.errors
 
     refetch()
+    closeModal()
 
     if (responseErrors.length > 0) {
       dispatch(addNotification(responseErrors[0].message, false))
-    }
-    else {
-      dispatch(addNotification(`La liste "${list?.name}" à bien été supprimée.`, true))
+      return
     }
 
-    closeModal()
+    dispatch(addNotification(`La liste "${list?.name}" à bien été supprimée.`, true))
+    removeSessionStorage("selectedList")
+    setSelectedList(() => "")
   }
 
   return (
-    <div className="mt-7 space-y-4 pt-1 pb-3 mr-3 overflow-y-auto max-h-[49.09rem] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-lg [&::-webkit-scrollbar]:pr-3">
+    <ul className="mt-7 space-y-4 pt-1 pb-3 mx-2 overflow-y-auto max-h-[49.09rem] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-lg [&::-webkit-scrollbar]:pr-3">
       {
         lists.map(list => {
           return (
-            <div key={list.uuid} className="ml-3 mr-5 space-y-1">
-              <div className="flex place-items-center justify-between space-x-2">
+            <li key={list.uuid} className="ml-3 mr-5 space-y-1">
+              <div className="flex place-items-center justify-between space-x-2 mb-2">
                 {
                   stateLists
-                    .find((displayList: any) => displayList.listId === list.uuid)
-                    ?.isUpdateListName
+                    .find((displayList: any) => displayList.listId === list.uuid)?.isUpdateListName
                     ? <UpdateListNameForm
                       list={list}
                       handleIsUpdateListName={handleIsUpdateListName}
                       refetch={refetch}
                     />
-                    : <span onClick={() => { }} className="cursor-pointer text-lg truncate hover:bg-gray-700 w-full rounded-md pl-2">{list.name}</span>
+                    : <span
+                      onClick={() => { setSelectedList(() => list.uuid) }}
+                      className={classNames({
+                        "cursor-pointer text-lg truncate w-full rounded-md pl-1": true,
+                        "hover:bg-gray-700": list.uuid !== selectedList || (selectedList === "" || getSessionStorage("SelectedList") === null),
+                        "hover:bg-gray-400 bg-gray-500": list.uuid === selectedList && (selectedList !== "" || getSessionStorage("SelectedList") !== null)
+                      })}
+                    >{list.name}</span>
                 }
                 <span className="flex space-x-2">
-                  <button 
+                  <button
                     onClick={() => {
                       handleIsUpdateListName(list.uuid)
                     }}
@@ -123,8 +133,8 @@ function ListsArray(props: ListsArrayProps) {
 
                       dispatch(addNotification(
                         list.isFavorite
-                        ? `La liste "${list.name}" n'est plus en favoris.`
-                        : `La liste "${list.name}" a été mise en favoris.`,
+                          ? `La liste "${list.name}" n'est plus en favoris.`
+                          : `La liste "${list.name}" a été mise en favoris.`,
                         true
                       ))
 
@@ -134,9 +144,9 @@ function ListsArray(props: ListsArrayProps) {
                   <button
                     onClick={() => {
                       openModal({
-                        title: "Confirmation",
-                        description: `Souhaitez-vous vraiment supprimer la liste "${list.name}" ?`,
-                        function: async function() { await handleDeleteList(list.uuid) }
+                        title: "Suppression d'une liste",
+                        description: `Êtes-vous sûr de vouloir supprimer la liste "${list.name}" ?`,
+                        function: async function () { await handleDeleteList(list.uuid) }
                       })
                     }}
                   >
@@ -145,11 +155,11 @@ function ListsArray(props: ListsArrayProps) {
                 </span>
               </div>
               <hr />
-            </div>
+            </li>
           )
         })
       }
-    </div>
+    </ul>
   )
 }
 

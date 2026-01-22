@@ -4,7 +4,7 @@ import { Formik, Form, Field } from "formik"
 import { Dispatch, SetStateAction } from "react"
 
 import { useNotification, addNotification } from "../notifications/NotificationProvider"
-import { useUser } from "../users/userProvider"
+import { useUser } from "../users/UserProvider"
 
 import { initialValues, validationSchema } from "./api"
 import { createListMutation } from "./graphql"
@@ -23,8 +23,8 @@ function AddListForm(props: ListsFormProps) {
   if (!props.isAddingList) return <></>
 
   return (
-    <div
-      className="mt-2 flex justify-center text-lg"
+    <section
+      className="-mb-2 mt-2 flex justify-center text-lg"
     >
       <Formik
         initialValues={initialValues}
@@ -35,7 +35,7 @@ function AddListForm(props: ListsFormProps) {
             return
           }
 
-          const response = await mutateFunction({ variables: { input: { ...values, isFavorite: false } } })
+          const response = await mutateFunction({ variables: { name: values.name } })
           const responseErrors = response.data.createList.errors
 
           if (responseErrors.length > 0) {
@@ -68,7 +68,7 @@ function AddListForm(props: ListsFormProps) {
         )}
 
       </Formik>
-    </div>
+    </section>
   )
 }
 

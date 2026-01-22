@@ -1,3 +1,5 @@
+import { AgainstNullOrUndefinedError } from "@shared/basicErrors"
+
 import { PasswordNotValidError } from "../errors"
 
 import { Password } from "./password"
@@ -24,7 +26,7 @@ describe("test the password value-object", () => {
     const passwordErrors = passwordResult.getErrors()
   
     expect(passwordErrors.length).toBe(1)
-    expect(passwordErrors[0].message).toBe("againstNullOrUndefined")
+    expect(passwordErrors[0]).toBeInstanceOf(AgainstNullOrUndefinedError)
   })
   
   test("should not create an password because email is invalid", () => {

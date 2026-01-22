@@ -1,10 +1,14 @@
 import { graphqlProps } from "@shared/basicResolvers"
 
-import { createListController } from "../../use-cases/createList"
-import { listsController } from "../../use-cases/lists"
-import { toggleFavoriteListController } from "../../use-cases/toggleFavoriteList"
-import { updateLIstController } from "../../use-cases/updateList"
-import { deleteListController } from "../../use-cases/deleteList"
+import { createListController } from "../../use-cases/list/create"
+import { listsController } from "../../use-cases/list/getAll"
+import { toggleFavoriteListController } from "../../use-cases/list/toggleIsFavorite"
+import { updateLIstController } from "../../use-cases/list/update"
+import { deleteListController } from "../../use-cases/list/delete"
+import { upsertTaskController } from "../../use-cases/task/upsert"
+import { tasksController } from "../../use-cases/task/getTasksByListId"
+import { toggleDoneTaskController } from "../../use-cases/task/toggleIsDone"
+import { deleteTaskController } from "../../use-cases/task/delete"
 
 const resolvers = {
   Mutation: {
@@ -47,6 +51,36 @@ const resolvers = {
       }
 
       return await deleteListController.executeImplementation(props)
+    },
+    upsertTask: async(parent: any, args: any, context: any, info: any) => {
+      const props: graphqlProps = {
+        parent,
+        args,
+        context,
+        info
+      }
+
+      return await upsertTaskController.executeImplementation(props)
+    },
+    toggleIsDone: async(parent: any, args: any, context: any, info: any) => {
+      const props: graphqlProps = {
+        parent,
+        args,
+        context,
+        info
+      }
+
+      return await toggleDoneTaskController.executeImplementation(props)
+    },
+    deleteTask: async(parent: any, args: any, context: any, info: any) => {
+      const props: graphqlProps = {
+        parent,
+        args,
+        context,
+        info
+      }
+
+      return await deleteTaskController.executeImplementation(props)
     }
   },
   Query: {
@@ -59,6 +93,16 @@ const resolvers = {
       }
 
       return await listsController.executeImplementation(props)
+    },
+    tasks: async(parent: any, args: any, context: any, info: any) => {
+      const props: graphqlProps = {
+        parent,
+        args,
+        context,
+        info
+      }
+
+      return await tasksController.executeImplementation(props)
     }
   }
 }

@@ -7,17 +7,11 @@ const typeDefs = gql`
     isFavorite: Boolean!
   }
 
-  input ListInput {
-    uuid: ID
-    name: String
-    isFavorite: Boolean
-  }
-
   type ListResponse implements QueryResponse {
     code: Int!
     isSuccess: Boolean!
     errors: [Error]!
-    values: [List]!
+    values: [List!]
   }
 
   input UpdateListInput {
@@ -25,15 +19,45 @@ const typeDefs = gql`
     name: String!
   }
 
+  input TaskInput {
+    uuid: String
+    title: String!
+    description: String!
+    listId: String!
+  }
+
+  type Task {
+    uuid: String!
+    title: String!
+    description: String!
+    isDone: Boolean!
+  }
+
+  type TaskInfo {
+    listName: String!
+    tasks: [Task]!
+  }
+
+  type TaskResponse implements QueryResponse {
+    code: Int!
+    isSuccess: Boolean!
+    errors: [Error]!
+    values: TaskInfo
+  }
+
   extend type Mutation {
-    createList(input: ListInput!): MutationResponse! @requireAuth
+    createList(name: String!): MutationResponse! @requireAuth
     toggleIsFavorite(listUuid: String!): MutationResponse! @requireAuth
     updateList(input: UpdateListInput!): MutationResponse! @requireAuth
     deleteList(listUuid: String!): MutationResponse! @requireAuth
+    upsertTask(input: TaskInput!): MutationResponse! @requireAuth
+    toggleIsDone(taskUuid: String!): MutationResponse! @requireAuth
+    deleteTask(taskUuid: String!): MutationResponse! @requireAuth
   }
 
   extend type Query {
     lists: ListResponse! @requireAuth
+    tasks(listUuid: String!): TaskResponse! @requireAuth
   }
 `
 export default typeDefs

@@ -1,4 +1,7 @@
+import { AgainstNullOrUndefinedError } from "@shared/basicErrors"
+
 import { EmailNotValidError } from "../errors"
+
 import { Email } from "./email"
 
 describe("test the email value-object", () => {
@@ -23,7 +26,7 @@ describe("test the email value-object", () => {
     const emailErrors = emailResult.getErrors()
   
     expect(emailErrors.length).toBe(1)
-    expect(emailErrors[0].message).toBe("againstNullOrUndefined")
+    expect(emailErrors[0]).toBeInstanceOf(AgainstNullOrUndefinedError)
   })
   
   test("should not create an email because email is invalid", () => {

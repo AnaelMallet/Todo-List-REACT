@@ -11,7 +11,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
 
   return (
     <html lang="en">
-        <body className="bg-gray-100 overflow-hidden">
+        <body className="bg-gray-100">
           <Providers>{children}</Providers>
         </body>
     </html>
