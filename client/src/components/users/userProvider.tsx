@@ -27,6 +27,7 @@ type User = {
 type UserContextType = {
   isLogged: boolean
   logout: () => void,
+  login: () => void,
   user: User | null,
   userId: string | null,
   refetch: (variables?: Partial<OperationVariables> | undefined) => Promise<ApolloQueryResult<any>>,
@@ -73,7 +74,19 @@ export default function UserProvider(props: any) {
     })
   }
 
-  useEffect(() => {
+  const login = () => {
+    const localStorageUserId = getLocalStorage("userId")
+
+    setUserId(localStorageUserId)
+
+    if (localStorageUserId !== "") {
+      setIsLogged(true)
+      handleStorage()
+      window.addEventListener("storage", handleStorage)
+    }
+  }
+
+    useEffect(() => {
     const localStorageUserId = getLocalStorage("userId")
 
     setUserId(localStorageUserId)
@@ -136,6 +149,7 @@ export default function UserProvider(props: any) {
     <UserContext.Provider value={{
       isLogged,
       logout,
+      login,
       user,
       userId,
       refetch,

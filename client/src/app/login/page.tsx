@@ -8,6 +8,7 @@ import { useMutation } from "@apollo/client"
 import TextTitle from "@/components/text"
 import { addNotification, useNotification } from "@/components/notifications/NotificationProvider"
 import { setLocalStorage } from "@/components/utils"
+import { useUser } from "@/components/users/userProvider"
 
 import client from "../graphql-api"
 
@@ -15,13 +16,14 @@ import { initialValues, validationSchema } from "./api"
 import { loginUserMutation } from "./graphql"
 
 function LoginPage() {
+  const { login } = useUser()
   const router = useRouter()
   const [mutateFunction, { loading }] = useMutation(loginUserMutation, { client })
   const { dispatch } = useNotification()
 
   return (
     <main className="h-screen flex place-items-center place-content-center">
-      <section className="w-1/3 bg-[#282c34] rounded-lg">
+      <section data-testid="loginFormSection" className="w-1/3 bg-[#282c34] rounded-lg">
         <TextTitle/>
           <Formik
             initialValues={initialValues}
@@ -40,8 +42,9 @@ function LoginPage() {
 
                 setLocalStorage("userId", userId)
                 setLocalStorage("token", accessToken)
-
-                location.replace("/")
+                
+                login()
+                router.push("/")
               }
             }}
           >
@@ -56,11 +59,12 @@ function LoginPage() {
                     "border-white": !errors.login
                   })}
                   id="login"
+                  data-testid="emailLoginInput"
                   name="login"
                   type="text"
                   placeholder="adresse email"
                 />
-                { errors.login && touched.login ? <div className="text-red-600 text-xs -mb-4">{ errors.login }</div> : <></> }
+                { errors.login && touched.login ? <div data-testid="emailLoginInputErrorText" className="text-red-600 text-xs -mb-4">{ errors.login }</div> : <></> }
               </p>
               <p className="px-5">
                 <label className="bg-transparent" htmlFor="password">Mot de passe <span className="text-red-600">*</span></label>
@@ -71,16 +75,17 @@ function LoginPage() {
                     "border-white": !errors.password
                   })}
                   id="password"
+                  data-testid="passwordLoginInput"
                   name="password"
                   type="password"
                   placeholder="Mot de passe"
                   autoComplete="on"
                 />
-                { errors.password && touched.password ? <div className="text-red-600 text-xs -mb-4">{ errors.password }</div> : <></> }
+                { errors.password && touched.password ? <div data-testid="passwordLoginInputErrorText" className="text-red-600 text-xs -mb-4">{ errors.password }</div> : <></> }
               </p>
               <p className="flex justify-center text-white pb-6 space-x-10">
-                <button type="submit" disabled={isSubmitting || loading} className="bg-cyan-400 font-bold hover:bg-cyan-500 rounded-md p-2">Valider</button>
-                <button type="button" onClick={() => router.push("/")} className="font-bold p-2 border-white hover:bg-[#181c24] border-2 rounded-md">Annuler</button>
+                <button data-testid="submitLoginButton" type="submit" disabled={isSubmitting || loading} className="bg-cyan-400 font-bold hover:bg-cyan-500 rounded-md p-2">Valider</button>
+                <button data-testid="cancelLoginButton" type="button" onClick={() => router.push("/")} className="font-bold p-2 border-white hover:bg-[#181c24] border-2 rounded-md">Annuler</button>
               </p>
             </Form>
           )}

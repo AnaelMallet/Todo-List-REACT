@@ -21,7 +21,7 @@ Fonctionnalité: Naviguation
         Lorsque je clique sur le bouton possédant l'ID "registerButton"
         Alors je suis sur la page nommé "Inscription"
 
-    @AfterScenario
+    @After_scenario
     Scénario: Revenir sur la page principal depuis la page d'inscription
         Lorsque je clique sur le bouton possédant l'ID "registerButton"
         Et que je clique sur le bouton possédant l'ID "cancelRegisterButton"
