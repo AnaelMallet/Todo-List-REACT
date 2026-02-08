@@ -7,7 +7,7 @@
         "paths": ["./features"],
         "requireModule": ["ts-node/register"],
         "require": [
-            "./steps/*Steps.ts",
+            "./steps/*.ts",
             "./steps/hook.ts"
         ]
     }

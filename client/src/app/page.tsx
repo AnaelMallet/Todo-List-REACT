@@ -49,7 +49,7 @@ function Home() {
         {!isLogged || !user ?
           <>
             <button data-testid="loginButton" onClick={() => router.push("/login")} className="bg-cyan-400 font-bold hover:bg-cyan-500 rounded-md p-2">Se connecter</button>
-            <button data-testid="subscriptionButton" onClick={() => router.push("/register")} className="bg-[#282c34] hover:bg-[#181c24] font-bold rounded-md p-2">S'inscrire</button>
+            <button data-testid="registerButton" onClick={() => router.push("/register")} className="bg-[#282c34] hover:bg-[#181c24] font-bold rounded-md p-2">S'inscrire</button>
           </>
           :
           <>
