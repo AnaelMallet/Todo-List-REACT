@@ -87,15 +87,7 @@ export default function UserProvider(props: any) {
   }
 
     useEffect(() => {
-    const localStorageUserId = getLocalStorage("userId")
-
-    setUserId(localStorageUserId)
-
-    if (localStorageUserId !== "") {
-      setIsLogged(true)
-      handleStorage()
-      window.addEventListener("storage", handleStorage)
-    }
+      login()
 
     return () => window.removeEventListener("storage", handleStorage)
   }, [])

@@ -36,36 +36,51 @@ BeforeAll(async function() {
     page = await context.newPage()
 })
 
-Before({ tags: "@Open_browser" }, async  function() {
+Before({ tags: "@Open_browser" }, async function() {
     context = await browser.newContext()
     page = await context.newPage()
+
+    await page.goto(process.env.BASE_URL as string)
+
+    await expect(page).toHaveTitle("Todo-list-REACT")
+    await expect(page.getByTestId("bodyPage")).toBeInViewport()
 })
 
 Before({ tags: "@Navigation_page_connexion" }, async function() {
-    await page.goto(process.env.BASE_URL as string)
-    
-    await expect(page.getByTestId("bodyPage")).toBeInViewport()
-
     await page.getByTestId("loginButton").click()
 
     await expect(page).toHaveTitle("Connexion")
-    
     await expect(page.getByTestId("loginFormSection")).toBeInViewport()
 })
 
 Before({ tags: "@Navigation_page_inscription" }, async function() {
-    await page.goto(process.env.BASE_URL  as string)
-    
-    await expect(page.getByTestId("bodyPage")).toBeInViewport()
-
     await page.getByTestId("registerButton").click()
 
     await expect(page).toHaveTitle("Inscription")
-    
     await expect(page.getByTestId("registerFormSection")).toBeInViewport()
 })
 
-After({tags: "@AfterScenario"}, async function() {
+Before({ tags: "@Connexion" }, async function() {
+    await page.getByTestId("emailLoginInput").fill("test@test.fr")
+    await page.getByTestId("passwordLoginInput").fill("P@ssw0rdT3st!ng")
+    await page.getByTestId("submitLoginButton").click()
+
+    await expect(page).toHaveTitle("Todo-list-REACT")
+
+    const localStorageToken = await page.evaluate(() => localStorage.getItem("token"))
+    const localStorageUserId = await page.evaluate(() => localStorage.getItem("userId"))
+
+    expect(localStorageToken).not.toBeNull()
+    expect(localStorageUserId).not.toBeNull()
+})
+
+Before({ tags: "@Navigation_page_profil" }, async function() {
+    await page.getByTestId("profileButton").click()
+
+    await expect(page).toHaveTitle("Utilisateur")
+})
+
+After({tags: "@Close_browser"}, async function() {
     await page.close()
     await context.close()
 })

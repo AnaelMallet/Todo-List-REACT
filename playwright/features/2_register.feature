@@ -49,13 +49,13 @@ Fonctionnalité: Inscription
         Et l'élément possédant l'ID "emailRegisterInputErrorText" avec le texte "L'adresse email n'est pas valide." n'est pas visible
     
     Scénario: Vérification de champs: Mot de passe valide
-        Lorsque je saisis "P@ssw0rdT3sting" dans le champs possédant l'ID "passwordRegisterInput"
+        Lorsque je saisis "P@ssw0rdT3st!ng" dans le champs possédant l'ID "passwordRegisterInput"
         Alors l'élément possédant l'ID "passwordRegisterInputErrorText" avec le texte "Le mot de passe est obligatoire." n'est pas visible
         Et l'élément possédant l'ID "passwordRegisterInputErrorText" avec le texte "Le mot de passe n'est pas valide." n'est pas visible
 
     Scénario: Vérification de champs: Confirmation du mot de passe valide
-        Lorsque je saisis "P@ssw0rdT3sting" dans le champs possédant l'ID "passwordRegisterInput"
-        Et que je saisis "P@ssw0rdT3sting" dans le champs possédant l'ID "confirmationPasswordInput"
+        Lorsque je saisis "P@ssw0rdT3st!ng" dans le champs possédant l'ID "passwordRegisterInput"
+        Et que je saisis "P@ssw0rdT3st!ng" dans le champs possédant l'ID "confirmationPasswordInput"
         Alors l'élément possédant l'ID "confirmationPasswordInputErrorText" avec le texte "La confirmation du mot de passe est obligatoire." n'est pas visible
         Et l'élément possédant l'ID "confirmationPasswordInputErrorText" avec le texte "La confirmation du mot de passe n'est pas identique." n'est pas visible
 
@@ -63,8 +63,8 @@ Fonctionnalité: Inscription
         Lorsque je saisis "john" dans le champs possédant l'ID "firstnameInput"
         Et que je saisis "doe" dans le champs possédant l'ID "lastnameInput"
         Et que je saisis "test@test.fr" dans le champs possédant l'ID "emailRegisterInput"
-        Et que je saisis "P@ssw0rdT3sting" dans le champs possédant l'ID "passwordRegisterInput"
-        Et que je saisis "P@ssw0rdT3sting" dans le champs possédant l'ID "confirmationPasswordInput"
+        Et que je saisis "P@ssw0rdT3st!ng" dans le champs possédant l'ID "passwordRegisterInput"
+        Et que je saisis "P@ssw0rdT3st!ng" dans le champs possédant l'ID "confirmationPasswordInput"
         Et que je clique sur le bouton possédant l'ID "submitRegisterButton"
         Alors la notification "Votre compte a bien été créé." est visible
         Et je suis sur la page nommé "Todo-list-REACT"
@@ -75,20 +75,20 @@ Fonctionnalité: Inscription
         Et que je saisis "stewart" dans le champs possédant l'ID "lastnameInput"
         Et que je saisis "jane@test.fr" dans le champs possédant l'ID "emailRegisterInput"
         Et que je saisis "JDoe" dans le champs possédant l'ID "usernameInput"
-        Et que je saisis "P@ssw0rdT3sting" dans le champs possédant l'ID "passwordRegisterInput"
-        Et que je saisis "P@ssw0rdT3sting" dans le champs possédant l'ID "confirmationPasswordInput"
+        Et que je saisis "P@ssw0rdT3st!ng" dans le champs possédant l'ID "passwordRegisterInput"
+        Et que je saisis "P@ssw0rdT3st!ng" dans le champs possédant l'ID "confirmationPasswordInput"
         Et que je clique sur le bouton possédant l'ID "submitRegisterButton"
         Alors la notification "Votre compte a bien été créé." est visible
         Et je suis sur la page nommé "Todo-list-REACT"
 
     @Navigation_page_inscription
-    @After_scenario
+    @Close_browser
     Scénario: Tentative d'inscription: échec (adresse email déjà utilisé)
         Lorsque je saisis "john" dans le champs possédant l'ID "firstnameInput"
         Et que je saisis "doe" dans le champs possédant l'ID "lastnameInput"
         Et que je saisis "test@test.fr" dans le champs possédant l'ID "emailRegisterInput"
-        Et que je saisis "P@ssw0rdT3sting" dans le champs possédant l'ID "passwordRegisterInput"
-        Et que je saisis "P@ssw0rdT3sting" dans le champs possédant l'ID "confirmationPasswordInput"
+        Et que je saisis "P@ssw0rdT3st!ng" dans le champs possédant l'ID "passwordRegisterInput"
+        Et que je saisis "P@ssw0rdT3st!ng" dans le champs possédant l'ID "confirmationPasswordInput"
         Et que je clique sur le bouton possédant l'ID "submitRegisterButton"
         Alors la notification "cet adresse email est déjà utilisé." est visible
 

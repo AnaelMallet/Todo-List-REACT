@@ -17,7 +17,7 @@ Then("l'élément possédant l'ID {string} avec le texte {string} n'est pas visi
 })
 
 Then("la notification {string} est visible", async function(text: string) {
-    const notificationMessageLocator = page.getByTestId("notificationMessage").filter({ hasText: text })
+    const notificationMessageLocator = page.getByTestId("notificationMessage").filter({ hasText: text }).last()
 
     await expect(notificationMessageLocator).toBeInViewport()
 })

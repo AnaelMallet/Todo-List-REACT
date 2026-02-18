@@ -2,10 +2,8 @@
 
 Fonctionnalité: Naviguation
 
-    Contexte:
-        Etant donné que j'accède au site
-
     Scénario: Naviguer sur la page principal
+        Etant donné que j'accède au site
         Alors je suis sur la page nommé "Todo-list-REACT"
 
     Scénario: Naviguer sur la page de connexion
@@ -13,16 +11,14 @@ Fonctionnalité: Naviguation
         Alors je suis sur la page nommé "Connexion"
 
     Scénario: Revenir sur la page principal depuis la page de connexion
-        Lorsque je clique sur le bouton possédant l'ID "loginButton"
-        Et que je clique sur le bouton possédant l'ID "cancelLoginButton"
+        Lorsque je clique sur le bouton possédant l'ID "cancelLoginButton"
         Alors je suis sur la page nommé "Todo-list-REACT"
 
     Scénario: Naviguer sur la page d'inscription
         Lorsque je clique sur le bouton possédant l'ID "registerButton"
         Alors je suis sur la page nommé "Inscription"
 
-    @After_scenario
+    @Close_browser
     Scénario: Revenir sur la page principal depuis la page d'inscription
-        Lorsque je clique sur le bouton possédant l'ID "registerButton"
-        Et que je clique sur le bouton possédant l'ID "cancelRegisterButton"
+        Lorsque je clique sur le bouton possédant l'ID "cancelRegisterButton"
         Alors je suis sur la page nommé "Todo-list-REACT"

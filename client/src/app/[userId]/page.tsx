@@ -1,7 +1,7 @@
 'use client'
 
 import TextTitle from "@/components/text"
-import { useUser } from "@/components/users/UserProvider"
+import { useUser } from "@/components/users/userProvider"
 import { useMutation } from "@apollo/client"
 import { addNotification, useNotification } from "@/components/notifications/NotificationProvider"
 import { Field, Form, Formik } from "formik"
@@ -137,7 +137,7 @@ function UserPage() {
               <div className="grid grid-cols-2 gap-x-5 px-5 place-items-center">
                 <p>
                   <div className="flex place-items-center gap-3">
-                    <button type="button" onClick={() => setIsChangingLastname(!isChangingLastname)}className="rounded-md p-0.5">{isChangingLastname === false ? <Pencil/> : <CircleX className="text-red-600"/>}</button>
+                    <button data-testid="updateLastnameButton" type="button" onClick={() => setIsChangingLastname(!isChangingLastname)}className="rounded-md p-0.5">{isChangingLastname === false ? <Pencil/> : <CircleX className="text-red-600"/>}</button>
                     <label htmlFor="lastname" className="bg-transparent">Nom</label>
                   </div>
                   <Field
@@ -148,16 +148,17 @@ function UserPage() {
                       "border-2 border-transparent": !isChangingLastname
                     })}
                     id="lastname"
+                    data-testid="updateLastnameInput"
                     type="text"
                     placeholder="Nom"
                     name="lastname"
                     disabled={!isChangingLastname}
                   />
-                  { isChangingLastname && errors.lastname && touched.lastname ? <div className="text-red-600 text-xs -mb-4">{ errors.lastname }</div> : <></> }
+                  { isChangingLastname && errors.lastname && touched.lastname ? <div data-testid="updateLastnameErrorText" className="text-red-600 text-xs -mb-4">{ errors.lastname }</div> : <></> }
                 </p>
                 <p>
                   <p className="flex place-items-center gap-3">
-                    <button type="button" onClick={() => setIsChangingFirstname(!isChangingFirstname)}className="rounded-md p-0.5">{ isChangingFirstname === false ? <Pencil/> : <CircleX className="text-red-600"/> }</button>
+                    <button data-testid="updateFirstnameButton" type="button" onClick={() => setIsChangingFirstname(!isChangingFirstname)}className="rounded-md p-0.5">{ isChangingFirstname === false ? <Pencil/> : <CircleX className="text-red-600"/> }</button>
                     <label htmlFor="firstname" className="bg-transparent">Prénom</label>
                   </p>
                   <Field
@@ -168,18 +169,19 @@ function UserPage() {
                       "border-2 border-transparent": !isChangingFirstname
                     })}
                     id="firstname"
+                    data-testid="updateFirstnameInput"
                     type="text"
                     placeholder="Prénom"
                     name="firstname"
                     disabled={!isChangingFirstname}
                   />
-                  { isChangingFirstname && errors.firstname && touched.firstname ? <div className="text-red-600 text-xs -mb-4">{ errors.firstname }</div> : <></> }
+                  { isChangingFirstname && errors.firstname && touched.firstname ? <div data-testid="updateFirstnameErrorText" className="text-red-600 text-xs -mb-4">{ errors.firstname }</div> : <></> }
                 </p>
               </div>
               <div className="grid grid-cols-2 gap-x-5 px-5 place-items-center">
                 <p>
                   <div className="flex place-items-center gap-3">
-                    <button type="button" onClick={() => setIsChangingEmail(!isChangingEmail)} className="rounded-md p-0.5">{ isChangingEmail === false ? <Pencil/> : <CircleX className="text-red-600"/> }</button>
+                    <button data-testid="updateEmailButton" type="button" onClick={() => setIsChangingEmail(!isChangingEmail)} className="rounded-md p-0.5">{ isChangingEmail === false ? <Pencil/> : <CircleX className="text-red-600"/> }</button>
                     <label htmlFor="email" className="bg-transparent">Adresse email</label>
                   </div>
                   <Field
@@ -190,16 +192,17 @@ function UserPage() {
                       "border-2 border-transparent": !isChangingEmail
                     })}
                     id="email"
+                    data-testid="updateEmailInput"
                     type="text"
                     placeholder="Adresse email"
                     name="email"
                     disabled={!isChangingEmail}
                   />
-                  { isChangingEmail && errors.email && touched.email ? <div className="text-red-600 text-xs -mb-4">{ errors.email }</div> : <></> }
+                  { isChangingEmail && errors.email && touched.email ? <div data-testid="updateEmailErrorText" className="text-red-600 text-xs -mb-4">{ errors.email }</div> : <></> }
                 </p>
                 <p>
                   <p className="flex place-items-center gap-3">
-                    <button type="button" onClick={() => setIsChangingUsername(!isChangingUsername)}className="rounded-md p-0.5">{ isChangingUsername === false ? <Pencil/> : <CircleX className="text-red-600"/> }</button>
+                    <button data-testid="updateUsernameButton" type="button" onClick={() => setIsChangingUsername(!isChangingUsername)}className="rounded-md p-0.5">{ isChangingUsername === false ? <Pencil/> : <CircleX className="text-red-600"/> }</button>
                     <label htmlFor="username" className="bg-transparent">Nom d'utilisateur</label>
                   </p>
                   <Field
@@ -209,6 +212,7 @@ function UserPage() {
                       "border-2 border-transparent": !isChangingUsername
                     })}
                     id="username"
+                    data-testid="updateUsernameInput"
                     type="text"
                     placeholder={isChangingUsername ? "Nom d'utilisateur" : ""}
                     name="username"
@@ -217,7 +221,7 @@ function UserPage() {
                 </p>
               </div>
               <p className="flex justify-center space-x-10">
-                <button type="button" disabled={isSubmitting} onClick={() => setIsChangingPassword(!isChangingPassword)} className="font-bold p-2 border-white hover:bg-[#181c24] border-2 rounded-md">Changer de mot de passe</button>
+                <button data-testid="updatePasswordButton" type="button" disabled={isSubmitting} onClick={() => setIsChangingPassword(!isChangingPassword)} className="font-bold p-2 border-white hover:bg-[#181c24] border-2 rounded-md">Changer de mot de passe</button>
               </p>
               {
                 isChangingPassword === true ?
@@ -231,12 +235,13 @@ function UserPage() {
                         "border-white": isChangingPassword && !errors.password
                       })}
                       id="password"
+                      data-testid="updatePasswordInput"
                       type="password"
                       placeholder="Mot de passe"
                       name="password"
                       autoComplete="on"
                     />
-                    { isChangingPassword && errors.password && touched.password ? <div className="text-red-600 text-xs -mb-4">{ errors.password }</div> : <></> }
+                    { isChangingPassword && errors.password && touched.password ? <div data-testid="updatePasswordErrorText" className="text-red-600 text-xs -mb-4">{ errors.password }</div> : <></> }
                   </p>
                   <p>
                     <label className="bg-transparent" htmlFor="confirmationPassword">Confirmation du mot de passe</label>
@@ -247,19 +252,20 @@ function UserPage() {
                           "border-white": isChangingPassword && !errors.confirmationPassword
                         })}
                         id="confirmationPassword"
+                        data-testid="updateConfirmationPasswordInput"
                         type="password"
                         placeholder="Confirmation du mot de passe"
                         name="confirmationPassword"
                         autoComplete="on"
                       />
-                      { isChangingPassword && errors.confirmationPassword && touched.confirmationPassword ? <div className="text-red-600 text-xs -mb-4">{ errors.confirmationPassword }</div> : <></> }
+                      { isChangingPassword && errors.confirmationPassword && touched.confirmationPassword ? <div data-testid="updateConfirmationPasswordErrorText" className="text-red-600 text-xs -mb-4">{ errors.confirmationPassword }</div> : <></> }
                   </p>
                 </section> : 
                 <></>
               }
               <p className="flex justify-center pb-6 space-x-10">
-                <button disabled={isSubmitting ||loading} type="submit" className="bg-cyan-400 font-bold hover:bg-cyan-500 rounded-md p-2">Valider</button>
-                <button type="button" onClick={() => (router.push("/"))} className="font-bold p-2 border-white hover:bg-[#181c24] border-2 rounded-md">Annuler</button>
+                <button data-testid="submitProfileButton" disabled={isSubmitting ||loading} type="submit" className="bg-cyan-400 font-bold hover:bg-cyan-500 rounded-md p-2">Valider</button>
+                <button data-testid="cancelProfileButton" type="button" onClick={() => (router.push("/"))} className="font-bold p-2 border-white hover:bg-[#181c24] border-2 rounded-md">Annuler</button>
               </p>
             </Form>
           )}
