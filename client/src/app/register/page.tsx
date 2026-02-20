@@ -6,7 +6,7 @@ import classNames from "classnames"
 import { useMutation } from "@apollo/client"
 
 import TextTitle from "@/components/text"
-import { addNotification, useNotification } from "@/components/notifications/NotificationProvider"
+import { addNotification, useNotification } from "@/components/notifications/notificationProvider"
 
 import client from "../graphql-api"
 

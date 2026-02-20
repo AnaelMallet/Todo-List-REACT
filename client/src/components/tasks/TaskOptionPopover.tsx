@@ -2,14 +2,14 @@ import { Dispatch, SetStateAction } from "react"
 import { Pencil, Trash2, ThumbsUp, ThumbsDown } from "lucide-react"
 import classNames from "classnames"
 
-import { useModal } from "../confirmationModal/ModalProvider"
+import { useModal } from "../confirmationModal/modalProvider"
+import { useUser } from "../users/userProvider"
+import { addNotification, useNotification } from "../notifications/notificationProvider"
 
 import { useTaskSettingManager } from "./taskSettingManagerProvider"
 import { TaskProps } from "./TaskComponent"
 import { ApolloQueryResult, OperationVariables, useMutation } from "@apollo/client"
 import { deleteTaskMutation, toggleTaskIsDoneMutation } from "./graphql"
-import { useUser } from "../users/UserProvider"
-import { addNotification, useNotification } from "../notifications/NotificationProvider"
 
 interface PopoverTaskProps {
     task: TaskProps
@@ -104,7 +104,7 @@ export default function TaskOptionPopover(props: PopoverTaskProps) {
                             if (responseErrors.length > 0) {
                                 dispatch(addNotification(responseErrors[0].message, false))
                             } else {
-                                dispatch(addNotification(`La tâche ${task.title} à bien été supprimée.`, true))
+                                dispatch(addNotification(`La tâche '${task.title}' à bien été supprimée.`, true))
                             }
                         }
                     })}}

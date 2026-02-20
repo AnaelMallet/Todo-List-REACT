@@ -3,7 +3,7 @@
 import TextTitle from "@/components/text"
 import { useUser } from "@/components/users/userProvider"
 import { useMutation } from "@apollo/client"
-import { addNotification, useNotification } from "@/components/notifications/NotificationProvider"
+import { addNotification, useNotification } from "@/components/notifications/notificationProvider"
 import { Field, Form, Formik } from "formik"
 import classNames from "classnames"
 import { useRouter } from "next/navigation"

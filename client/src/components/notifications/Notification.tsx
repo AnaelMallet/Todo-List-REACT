@@ -6,7 +6,7 @@ import {
   NotificationInterface,
   removeNotification,
   useNotification
-} from "./NotificationProvider"
+} from "./notificationProvider"
 
 type Notification = {
   notification: NotificationInterface

@@ -101,6 +101,7 @@ Fonctionnalité: Modification du profil
         Alors l'élément possédant l'ID "updatePasswordErrorText" avec le texte "Le mot de passe n'est pas valide." n'est pas visible
         Et l'élément possédant l'ID "updateConfirmationPasswordErrorText" avec le texte "La confirmation du mot de passe n'est pas identique." n'est pas visible
 
+    @Deconnexion
     @Close_browser
     Scénario: modification des champs de l'utilisateur: Succès
         Lorsque je clique sur le bouton possédant l'ID "updateFirstnameButton"

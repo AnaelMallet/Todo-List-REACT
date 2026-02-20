@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { ApolloProvider } from '@apollo/client'
 
 import SelectListProvider from "../components/lists/SelectListProvider"
-import NotificationProvider from '../components/notifications/NotificationProvider'
+import NotificationProvider from '../components/notifications/notificationProvider'
 import ModalProvider from '../components/confirmationModal/modalProvider'
 import UserProvider, { useUser } from "../components/users/userProvider"
 import Sidebar from '../components/sidebar'

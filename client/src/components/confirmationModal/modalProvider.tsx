@@ -4,7 +4,7 @@ import {
     useState
 } from "react"
 
-import Modal from "./Modal"
+import Modal from "./modal"
 
 type ModalContextType = {
     openModal: (props: ModalType) => void

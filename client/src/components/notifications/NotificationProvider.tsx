@@ -1,7 +1,7 @@
 import { createContext, Dispatch, useContext, useReducer } from "react"
 import { v4 as uuid } from "uuid"
 
-import Notification from "./Notification"
+import Notification from "./notification"
 
 export interface NotificationInterface {
   uuid: string,

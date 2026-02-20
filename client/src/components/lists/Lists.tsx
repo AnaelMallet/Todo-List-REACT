@@ -12,9 +12,9 @@ import classNames from "classnames"
 import client from "@/app/graphql-api"
 import { FullStarIconSVG, StarIconSVG } from "@/app/svg"
 
-import { addNotification, useNotification } from "../notifications/NotificationProvider"
-import { useUser } from "../users/UserProvider"
-import { useModal } from "../confirmationModal/ModalProvider"
+import { addNotification, useNotification } from "../notifications/notificationProvider"
+import { useUser } from "../users/userProvider"
+import { useModal } from "../confirmationModal/modalProvider"
 import { getSessionStorage, removeSessionStorage } from "../utils"
 
 import { toggleFavoriteMutation, deleteListMutation } from "./graphql"
@@ -83,17 +83,17 @@ function ListsArray(props: ListsArrayProps) {
       return
     }
 
-    dispatch(addNotification(`La liste "${list?.name}" à bien été supprimée.`, true))
+    dispatch(addNotification(`La liste '${list?.name}' à bien été supprimée.`, true))
     removeSessionStorage("selectedList")
     setSelectedList(() => "")
   }
 
   return (
-    <ul className="mt-7 space-y-4 pt-1 pb-3 mx-2 overflow-y-auto max-h-[49.09rem] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-lg [&::-webkit-scrollbar]:pr-3">
+    <ul data-testid="listingElement" className="mt-7 space-y-4 pt-1 pb-3 mx-2 overflow-y-auto max-h-[49.09rem] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-lg [&::-webkit-scrollbar]:pr-3">
       {
         lists.map(list => {
           return (
-            <li key={list.uuid} className="ml-3 mr-5 space-y-1">
+            <li data-testid="listElement" key={list.uuid} className="ml-3 mr-5 space-y-1">
               <div className="flex place-items-center justify-between space-x-2 mb-2">
                 {
                   stateLists
@@ -114,6 +114,7 @@ function ListsArray(props: ListsArrayProps) {
                 }
                 <span className="flex space-x-2">
                   <button
+                    data-testid="updateListButton"
                     onClick={() => {
                       handleIsUpdateListName(list.uuid)
                     }}
@@ -121,6 +122,7 @@ function ListsArray(props: ListsArrayProps) {
                     <Pencil />
                   </button>
                   <button
+                    data-testid="listFavoriteButton"
                     onClick={async () => {
                       const response = await toggleFavoriteMutate({ variables: { listUuid: list.uuid } })
                       const responseErrors = response.data.toggleIsFavorite.errors
@@ -133,8 +135,8 @@ function ListsArray(props: ListsArrayProps) {
 
                       dispatch(addNotification(
                         list.isFavorite
-                          ? `La liste "${list.name}" n'est plus en favoris.`
-                          : `La liste "${list.name}" a été mise en favoris.`,
+                          ? `La liste '${list.name}' n'est plus en favoris.`
+                          : `La liste '${list.name}' a été mise en favoris.`,
                         true
                       ))
 
@@ -142,6 +144,7 @@ function ListsArray(props: ListsArrayProps) {
                     }}
                   >{list.isFavorite ? <FullStarIconSVG /> : <StarIconSVG />}</button>
                   <button
+                    data-testid="deleteListButton"
                     onClick={() => {
                       openModal({
                         title: "Suppression d'une liste",

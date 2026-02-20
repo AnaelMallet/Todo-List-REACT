@@ -5,13 +5,13 @@ import { ApolloQueryResult, OperationVariables, useMutation } from "@apollo/clie
 
 import client from "@/app/graphql-api"
 
-import { useModal } from "../confirmationModal/ModalProvider"
-import { useUser } from "../users/UserProvider"
+import { useModal } from "../confirmationModal/modalProvider"
+import { useUser } from "../users/userProvider"
 
 import { validationSchema, initialValues } from "./api"
 import { Task } from "./Task"
 import { upsertTaskMutation } from "./graphql"
-import { useNotification, addNotification } from "../notifications/NotificationProvider"
+import { useNotification, addNotification } from "../notifications/notificationProvider"
 import { useTaskSettingManager } from "./taskSettingManagerProvider"
 
 interface AddTaskFormProps {
@@ -58,7 +58,7 @@ export default function AddTaskForm(props: AddTaskFormProps) {
                     if (responseErrors.length > 0) {
                         dispatch(addNotification(responseErrors[0].message, false))
                     } else {
-                        dispatch(addNotification(`La tâche "${values.title}" à bien été ajouté à la liste "${list.name}".`, true))
+                        dispatch(addNotification(`La tâche '${values.title}' à bien été ajouté à la liste "${list.name}".`, true))
                     }
 
                     setDisplayTaskForm(() => false)

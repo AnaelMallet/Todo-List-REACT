@@ -3,7 +3,7 @@ import { Plus } from "lucide-react"
 import { useLazyQuery } from "@apollo/client"
 
 import { useSelectList } from "../lists/SelectListProvider"
-import { useUser } from "../users/UserProvider"
+import { useUser } from "../users/userProvider"
 
 import TaskForm from "./TaskForm"
 import { getListTasksQuery } from "./graphql"

@@ -11,7 +11,7 @@ import { ApolloQueryResult, OperationVariables, useMutation, useQuery } from "@a
 import client from "@/app/graphql-api"
 
 import { getLocalStorage, removeLocalStorage, setLocalStorage } from "../utils"
-import { addNotification, useNotification } from "../notifications/NotificationProvider"
+import { addNotification, useNotification } from "../notifications/notificationProvider"
 
 import { getMeQuery, verifyTokenMutation } from "./graphql"
 

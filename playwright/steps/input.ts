@@ -11,6 +11,10 @@ When("je saisis {string} dans le champs possédant l'ID {string}", async functio
     await inputElement.blur()
 })
 
+When("je désélectionne le champs possédant l'ID {string}", async function(elementTestID: string) {
+    await page.getByTestId(elementTestID).blur()
+})
+
 Then("le champs possédant l'ID {string} est visible", async function(elementTestID: string) {
     await expect(page.getByTestId(elementTestID)).toBeInViewport()
 })

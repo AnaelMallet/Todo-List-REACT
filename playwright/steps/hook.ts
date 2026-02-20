@@ -85,6 +85,20 @@ After({tags: "@Close_browser"}, async function() {
     await context.close()
 })
 
+After({ tags: "@Deconnexion" }, async function() {
+    if (page.url() !== "http://localhost:3000/") {
+        await page.goBack()
+    }
+
+    await page.getByTestId("logoutButton").click()
+
+    const localStorageToken = await page.evaluate(() => localStorage.getItem("token"))
+    const localStorageUserId = await page.evaluate(() => localStorage.getItem("userId"))
+
+    expect(localStorageToken).toBeNull()
+    expect(localStorageUserId).toBeNull()
+})
+
 AfterAll(async function() {
     await browser.close()
 })
