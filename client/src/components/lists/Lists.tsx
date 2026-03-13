@@ -89,7 +89,7 @@ function ListsArray(props: ListsArrayProps) {
   }
 
   return (
-    <ul data-testid="listingElement" className="mt-7 space-y-4 pt-1 pb-3 mx-2 overflow-y-auto max-h-[49.09rem] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-lg [&::-webkit-scrollbar]:pr-3">
+    <ul data-testid="listingListElement" className="mt-7 space-y-4 pt-1 pb-3 mx-2 overflow-y-auto max-h-[49.09rem] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-lg [&::-webkit-scrollbar]:pr-3">
       {
         lists.map(list => {
           return (

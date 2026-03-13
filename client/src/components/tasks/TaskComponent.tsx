@@ -41,8 +41,8 @@ export function TasksComponent() {
 
     }, [selectedList, isLogged, getTasks])
 
-    if (!isLogged) return <p className="fixed pt-[5rem] pb-5 w-full h-full overflow-y-auto flex justify-center text-2xl">Vous devez vous connecter vous visualiser vos tâches.</p>
-    if (selectedList === "") return <p className="fixed pt-[5rem] pb-5 w-full h-full overflow-y-auto flex justify-center text-2xl">Selectionnez une liste pour voir ces tâches associées.</p>
+    if (!isLogged) return <p data-testid="notConnectedTaskText" className="fixed pt-[5rem] pb-5 w-full h-full overflow-y-auto flex justify-center text-2xl">Connectez-vous pour voir vos tâches.</p>
+    if (selectedList === "") return <p data-testid="notselectedListText" className="fixed pt-[5rem] pb-5 w-full h-full overflow-y-auto flex justify-center text-2xl">Selectionnez une liste pour voir ces tâches associées.</p>
     if (loading) return <p className="fixed pt-[5rem] pb-5 w-full h-full overflow-y-auto flex justify-center text-2xl">Chargement...</p>
     if (!data || !data.tasks.values || error) return <p className="fixed pt-[5rem] pb-5 w-full h-full overflow-y-auto flex justify-center text-2xl">Une erreur est survenu.</p>
 
@@ -51,11 +51,11 @@ export function TasksComponent() {
     populateHook(getTaskValues.tasks)
 
     return (
-        <main className="fixed pt-[5rem] pb-5 w-full h-full overflow-y-auto flex justify-center [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-lg [&::-webkit-scrollbar]:pr-3">
+        <main data-testid="listingTaskElement" className="fixed pt-[5rem] pb-5 w-full h-full overflow-y-auto flex justify-center [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-lg [&::-webkit-scrollbar]:pr-3">
             <section className="grid grid-cols-1 gap-10 h-max w-[35vw] ml-[10rem]">
                 <div className="flex justify-center space-x-10 ml-4 mt-5">
                     <p className="pb-1 text-3xl">{getTaskValues.listName}</p>
-                    <button onClick={() => setTaskFormIsVisible(() => true)} className="flex place-items-center space-x-2 bg-cyan-400 hover:bg-cyan-500 text-white font-bold rounded-md px-3">
+                    <button data-testid="addTaskButton" onClick={() => setTaskFormIsVisible(() => true)} className="flex place-items-center space-x-2 bg-cyan-400 hover:bg-cyan-500 text-white font-bold rounded-md px-3">
                         <p>Ajouter une tâche</p>
                         <Plus />
                     </button>
@@ -82,7 +82,7 @@ export function TasksComponent() {
                             />
                             )
                         })
-                    : <p className="flex justify-center text text-lg">...Aucune tâche pour le moment.</p>
+                    : <p data-testid="emptylistingTaskText" className="flex justify-center text text-lg">...Aucune tâche pour le moment.</p>
                 }
             </section>
         </main>

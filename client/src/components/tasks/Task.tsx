@@ -40,7 +40,7 @@ export default function Task(props: TaskComponentProps) {
     const [ taskIsUnroll, setTaskIsUnroll ] = useState(false)
 
     return (
-        <article className={classNames({
+        <article data-testid="taskElement" className={classNames({
             "bg-[#282c34] w-auto rounded-xl relative text-white": true,
             "h-[3.5rem] hover:bg-[#181c24]": !taskIsUnroll,
             "h-full": taskIsUnroll
@@ -65,7 +65,7 @@ export default function Task(props: TaskComponentProps) {
                 >
                     {task.title}
                 </p>
-                <button onClick={() => {
+                <button data-testid="taskPopoverButton" onClick={() => {
                     handleOptionIsVisible(task.uuid)
                 }}>
                     <EllipsisVertical className="size-10 text-gray-100" />
@@ -82,7 +82,7 @@ export default function Task(props: TaskComponentProps) {
                 {
                     task.isDone === false
                     ? <></>
-                    : <CircleCheck className="absolute flex place-content-center place-items-center text-[#00b400] bg-white rounded-full -top-[0.9rem] -right-[0.9rem] h-8 w-8"/>
+                    : <CircleCheck data-testid="doneMarkElement" className="absolute flex place-content-center place-items-center text-[#00b400] bg-white rounded-full -top-[0.9rem] -right-[0.9rem] h-8 w-8"/>
                 }
             </div>
             {

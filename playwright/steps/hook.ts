@@ -46,21 +46,21 @@ Before({ tags: "@Open_browser" }, async function() {
     await expect(page.getByTestId("bodyPage")).toBeInViewport()
 })
 
-Before({ tags: "@Navigation_page_connexion" }, async function() {
+Before({ tags: "@Navigation_login_page" }, async function() {
     await page.getByTestId("loginButton").click()
 
     await expect(page).toHaveTitle("Connexion")
     await expect(page.getByTestId("loginFormSection")).toBeInViewport()
 })
 
-Before({ tags: "@Navigation_page_inscription" }, async function() {
+Before({ tags: "@Navigation_register_page" }, async function() {
     await page.getByTestId("registerButton").click()
 
     await expect(page).toHaveTitle("Inscription")
     await expect(page.getByTestId("registerFormSection")).toBeInViewport()
 })
 
-Before({ tags: "@Connexion" }, async function() {
+Before({ tags: "@Login" }, async function() {
     await page.getByTestId("emailLoginInput").fill("test@test.fr")
     await page.getByTestId("passwordLoginInput").fill("P@ssw0rdT3st!ng")
     await page.getByTestId("submitLoginButton").click()
@@ -74,7 +74,7 @@ Before({ tags: "@Connexion" }, async function() {
     expect(localStorageUserId).not.toBeNull()
 })
 
-Before({ tags: "@Navigation_page_profil" }, async function() {
+Before({ tags: "@Navigation_profile_page" }, async function() {
     await page.getByTestId("profileButton").click()
 
     await expect(page).toHaveTitle("Utilisateur")
@@ -85,7 +85,7 @@ After({tags: "@Close_browser"}, async function() {
     await context.close()
 })
 
-After({ tags: "@Deconnexion" }, async function() {
+After({ tags: "@Logout" }, async function() {
     if (page.url() !== "http://localhost:3000/") {
         await page.goBack()
     }

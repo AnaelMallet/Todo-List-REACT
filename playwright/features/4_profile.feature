@@ -3,8 +3,8 @@
 Fonctionnalité: Modification du profil
 
     @Open_browser
-    @Navigation_page_connexion
-    @Connexion
+    @Navigation_login_page
+    @Login
     Scénario: Naviguer sur la page de profil du l'utilisateur
         Lorsque je clique sur le bouton possédant l'ID "profileButton"
         Alors je suis sur la page nommé "Utilisateur"
@@ -13,7 +13,7 @@ Fonctionnalité: Modification du profil
         Lorsque je clique sur le bouton possédant l'ID "cancelProfileButton"
         Alors je suis sur la page nommé "Todo-list-REACT"
 
-    @Navigation_page_profil
+    @Navigation_profile_page
     Scénario: vérification de champs: visibilité du champs "Prénom"
         Lorsque je clique sur le bouton possédant l'ID "updateFirstnameButton"
         Alors le champs possédant l'ID "updateFirstnameInput" est actif
@@ -101,7 +101,7 @@ Fonctionnalité: Modification du profil
         Alors l'élément possédant l'ID "updatePasswordErrorText" avec le texte "Le mot de passe n'est pas valide." n'est pas visible
         Et l'élément possédant l'ID "updateConfirmationPasswordErrorText" avec le texte "La confirmation du mot de passe n'est pas identique." n'est pas visible
 
-    @Deconnexion
+    @Logout
     @Close_browser
     Scénario: modification des champs de l'utilisateur: Succès
         Lorsque je clique sur le bouton possédant l'ID "updateFirstnameButton"

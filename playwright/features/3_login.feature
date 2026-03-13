@@ -3,7 +3,7 @@
 Fonctionnalité: Connexion
 
     @Open_browser
-    @Navigation_page_connexion
+    @Navigation_login_page
     Scénario: Vérification de champs: adresse email obligatoire
         Lorsque je saisis "" dans le champs possédant l'ID "emailLoginInput"
         Alors l'élément possédant l'ID "emailLoginInputErrorText" avec le texte "L'adresse email est obligatoire." est visible

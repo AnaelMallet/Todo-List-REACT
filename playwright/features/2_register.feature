@@ -4,7 +4,7 @@
 Fonctionnalité: Inscription
 
     @Open_browser
-    @Navigation_page_inscription
+    @Navigation_register_page
     Scénario: Vérification de champs: Prénom obligatoire
         Lorsque je saisis "" dans le champs possédant l'ID "firstnameInput"
         Alors l'élément possédant l'ID "firstnameInputErrorText" avec le texte "Le prénom est obligatoire." est visible
@@ -69,7 +69,7 @@ Fonctionnalité: Inscription
         Alors la notification "Votre compte a bien été créé." est visible
         Et je suis sur la page nommé "Todo-list-REACT"
 
-    @Navigation_page_inscription
+    @Navigation_register_page
     Scénario: Tentative d'inscription: Succès (avec nom d'utilisateur)
         Lorsque je saisis "jane" dans le champs possédant l'ID "firstnameInput"
         Et que je saisis "stewart" dans le champs possédant l'ID "lastnameInput"
@@ -81,7 +81,7 @@ Fonctionnalité: Inscription
         Alors la notification "Votre compte a bien été créé." est visible
         Et je suis sur la page nommé "Todo-list-REACT"
 
-    @Navigation_page_inscription
+    @Navigation_register_page
     @Close_browser
     Scénario: Tentative d'inscription: échec (adresse email déjà utilisé)
         Lorsque je saisis "john" dans le champs possédant l'ID "firstnameInput"

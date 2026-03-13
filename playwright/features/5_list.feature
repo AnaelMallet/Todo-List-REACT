@@ -8,12 +8,12 @@ Fonctionnalité: manipulation des listes
         Lorsque je clique sur le bouton possédant l'ID "addListButton"
         Alors la notification "Connectez-vous pour ajouter une liste." est visible
 
-    Scénario: Vérification de la connexion: affichage du listage des listes
+    Scénario: Vérification de la connexion: affichage du listage des listes refusé (pas connecté)
         Etant donné que je suis déconnecté
         Alors l'élément possédant l'ID "notConnectedListingText" avec le texte "Connectez-vous pour voir vos listes." est visible
 
-    @Navigation_page_connexion
-    @Connexion
+    @Navigation_login_page
+    @Login
     Scénario: Vérification de la connexion: ajout autorisé
         Etant donné que je suis connecté
         Lorsque je clique sur le bouton possédant l'ID "addListButton"
@@ -36,7 +36,7 @@ Fonctionnalité: manipulation des listes
         Et la liste "test" est visible dans le listage
 
     Scénario: Affichage du champs de modification de nom de la liste
-        Lorsque je clique sur le bouton possédant l'ID "updateListButton"
+        Lorsque je clique sur le bouton possédant l'ID "updateListButton" de la liste "test"
         Alors le champs possédant l'ID "updateListInput" est visible
 
     Scénario: Modification du nom de la liste
@@ -46,15 +46,15 @@ Fonctionnalité: manipulation des listes
         Et la liste "testing" est visible dans le listage
 
     Scénario: mise en favoris de la liste
-        Lorsque je clique sur le bouton possédant l'ID "listFavoriteButton"
+        Lorsque je clique sur le bouton possédant l'ID "listFavoriteButton" de la liste "testing"
         Alors la notification "La liste 'testing' a été mise en favoris." est visible
 
     Scénario: désélection de la liste en favoris
-        Lorsque je clique sur le bouton possédant l'ID "listFavoriteButton"
+        Lorsque je clique sur le bouton possédant l'ID "listFavoriteButton" de la liste "testing"
         Alors la notification "La liste 'testing' n'est plus en favoris." est visible
 
     Scénario: suppression d'une liste: affichage de la popup
-        Lorsque je clique sur le bouton possédant l'ID "deleteListButton"
+        Lorsque je clique sur le bouton possédant l'ID "deleteListButton" de la liste "testing"
         Alors la popup "Suppression d'une liste" est visible
 
     Scénario: suppression d'une liste: affichage de la popup
@@ -62,11 +62,11 @@ Fonctionnalité: manipulation des listes
         Alors la popup "Suppression d'une liste" n'est pas visible
 
     Scénario: suppression d'une liste
-        Lorsque je clique sur le bouton possédant l'ID "deleteListButton"
+        Lorsque je clique sur le bouton possédant l'ID "deleteListButton" de la liste "testing"
         Et que je clique sur le bouton possédant l'ID "confirmPopupButton"
         Alors la popup "Suppression d'une liste" n'est pas visible
         Et la notification "La liste 'testing' à bien été supprimée." est visible
-        Et la liste 'test' n'est pas visible dans le listage
+        Et la liste 'testing' n'est pas visible dans le listage
 
     Plan du scénario: Ajout de 5 listes + mise en favoris
         Lorsque je clique sur le bouton possédant l'ID "addListButton"
@@ -75,7 +75,7 @@ Fonctionnalité: manipulation des listes
         Alors la notification "<notifText>" est visible
         Et la liste "<listText>" est visible dans le listage
 
-        Lorsque je clique sur le bouton possédant l'ID "listFavoriteButton"
+        Lorsque je clique sur le bouton possédant l'ID "listFavoriteButton" de la liste "<listText>"
         Alors la notification "<favoriteText>" est visible
 
         Exemples:
@@ -86,12 +86,12 @@ Fonctionnalité: manipulation des listes
         |    test4 | La liste 'test4' a été ajouté. | La liste 'test4' a été mise en favoris. |
         |    test5 | La liste 'test5' a été ajouté. | La liste 'test5' a été mise en favoris. |
 
-    @Deconnexion
+    @Logout
     @Close_browser
     Scénario: Ajout d'une sixième liste + mise en favoris erreur: 5 max
         Lorsque je clique sur le bouton possédant l'ID "addListButton"
-        Et que je saisis "test6" dans le champs possédant l'ID "addListInput"
+        Et que je saisis "test" dans le champs possédant l'ID "addListInput" 
         Et que je valide le champs possédant l'ID "addListInput"
-        Et que la liste "test6" est visible dans le listage
-        Et que je clique sur le bouton possédant l'ID "listFavoriteButton"
+        Et que la liste "test" est visible dans le listage
+        Et que je clique sur le bouton possédant l'ID "listFavoriteButton" de la liste "test"
         Alors la notification "Nombre de listes en favoris atteint (5 maximum)." est visible
