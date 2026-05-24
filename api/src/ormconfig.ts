@@ -9,13 +9,19 @@ export let appDataSource: DataSource
 export async function createDataSource() {
   ormEntityClasses = await getORMEntities()
   
+  // Configuration différente pour tests vs production
+  const isTestMode = process.env.CI === 'true'
+  const port = isTestMode ? 5433 : 5432
+  const database = isTestMode ? 'test_db' : 'postgres'
+  const password = isTestMode ? 'testpass' : 'admin'
+  
   appDataSource = new DataSource({
     type: "postgres",
-    host: process.env.DATABASE_HOST,
-    port: 5432,
+    host: process.env.DATABASE_HOST || 'localhost',
+    port: port,
     username: "postgres",
-    password: "admin",
-    database: "postgres",
+    password,
+    database,
     synchronize: true,
     logging: true,
     namingStrategy: new SnakeNamingStrategy(),
@@ -23,7 +29,7 @@ export async function createDataSource() {
   })
 
   appDataSource.initialize().then(() => {
-    console.info("database is initialized")
+    console.info(`database initialized (mode: ${isTestMode ? 'TEST' : 'PROD'})`)
   }).catch((err) => {
     console.error(err)
   })

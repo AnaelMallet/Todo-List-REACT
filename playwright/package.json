@@ -12,6 +12,11 @@
     "typescript": "^5.9.3"
   },
   "scripts": {
-    "test": "cucumber-js test"
+    "test:chromium": "cross-env BROWSER=chromium cucumber-js test",
+    "test:firefox": "cross-env BROWSER=firefox cucumber-js test",
+    "test": "yarn test:chromium && yarn test:firefox"
+  },
+  "dependencies": {
+    "cross-env": "^10.1.0"
   }
 }

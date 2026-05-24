@@ -13,6 +13,7 @@ import {
     chromium,
     expect
 } from "@playwright/test"
+import { execSync } from "child_process"
 
 export let page: Page
 let browser: Browser
@@ -23,10 +24,10 @@ dotenv.config()
 BeforeAll(async function() {
     switch(process.env.BROWSER) {
         case "firefox":
-            browser = await firefox.launch({ headless: false })
+            browser = await firefox.launch()
             break
         case "chromium":
-            browser = await chromium.launch({ headless: false })
+            browser = await chromium.launch()
             break
         default:
             throw new Error("Browser not found")
@@ -101,4 +102,8 @@ After({ tags: "@Logout" }, async function() {
 
 AfterAll(async function() {
     await browser.close()
+
+    if (process.env.CI === "false") {
+        execSync(`docker exec postgres psql -U postgres -d postgres -c "DELETE FROM tasks; DELETE FROM lists; DELETE FROM users;"`)
+    }
 })
