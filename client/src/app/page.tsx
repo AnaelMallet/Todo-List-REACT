@@ -5,8 +5,8 @@ import { ApolloProvider } from '@apollo/client'
 
 import SelectListProvider from "../components/lists/SelectListProvider"
 import NotificationProvider from '../components/notifications/NotificationProvider'
-import ModalProvider from '../components/confirmationModal/ModalProvider'
-import UserProvider, { useUser } from "../components/users/UserProvider"
+import ModalProvider from '../components/confirmationModal/modalProvider'
+import UserProvider, { useUser } from "../components/users/userProvider"
 import Sidebar from '../components/sidebar'
 import TaskSettingManagerProvider from '../components/tasks/taskSettingManagerProvider'
 import { TasksComponent } from "../components/tasks/TaskComponent"

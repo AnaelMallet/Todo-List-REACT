@@ -9,7 +9,7 @@ const initialValues = {
   confirmationPassword: ""
 }
 
-const validationSchema = Yup.object().shape({
+const schemaValidation = Yup.object().shape({
   firstname: Yup
     .string()
     .required("Le prénom est obligatoire."),
@@ -26,11 +26,12 @@ const validationSchema = Yup.object().shape({
   username: Yup.string(),
   password: Yup
     .string()
-    .matches(
-      /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/g,
-      "Le mot de passe n'est pas valide."
-    )
-    .required("Le mot de passe est obligatoire."),
+    .required("Le mot de passe est obligatoire.")
+    .min(8, "Le mot de passe doit contenir au moins 8 caractères.")
+    .matches(/[A-Z]/g, "Le mot de passe doit contenir au moins une majuscule.")
+    .matches(/[a-z]/g, "Le mot de passe doit contenir au moins une minuscule.")
+    .matches(/[0-9]/g, "Le mot de passe doit contenir au moins un chiffre")
+    .matches(/[!@#$%^&*=+?~]/g, "Le mot de passe doit contenir au moins un caractère spécial parmi: !@#$%^&*=+?~"),
   confirmationPassword: Yup
     .string()
     .oneOf([Yup.ref("password")], "La confirmation du mot de passe n'est pas identique.")
@@ -39,5 +40,5 @@ const validationSchema = Yup.object().shape({
 
 export {
   initialValues,
-  validationSchema
-} 
+  schemaValidation
+}

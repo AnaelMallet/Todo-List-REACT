@@ -30,9 +30,18 @@ export class Password extends Value<Password, string> {
   }
 
   static isValidPassword(value: string): boolean {
-    const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/g
+    const regexTests = [
+      value.length >= 8,
+      /[A-Z]/g.test(value),
+      /[a-z]/g.test(value),
+      /[0-9]/g.test(value),
+      /[!@#$%^&*=+?~]/g.test(value)
+    ]
 
-    return regex.test(value)
+    console.log("regexTests", regexTests);
+    
+
+    return !regexTests.some(test => test === false)
   }
 
   static hashPassword(password: string): string {
