@@ -1,4 +1,5 @@
 import { v4 as uuid } from "uuid"
+import { describe, expect, test, beforeAll } from "@jest/globals"
 
 import { UserNotExistError } from "../../errors"
 import { userTestRepository } from "../../infra/databases/repositories"

@@ -1,4 +1,5 @@
 import { v4 as uuid } from "uuid"
+import { describe, expect, test, beforeAll } from "@jest/globals"
 
 import { userTestRepository } from "../../infra/databases/repositories"
 import { UserNotExistError } from "../../errors"
@@ -6,7 +7,7 @@ import { UserNotExistError } from "../../errors"
 import { userPropsDto } from "../createUser/dto"
 import { CreateUserUseCase } from "../createUser/use-case"
 
-import { UserMeUseCase } from "./use-case"
+import { UserInfo, UserMeUseCase } from "./use-case"
 
 describe("test the me use-case" , () => {
   const meUseCase = new UserMeUseCase(userTestRepository)
@@ -38,7 +39,7 @@ describe("test the me use-case" , () => {
 
     expect(meErrors.length).toBe(0)
 
-    const me = meResult.getValue()
+    const me = meResult.getValue() as UserInfo
 
     expect(me.email).toBe(userProps.email)
     expect(me.firstname).toBe(userProps.firstname)
@@ -47,7 +48,7 @@ describe("test the me use-case" , () => {
   })
 
   test("should return null because the user is not connected", async () => {
-    const meResult = await meUseCase.execute(null)
+    const meResult = await meUseCase.execute(null as unknown as string)
 
     expect(meResult.isSuccess).toBe(true)
 

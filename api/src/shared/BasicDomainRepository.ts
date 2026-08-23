@@ -1,4 +1,4 @@
-import { EntityTarget, ObjectLiteral, Repository } from "typeorm"
+import { ObjectLiteral } from "typeorm"
 
 import BasicRepository from "./basicRepository"
 

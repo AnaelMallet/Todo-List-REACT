@@ -1,13 +1,13 @@
 import { BasicUseCase } from "@shared/basicUseCase"
 
-import { TaskDomainRepository } from "../../../repositories/implementations/taskDomainRepository"
+import { ITaskDomainRepository } from "../../../repositories/I_TaskDomainRepository"
 import { Result } from "@shared/Results"
 import { TaskNotExistError } from "src/domains/lists/errors"
 
 export class ToggleDoneTaskUseCase implements BasicUseCase {
-    repository: TaskDomainRepository
+    repository: ITaskDomainRepository
 
-    constructor(repository: TaskDomainRepository) {
+    constructor(repository: ITaskDomainRepository) {
         this.repository = repository
     }
 

@@ -1,6 +1,6 @@
 export interface ListPropsDto {
   uuid? :string
   name: string
-  isFavorite?: boolean
+  isFavorite: boolean
   userId: string
 }

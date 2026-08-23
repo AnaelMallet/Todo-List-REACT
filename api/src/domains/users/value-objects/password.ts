@@ -38,9 +38,6 @@ export class Password extends Value<Password, string> {
       /[!@#$%^&*=+?~]/g.test(value)
     ]
 
-    console.log("regexTests", regexTests);
-    
-
     return !regexTests.some(test => test === false)
   }
 

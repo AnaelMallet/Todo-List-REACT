@@ -5,7 +5,6 @@ import { Task } from "../../../entities/task"
 
 export class TaskTestRepository implements ITaskDomainRepository {
     array: Task[] = []
-    repository: null
 
     async findOneByUuid(uuid: string): Promise<Result<Task>> {
         const foundTask = this.array.find(task => task.uuid === uuid)

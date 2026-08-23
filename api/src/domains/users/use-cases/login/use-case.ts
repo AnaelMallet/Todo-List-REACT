@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken"
 import { BasicUseCase } from "@shared/basicUseCase"
 import { Result } from "@shared/Results"
 
-import { UserDomainRepository } from "../../repositories/implementations/userDomainRepository"
+import { IUserDomainRepository } from "../../repositories/I-UserDomainRepository"
 import { LoginNotValidError } from "../../errors"
 import { Password } from "../../value-objects/password"
 
@@ -15,9 +15,9 @@ type UserLoginData = {
 }
 
 export class LoginUserUseCase implements BasicUseCase {
-  repository: UserDomainRepository
+  repository: IUserDomainRepository
 
-  constructor(repository: UserDomainRepository) {
+  constructor(repository: IUserDomainRepository) {
     this.repository = repository
   }
 

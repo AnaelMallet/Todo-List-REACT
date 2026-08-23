@@ -1,4 +1,6 @@
 import { v4 as uuid } from "uuid"
+import { describe, test, expect, beforeAll } from "@jest/globals"
+
 import { CreateUserUseCase } from "src/domains/users/use-cases/createUser/use-case"
 import { userTestRepository } from "src/domains/users/infra/databases/repositories"
 import { userPropsDto } from "src/domains/users/use-cases/createUser/dto"
@@ -12,7 +14,6 @@ import { CreateListUseCase } from "../../list/create/use-case"
 import { TaskPropsDto } from "./dto"
 import { UpdateTaskUseCase } from "./update-useCase"
 import { CreateTaskUseCase } from "./create-useCase"
-import { taskDomainRepository } from "src/domains/lists/repositories/implementations"
 
 describe("test the updateTask use-case", () => {
     const userUuid = uuid()
@@ -24,6 +25,7 @@ describe("test the updateTask use-case", () => {
         uuid: taskUuid,
         title: "Task title",
         description: "task description",
+        isDone: false,
         listId: listUuid
     }
 
@@ -32,6 +34,7 @@ describe("test the updateTask use-case", () => {
         uuid: taskUuid,
         title: "Titre de la tâche",
         description: "Description de la tâche",
+        isDone: false,
         listId: listUuid
     }
 
@@ -48,6 +51,7 @@ describe("test the updateTask use-case", () => {
         const listProps: ListPropsDto = {
             uuid: listUuid,
             name: "Task for today",
+            isFavorite: false,
             userId: userUuid
         }
 
@@ -64,7 +68,7 @@ describe("test the updateTask use-case", () => {
 
         expect(updateTaskResult.isSuccess).toBe(true)
 
-        const taskResult = await taskTestRepository.findOneByUuid(updateTaskProps.uuid)
+        const taskResult = await taskTestRepository.findOneByUuid(updateTaskProps.uuid as string)
         const task = taskResult.getValue()
 
         expect(task.title).toBe(updateTaskProps.title)

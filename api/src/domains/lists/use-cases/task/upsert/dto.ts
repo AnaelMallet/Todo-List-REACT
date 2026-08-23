@@ -2,6 +2,6 @@ export interface TaskPropsDto {
     uuid?: string
     title: string
     description: string
-    isDone?: boolean
+    isDone: boolean
     listId: string
 }

@@ -1,16 +1,16 @@
 import { BasicUseCase } from "@shared/basicUseCase"
 import { Result } from "@shared/Results"
 
-import { UserDomainRepository } from "../../repositories/implementations/userDomainRepository"
+import { IUserDomainRepository } from "../../repositories/I-UserDomainRepository"
 import { UserNotExistError } from "../../errors"
 import { Password } from "../../value-objects/password"
 
 import { updateUserDto } from "./dto"
 
 export class UpdateUserUseCase implements BasicUseCase {
-  repository: UserDomainRepository
+  repository: IUserDomainRepository
 
-  constructor(repository: UserDomainRepository) {
+  constructor(repository: IUserDomainRepository) {
     this.repository = repository
   }
 
@@ -32,7 +32,7 @@ export class UpdateUserUseCase implements BasicUseCase {
     }
 
     if (props.username !== user.props.username) {
-      user.updateUsername(props.username)
+      user.updateUsername(props.username as string)
     }
 
     if (props.email && props.email !== user.props.email.value) {

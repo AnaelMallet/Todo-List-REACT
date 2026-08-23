@@ -4,7 +4,7 @@ import { Result } from "@shared/Results"
 
 export type ListProps = {
   name: string
-  isFavorite?: boolean
+  isFavorite: boolean
   userId: string
 }
 
@@ -24,6 +24,7 @@ export class List extends Entity<List, ListProps> {
   static create(props: ListProps, uuid?: string): Result<List> {
     const guardResults = Result.combine([
       Guard.againstNullOrUndefined(props.name, "name"),
+      Guard.againstNullOrUndefined(props.isFavorite, "isFavorite"),
       Guard.againstNullOrUndefined(props.userId, "userId")
     ])
 
@@ -36,11 +37,11 @@ export class List extends Entity<List, ListProps> {
     return Result.ok(list)
   }
 
-  toggleIsFavorite(): void {
-    this.props.isFavorite = !this.props.isFavorite
-  }
-
   updateName(name: string): void {
     this.props.name = name
+  }
+
+  toggleIsFavorite(): void {
+    this.props.isFavorite = !this.props.isFavorite
   }
 }

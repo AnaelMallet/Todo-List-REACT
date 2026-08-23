@@ -1,4 +1,4 @@
-import { graphqlProps } from "src/domains/users/infra/graphql/resolvers"
+import { graphqlProps } from "@shared/basicResolvers"
 
 import { Result } from "./Results"
 

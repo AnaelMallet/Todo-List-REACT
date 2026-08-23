@@ -2,12 +2,12 @@ import { BasicUseCase } from "@shared/basicUseCase"
 import { Result } from "@shared/Results"
 
 import { TaskNotExistError } from "../../../errors"
-import { TaskDomainRepository } from "../../../repositories/implementations/taskDomainRepository"
+import { ITaskDomainRepository } from "../../../repositories/I_TaskDomainRepository"
 
 export class DeleteTaskUseCase implements BasicUseCase {
-    repository: TaskDomainRepository
+    repository: ITaskDomainRepository
 
-    constructor(repository: TaskDomainRepository) {
+    constructor(repository: ITaskDomainRepository) {
         this.repository = repository
     }
 

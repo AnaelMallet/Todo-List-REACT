@@ -1,4 +1,5 @@
 import { v4 as uuid } from "uuid"
+import { describe, test, expect, beforeAll } from "@jest/globals"
 
 import { userPropsDto } from "src/domains/users/use-cases/createUser/dto"
 import { CreateUserUseCase } from "src/domains/users/use-cases/createUser/use-case"
@@ -24,12 +25,14 @@ describe("test the deleteList use-case", () => {
     const listProps: ListPropsDto = {
         uuid: listUuid,
         name: "task for today",
+        isFavorite: false,
         userId: userUuid
     }
     const taskProps: TaskPropsDto = {
         uuid: taskUuid,
         title: "task title",
         description: "task description",
+        isDone: false,
         listId: listUuid
     }
 
@@ -62,7 +65,7 @@ describe("test the deleteList use-case", () => {
         const toggleIsDoneUseCase = new ToggleDoneTaskUseCase(taskTestRepository)
 
         await createTaskUseCase.execute(taskProps)
-        await toggleIsDoneUseCase.execute(taskProps.uuid)
+        await toggleIsDoneUseCase.execute(taskProps.uuid as string)
         
         const deleteListResult = await deleteListUseCase.execute(listUuid)
 

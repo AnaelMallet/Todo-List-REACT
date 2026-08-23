@@ -13,35 +13,35 @@ import ListEntity from "src/domains/lists/infra/databases/entities/list"
 @Entity({ name: "users" })
 export default class UserEntity extends BaseEntity {
   @PrimaryColumn()
-  uuid: string
+  uuid!: string
 
   @Column('varchar', { length: 64 })
-  firstrname: string
+  firstrname!: string
 
   @Column('varchar', { length: 64 })
-  lastname: string
+  lastname!: string
 
   @Column("varchar", { length: 64 })
-  email: string
+  email!: string
 
-  @Column("varchar", { length : 32, nullable: true })
-  username: string
+  @Column("varchar", { length: 32, nullable: true })
+  username!: string | undefined
 
   @Column("varchar", { length: 64 })
-  password: string
+  password!: string
 
   @Column("text", { nullable: true })
-  accessToken: string
+  accessToken!: string | undefined
 
   @Column("text", { nullable: true })
-  refreshToken: string
+  refreshToken!: string | undefined
 
   @OneToMany(() => ListEntity, list => list.user)
-  lists: ListEntity[]
+  lists!: ListEntity[]
 
   @CreateDateColumn()
-  createdDate: Date
+  createdDate!: Date
 
   @UpdateDateColumn()
-  updatedDate: Date
+  updatedDate!: Date
 }

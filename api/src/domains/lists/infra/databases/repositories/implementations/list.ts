@@ -17,7 +17,7 @@ export class ListRepository extends BasicRepository<ListEntity> implements IList
       .getMany()
   }
 
-  async findOneByUuid(uuid: string): Promise<ListEntity> {
+  async findOneByUuid(uuid: string): Promise<ListEntity | null> {
       return await this.repository
         .createQueryBuilder(this.alias)
         .innerJoinAndSelect(`${this.alias}.user`, "user_lists")
