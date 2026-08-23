@@ -1,3 +1,5 @@
+import { describe, expect, test } from "@jest/globals"
+
 import { AgainstNullOrUndefinedError } from "@shared/basicErrors"
 
 import { Email } from "../value-objects/email"
@@ -55,7 +57,7 @@ describe("test the user entity", () => {
   test("Should not create an user because firstname is undefined", () => {
     const props = {...userProps}
   
-    props.firstname = undefined
+    props.firstname = undefined as unknown as string
   
     const userResult = User.create(props)
   
@@ -71,7 +73,7 @@ describe("test the user entity", () => {
   test("Should not create an user because lastname is undefined", () => {
     const props = {...userProps}
   
-    props.lastname = undefined
+    props.lastname = undefined as unknown as string
   
     const userResult = User.create(props)
   
@@ -87,7 +89,7 @@ describe("test the user entity", () => {
   test("Should not create an user because email is undefined", () => {
     const props = {...userProps}
   
-    props.email = undefined
+    props.email = undefined as unknown as Email
   
     const userResult = User.create(props)
   
@@ -103,7 +105,7 @@ describe("test the user entity", () => {
   test("Should not create an user because password is undefined", () => {
     const props = {...userProps}
   
-    props.password = undefined
+    props.password = undefined as unknown as Password
   
     const userResult = User.create(props)
   

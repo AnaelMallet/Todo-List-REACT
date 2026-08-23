@@ -1,7 +1,7 @@
 import { BasicUseCase } from "@shared/basicUseCase"
 import { Result } from "@shared/Results"
 
-import { UserDomainRepository } from "../../repositories/implementations/userDomainRepository"
+import { IUserDomainRepository } from "../../repositories/I-UserDomainRepository"
 import { User } from "../../entities/user"
 import { Email } from "../../value-objects/email"
 import { EmailAlreadyExistError, PasswordNotEqualsError } from "../../errors"
@@ -10,9 +10,9 @@ import { Password } from "../../value-objects/password"
 import { userPropsDto } from "./dto"
 
 export class CreateUserUseCase implements BasicUseCase {
-  repository: UserDomainRepository
+  repository: IUserDomainRepository
 
-  constructor(repository: UserDomainRepository) {
+  constructor(repository: IUserDomainRepository) {
     this.repository = repository
   }
 

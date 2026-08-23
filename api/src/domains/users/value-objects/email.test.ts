@@ -1,3 +1,5 @@
+import { describe, expect, test } from "@jest/globals"
+
 import { AgainstNullOrUndefinedError } from "@shared/basicErrors"
 
 import { EmailNotValidError } from "../errors"
@@ -18,7 +20,7 @@ describe("test the email value-object", () => {
   })
   
   test("should not create an email because email is undefined", () => {
-    const emailResult = Email.create(undefined)
+    const emailResult = Email.create(undefined as unknown as string)
   
     expect(emailResult.isSuccess).toBe(false)
     expect(emailResult.values).toBe(undefined)

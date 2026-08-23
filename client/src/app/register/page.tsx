@@ -10,7 +10,7 @@ import { addNotification, useNotification } from "@/components/notifications/Not
 
 import client from "../graphql-api"
 
-import { initialValues, validationSchema } from "./api"
+import { initialValues, schemaValidation } from "./api"
 import { createUserMutation } from "./graphql"
 
 function RegsiterPage() {
@@ -25,7 +25,7 @@ function RegsiterPage() {
         <TextTitle/>
         <Formik
           initialValues={initialValues}
-          validationSchema={validationSchema}
+          validationSchema={schemaValidation}
           onSubmit={async values => {
             const response = await mutateFunction({ variables: { input: values } })
             const responseErrors = response.data.createUser.errors

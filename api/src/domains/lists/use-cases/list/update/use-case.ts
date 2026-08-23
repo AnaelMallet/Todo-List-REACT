@@ -1,15 +1,15 @@
 import { BasicUseCase } from "@shared/basicUseCase"
 import { Result } from "@shared/Results"
 
-import { ListDomainRepository } from "../../../repositories/implementations/listDomainRepository"
+import { IListDomainRepository } from "../../../repositories/I_ListDomainRepository"
 import { ListNotExistError } from "../../../errors"
 
 import { updateListDto } from "./dto"
 
 export class UpdateListUseCase implements BasicUseCase {
-  repository: ListDomainRepository
+  repository: IListDomainRepository
 
-  constructor(repository: ListDomainRepository) {
+  constructor(repository: IListDomainRepository) {
     this.repository = repository
   }
 
@@ -19,7 +19,7 @@ export class UpdateListUseCase implements BasicUseCase {
       name
     } = args
 
-    const foundListResult = await this.repository.findOneByUuid(uuid)
+    const foundListResult = await this.repository.findOneByUuid(uuid as string)
 
     if (foundListResult.isFailure) {
       return Result.fail(new ListNotExistError())

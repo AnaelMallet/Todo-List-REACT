@@ -13,25 +13,25 @@ import {
 @Entity({ name: "tasks" })
 export default class TaskEntity extends BaseEntity {
     @PrimaryColumn()
-    uuid: string
+    uuid!: string
 
     @Column("varchar", { length: 64 })
-    title: string
+    title!: string
 
     @Column("text")
-    description: string
+    description!: string
 
     @Column("bool", { default: false })
-    isDone: boolean
+    isDone!: boolean
 
     @ManyToOne(() => ListEntity, list => list.tasks, {
         onDelete: "CASCADE"
     })
-    list: ListEntity
+    list!: ListEntity
 
     @CreateDateColumn()
-    createdDate: Date
+    createdDate!: Date
 
     @UpdateDateColumn()
-    updatedDate: Date
+    updatedDate!: Date
 }

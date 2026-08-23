@@ -24,14 +24,14 @@ export class UserVerifyTokenUseCase implements BasicUseCase {
     const user = foundUserResult.getValue()
 
     try {
-      jwt.verify(user.props.refreshToken, process.env.JWT_KEY)
+      jwt.verify(user.props.refreshToken as string, process.env.JWT_KEY)
     } catch (error) {
       return Result.fail(new UserTokenOutdatedError())
     }
 
     let newAccessToken = null
 
-    jwt.verify(user.props.accessToken, process.env.JWT_KEY, (err) => {
+    jwt.verify(user.props.accessToken as string, process.env.JWT_KEY, (err) => {
       if (err) {
         if (err.message !== "jwt expired") {
           return Result.fail(new DomainError(err.name, err.message))

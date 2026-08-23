@@ -5,7 +5,7 @@ export class Result<T> {
   isSuccess: boolean
   isFailure: boolean
   errors: DomainError[]
-  values: T
+  values: T | undefined
 
   constructor(isSuccess: boolean, errors?: DomainError[], values?: T) {
     this.code = isSuccess ? 200 : 400
@@ -22,7 +22,7 @@ export class Result<T> {
       throw new Error("InvalidOperation: Can't retrieve value from a failed result.")
     }
 
-    return this.values
+    return this.values as T
   }
 
   public getErrors(): DomainError[] {

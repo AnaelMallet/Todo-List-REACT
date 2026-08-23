@@ -14,23 +14,23 @@ import TaskEntity from "./task"
 @Entity({ name: "lists" })
 export default class ListEntity extends BaseEntity {
   @PrimaryColumn()
-  uuid: string
+  uuid!: string
 
   @Column("varchar", { length: 64 })
-  name: string
+  name!: string
 
   @Column("bool", { default: false })
-  isFavorite: boolean
+  isFavorite!: boolean
 
   @ManyToOne(() => UserEntity, user => user.lists)
-  user: UserEntity
+  user!: UserEntity
 
   @OneToMany(() => TaskEntity, task => task.list)
-  tasks: TaskEntity[]
+  tasks!: TaskEntity[]
 
   @CreateDateColumn()
-  createdDate: Date
+  createdDate!: Date
 
   @UpdateDateColumn()
-  updatedDate: Date
+  updatedDate!: Date
 }

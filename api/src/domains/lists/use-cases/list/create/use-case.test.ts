@@ -1,4 +1,5 @@
 import { v4 as uuid } from "uuid"
+import { describe, test, expect, beforeAll } from "@jest/globals"
 
 import { userPropsDto } from "src/domains/users/use-cases/createUser/dto"
 import { CreateUserUseCase } from "src/domains/users/use-cases/createUser/use-case"
@@ -15,6 +16,7 @@ describe("test the createList use-case", () => {
   const userUuid = uuid()
   const listProps: ListPropsDto = {
     name: "task for today",
+    isFavorite: false,
     userId: userUuid
   }
 

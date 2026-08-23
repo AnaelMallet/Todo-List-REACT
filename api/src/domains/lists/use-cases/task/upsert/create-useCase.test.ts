@@ -1,15 +1,17 @@
 import { v4 as uuid } from "uuid"
+import { describe, test, expect, beforeAll } from "@jest/globals"
 
 import { userPropsDto } from "src/domains/users/use-cases/createUser/dto"
+import { CreateUserUseCase } from "src/domains/users/use-cases/createUser/use-case"
+import { userTestRepository } from "src/domains/users/infra/databases/repositories"
 
 import { listTestRepository, taskTestRepository } from "../../../infra/databases/repositories"
 
-import { CreateTaskUseCase } from "./create-useCase"
-import { TaskPropsDto } from "./dto"
-import { CreateUserUseCase } from "src/domains/users/use-cases/createUser/use-case"
-import { userTestRepository } from "src/domains/users/infra/databases/repositories"
 import { ListPropsDto } from "../../list/create/dto"
 import { CreateListUseCase } from "../../list/create/use-case"
+
+import { CreateTaskUseCase } from "./create-useCase"
+import { TaskPropsDto } from "./dto"
 
 describe("test the createTask use-case", () => {
     const createTaskUseCase = new CreateTaskUseCase(taskTestRepository)
@@ -18,6 +20,7 @@ describe("test the createTask use-case", () => {
     const taskProps: TaskPropsDto = {
         title: "today's task",
         description: "description of the today's task",
+        isDone: false,
         listId: listUuid
     }
 
@@ -35,6 +38,7 @@ describe("test the createTask use-case", () => {
         const listProps: ListPropsDto = {
             uuid: listUuid,
             name: "task for today",
+            isFavorite: false,
             userId: userUuid
         }
 

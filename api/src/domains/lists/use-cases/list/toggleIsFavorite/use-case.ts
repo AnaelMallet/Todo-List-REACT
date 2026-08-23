@@ -1,15 +1,15 @@
 import { BasicUseCase } from "@shared/basicUseCase"
 import { Result } from "@shared/Results"
 
-import { ListDomainRepository } from "../../../repositories/implementations/listDomainRepository"
+import { IListDomainRepository } from "../../../repositories/I_ListDomainRepository"
 import { FavoriteListNumberReachError, ListNotExistError } from "../../../errors"
 
 import { toggleFavoriteDto } from "./dto"
 
 export class ToggleFavoriteListUseCase implements BasicUseCase {
-  repository: ListDomainRepository
+  repository: IListDomainRepository
 
-  constructor(repository: ListDomainRepository) {
+  constructor(repository: IListDomainRepository) {
     this.repository = repository
   }
 

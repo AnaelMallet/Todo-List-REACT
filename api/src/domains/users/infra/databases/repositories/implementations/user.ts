@@ -7,14 +7,14 @@ import { IUserRepository } from "../I_user"
 export class UserRepository extends BasicRepository<UserEntity> implements IUserRepository {
   alias = "users"
 
-  async findOneByUuid(uuid: string): Promise<UserEntity> {
+  async findOneByUuid(uuid: string): Promise<UserEntity | null> {
     return await this.repository
       .createQueryBuilder(this.alias)
       .where(`${this.alias}.uuid = :uuid`, { uuid })
       .getOne()
   }
 
-  async findOneByEmail(email: string): Promise<UserEntity> {
+  async findOneByEmail(email: string): Promise<UserEntity | null> {
       return await this.repository
         .createQueryBuilder(this.alias)
         .where(`${this.alias}.email = :email`, { email })

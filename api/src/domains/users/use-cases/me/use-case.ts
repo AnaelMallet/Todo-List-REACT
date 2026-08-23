@@ -1,24 +1,24 @@
 import { BasicUseCase } from "@shared/basicUseCase"
 import { Result } from "@shared/Results"
 
-import { UserDomainRepository } from "../../repositories/implementations/userDomainRepository"
+import { IUserDomainRepository } from "../../repositories/I-UserDomainRepository"
 import { UserNotExistError } from "../../errors"
 
-type UserInfo = {
+export type UserInfo = {
   firstname: string
   lastname: string
   email: string
-  username: string
+  username?: string
 }
 
 export class UserMeUseCase implements BasicUseCase {
-  repository: UserDomainRepository
+  repository: IUserDomainRepository
 
-  constructor(repository: UserDomainRepository) {
+  constructor(repository: IUserDomainRepository) {
     this.repository = repository
   }
 
-  async execute(userId: string): Promise<Result<UserInfo>> {
+  async execute(userId: string): Promise<Result<UserInfo | null>> {
     if (!userId) {
       return Result.ok(null)
     }

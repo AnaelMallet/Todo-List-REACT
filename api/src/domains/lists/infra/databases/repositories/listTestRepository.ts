@@ -5,7 +5,6 @@ import { IListDomainRepository } from "../../../repositories/I_ListDomainReposit
 
 export class ListTestRepository implements IListDomainRepository {
   array: List[] = []
-  repository: null
 
   findAllByUserId(uuid: string): Promise<Result<List[]>> {
     const foundLists = this.array.filter(list => list.userId === uuid)

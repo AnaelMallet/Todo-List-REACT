@@ -2,14 +2,14 @@ import { BasicUseCase } from "@shared/basicUseCase"
 import { Result } from "@shared/Results"
 
 import { Task } from "../../../entities/task"
-import { TaskDomainRepository } from "../../../repositories/implementations/taskDomainRepository"
+import { ITaskDomainRepository } from "../../../repositories/I_TaskDomainRepository"
 
 import { TaskPropsDto } from "./dto"
 
 export class CreateTaskUseCase implements BasicUseCase {
-    repository: TaskDomainRepository
+    repository: ITaskDomainRepository
 
-    constructor(repository: TaskDomainRepository) {
+    constructor(repository: ITaskDomainRepository) {
         this.repository = repository
     }
 
@@ -18,12 +18,14 @@ export class CreateTaskUseCase implements BasicUseCase {
             uuid,
             title,
             description,
+            isDone,
             listId
         } = props
 
         const taskResult = Task.create({
             title,
             description,
+            isDone,
             listId
         }, uuid)
 

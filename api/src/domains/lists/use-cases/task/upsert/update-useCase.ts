@@ -1,15 +1,15 @@
 import { BasicUseCase } from "@shared/basicUseCase"
 import { Result } from "@shared/Results"
 
-import { TaskDomainRepository } from "../../../repositories/implementations/taskDomainRepository"
+import { ITaskDomainRepository } from "../../../repositories/I_TaskDomainRepository"
 import { TaskNotExistError } from "../../../errors"
 
 import { TaskPropsDto } from "./dto"
 
 export class UpdateTaskUseCase implements BasicUseCase {
-    repository: TaskDomainRepository
+    repository: ITaskDomainRepository
 
-    constructor(repository: TaskDomainRepository) {
+    constructor(repository: ITaskDomainRepository) {
         this.repository = repository
     }
 
@@ -20,7 +20,7 @@ export class UpdateTaskUseCase implements BasicUseCase {
             description
         } = props
 
-        const foundTaskResult = await this.repository.findOneByUuid(uuid)
+        const foundTaskResult = await this.repository.findOneByUuid(uuid as string)
 
         if (foundTaskResult.isFailure) {
             return Result.fail(new TaskNotExistError())

@@ -7,7 +7,7 @@ import { ITaskRepository } from "../I_task"
 export class TaskRepository extends BasicRepository<TaskEntity> implements ITaskRepository {
     alias = "tasks"
 
-    async findOneByUuid(uuid: string): Promise<TaskEntity> {
+    async findOneByUuid(uuid: string): Promise<TaskEntity | null> {
         return await this.repository
         .createQueryBuilder(this.alias)
         .innerJoinAndSelect(`${this.alias}.list`, "list_tasks")

@@ -6,7 +6,7 @@ import { Plus } from "lucide-react"
 import { ListsComponent } from "./lists/ListComponent"
 import { addNotification, useNotification } from "./notifications/NotificationProvider"
 import TextTitle from "./text"
-import { useUser } from "./users/UserProvider"
+import { useUser } from "./users/userProvider"
 
 function Sidebar() {
   const { isLogged } = useUser()

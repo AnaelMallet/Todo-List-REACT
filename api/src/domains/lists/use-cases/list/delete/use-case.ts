@@ -1,17 +1,17 @@
 import { BasicUseCase } from "@shared/basicUseCase"
 import { Result } from "@shared/Results"
 
-import { ListDomainRepository } from "../../../repositories/implementations/listDomainRepository"
-import { TaskDomainRepository } from "../../../repositories/implementations/taskDomainRepository"
+import { IListDomainRepository } from "../../../repositories/I_ListDomainRepository"
+import { ITaskDomainRepository } from "../../../repositories/I_TaskDomainRepository"
 import { ListNotExistError, UndoneTaskFoundError } from "../../../errors"
 
 export class DeleteListUseCase implements BasicUseCase {
-  repository: ListDomainRepository
-  taskRepository: TaskDomainRepository
+  repository: IListDomainRepository
+  taskRepository: ITaskDomainRepository
 
   constructor(
-    repository: ListDomainRepository,
-    taskRepository: TaskDomainRepository
+    repository: IListDomainRepository,
+    taskRepository: ITaskDomainRepository
   ) {
     this.repository = repository
     this.taskRepository = taskRepository

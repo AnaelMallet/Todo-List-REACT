@@ -24,7 +24,7 @@ export class User extends Entity<User, UserProps> {
     return this.props.lastname
   }
 
-  get username(): string {
+  get username(): string | undefined {
     return this.props.username
   }
 
@@ -36,11 +36,11 @@ export class User extends Entity<User, UserProps> {
     return this.props.password
   }
 
-  get accessToken(): string {
+  get accessToken(): string | undefined {
     return this.accessToken
   }
 
-  get refreshToken(): string {
+  get refreshToken(): string | undefined {
     return this.refreshToken
   }
   

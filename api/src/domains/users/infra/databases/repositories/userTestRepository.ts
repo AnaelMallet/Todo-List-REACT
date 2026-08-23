@@ -5,7 +5,6 @@ import { IUserDomainRepository } from "../../../repositories/I-UserDomainReposit
 
 export class UserTestRepository implements IUserDomainRepository {
   array: User[] = []
-  repository: null
 
   findOneByUuid(uuid: string): Promise<Result<User>> {
     const foundUser = this.array.find(user => user.uuid === uuid)

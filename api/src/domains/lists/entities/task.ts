@@ -5,7 +5,7 @@ import { Result } from "@shared/Results"
 export type TaskProps =  {
     title: string
     description: string
-    isDone?: boolean
+    isDone: boolean
     listId: string
 }
 
@@ -30,6 +30,7 @@ export class Task extends Entity<Task, TaskProps> {
         const guardResults = Result.combine([
             Guard.againstNullOrUndefined(props.title, "title"),
             Guard.againstNullOrUndefined(props.description, "description"),
+            Guard.againstNullOrUndefined(props.isDone, "isDone"),
             Guard.againstNullOrUndefined(props.listId, "listId")
         ])
 
