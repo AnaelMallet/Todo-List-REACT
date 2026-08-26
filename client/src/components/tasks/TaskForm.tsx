@@ -5,13 +5,13 @@ import { ApolloQueryResult, OperationVariables, useMutation } from "@apollo/clie
 
 import client from "@/app/graphql-api"
 
-import { useModal } from "../confirmationModal/ModalProvider"
-import { useUser } from "../users/UserProvider"
+import { useModal } from "../confirmationModal/modalProvider"
+import { useUser } from "../users/userProvider"
 
 import { validationSchema, initialValues } from "./api"
 import { Task } from "./Task"
 import { upsertTaskMutation } from "./graphql"
-import { useNotification, addNotification } from "../notifications/NotificationProvider"
+import { useNotification, addNotification } from "../notifications/notificationProvider"
 import { useTaskSettingManager } from "./taskSettingManagerProvider"
 
 interface AddTaskFormProps {
@@ -41,7 +41,7 @@ export default function AddTaskForm(props: AddTaskFormProps) {
     }, [task])
 
     return (
-        <section className="border-2 border-gray-400 rounded-lg">
+        <section data-testid="taskFormElement" className="border-2 border-gray-400 rounded-lg">
             <Formik
                 initialValues={initialTaskValues ?? initialValues}
                 validationSchema={validationSchema}
@@ -58,7 +58,11 @@ export default function AddTaskForm(props: AddTaskFormProps) {
                     if (responseErrors.length > 0) {
                         dispatch(addNotification(responseErrors[0].message, false))
                     } else {
-                        dispatch(addNotification(`La tâche "${values.title}" à bien été ajouté à la liste "${list.name}".`, true))
+                        if (task?.uuid) {
+                            dispatch(addNotification(`La tâche a été correctement modifié.`, true))
+                        } else {
+                            dispatch(addNotification(`La tâche '${values.title}' à bien été ajouté à la liste '${list.name}'.`, true))
+                        }
                     }
 
                     setDisplayTaskForm(() => false)
@@ -72,6 +76,7 @@ export default function AddTaskForm(props: AddTaskFormProps) {
                             <label htmlFor="title">Titre de la tâche<span className="text-red-600">*</span></label>
                             <Field
                                 id="title"
+                                data-testid="taskTitleInput"
                                 name="title"
                                 type="text"
                                 placeholder="Titre de la tâche"
@@ -87,6 +92,7 @@ export default function AddTaskForm(props: AddTaskFormProps) {
                             <label htmlFor="description">Description de la tâche<span className="text-red-600">*</span></label>
                             <Field
                                 id="description"
+                                data-testid="taskDescriptionInput"
                                 name="description"
                                 type="text"
                                 className={classNames({
@@ -99,8 +105,9 @@ export default function AddTaskForm(props: AddTaskFormProps) {
                             {errors.description && touched.description ? <p className="text-red-600 text-xs">{errors.description}</p> : <></>}
                         </div>
                         <div className="text-white flex p-3 gap-3">
-                            <button type="submit" disabled={isSubmitting} className="bg-cyan-400 font-bold hover:bg-cyan-500 rounded-md p-2">Valider</button>
+                            <button data-testid="taskSubmitButton" type="submit" disabled={isSubmitting} className="bg-cyan-400 font-bold hover:bg-cyan-500 rounded-md p-2">Valider</button>
                             <button
+                                data-testid="taskCancelButton"
                                 type="button"
                                 className="font-bold p-2 bg-[#282c34] hover:bg-[#181c24] rounded-md"
                                 onClick={() => {

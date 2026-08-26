@@ -11,7 +11,7 @@ import { ApolloQueryResult, OperationVariables, useMutation, useQuery } from "@a
 import client from "@/app/graphql-api"
 
 import { getLocalStorage, removeLocalStorage, setLocalStorage } from "../utils"
-import { addNotification, useNotification } from "../notifications/NotificationProvider"
+import { addNotification, useNotification } from "../notifications/notificationProvider"
 
 import { getMeQuery, verifyTokenMutation } from "./graphql"
 
@@ -27,6 +27,7 @@ type User = {
 type UserContextType = {
   isLogged: boolean
   logout: () => void,
+  login: () => void,
   user: User | null,
   userId: string | null,
   refetch: (variables?: Partial<OperationVariables> | undefined) => Promise<ApolloQueryResult<any>>,
@@ -73,7 +74,7 @@ export default function UserProvider(props: any) {
     })
   }
 
-  useEffect(() => {
+  const login = () => {
     const localStorageUserId = getLocalStorage("userId")
 
     setUserId(localStorageUserId)
@@ -83,6 +84,10 @@ export default function UserProvider(props: any) {
       handleStorage()
       window.addEventListener("storage", handleStorage)
     }
+  }
+
+    useEffect(() => {
+      login()
 
     return () => window.removeEventListener("storage", handleStorage)
   }, [])
@@ -136,6 +141,7 @@ export default function UserProvider(props: any) {
     <UserContext.Provider value={{
       isLogged,
       logout,
+      login,
       user,
       userId,
       refetch,

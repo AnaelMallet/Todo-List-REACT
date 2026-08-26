@@ -6,7 +6,7 @@ import {
   NotificationInterface,
   removeNotification,
   useNotification
-} from "./NotificationProvider"
+} from "./notificationProvider"
 
 type Notification = {
   notification: NotificationInterface
@@ -48,7 +48,7 @@ export default function Notification(props: Notification) {
   }, [dispatch, notification.uuid, notificationTimerWidth])
   
   return (
-    <section className={classNames({
+    <section data-testid="notificationMessage" className={classNames({
           "h-12 w-fit rounded-md shadow-xl place-content-center": true,
           "bg-[#00c400]": notification.isSuccess,
           "bg-[#d40000]": !notification.isSuccess

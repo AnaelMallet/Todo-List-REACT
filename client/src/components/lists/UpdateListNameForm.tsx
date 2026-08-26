@@ -2,8 +2,8 @@ import client from "@/app/graphql-api"
 import { OperationVariables, ApolloQueryResult, useMutation } from "@apollo/client"
 import { Formik, Form, Field } from "formik"
 
-import { useNotification, addNotification } from "../notifications/NotificationProvider"
-import { useUser } from "../users/UserProvider"
+import { useNotification, addNotification } from "../notifications/notificationProvider"
+import { useUser } from "../users/userProvider"
 
 import { validationSchema } from "./api"
 import { updateListMutation } from "./graphql"
@@ -56,6 +56,7 @@ function UpdateListNameForm(props: UpdateListNameComponentProps) {
           <Field
             className="text-lg bg-transparent w-full pl-1 focus:outline-none"
             id="name"
+            data-testid="updateListInput"
             type="text"
             placeholder="Sans nom"
             name="name"

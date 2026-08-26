@@ -3,8 +3,8 @@ import { ApolloQueryResult, OperationVariables, useMutation } from "@apollo/clie
 import { Formik, Form, Field } from "formik"
 import { Dispatch, SetStateAction } from "react"
 
-import { useNotification, addNotification } from "../notifications/NotificationProvider"
-import { useUser } from "../users/UserProvider"
+import { useNotification, addNotification } from "../notifications/notificationProvider"
+import { useUser } from "../users/userProvider"
 
 import { initialValues, validationSchema } from "./api"
 import { createListMutation } from "./graphql"
@@ -41,7 +41,7 @@ function AddListForm(props: ListsFormProps) {
           if (responseErrors.length > 0) {
             dispatch(addNotification(responseErrors[0].message, false))
           } else {
-            dispatch(addNotification(`La liste "${values.name}" a été ajouté.`, true))
+            dispatch(addNotification(`La liste '${values.name}' a été ajouté.`, true))
           }
 
           props.refetch()
@@ -52,6 +52,7 @@ function AddListForm(props: ListsFormProps) {
           <Form>
             <Field
               id="name"
+              data-testid="addListInput"
               className="bg-transparent border-2 rounded-2xl h-9 w-full mt-3 pl-2 focus:outline-none border-white"
               type="text"
               placeholder="Sans nom"

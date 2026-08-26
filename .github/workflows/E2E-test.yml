@@ -1,0 +1,100 @@
+name: End-to-end Tests with playwright
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches: [master]
+
+jobs:
+  Playwright:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'yarn'
+          cache-dependency-path: 'playwright/yarn.lock'
+      
+      - name: Enable Corepack
+        run: corepack enable
+      
+      - name: Start Docker Compose services
+        run: docker compose up -d postgres-test
+      
+      - name: Wait for services to be ready
+        run: |
+          echo "Waiting for PostgreSQL to be ready..."
+          for i in {1..30}; do
+            if docker compose exec -T postgres-test pg_isready -U postgres > /dev/null 2>&1; then
+              echo "✓ PostgreSQL is ready"
+              break
+            fi
+            if [ $i -eq 30 ]; then
+              echo "✗ PostgreSQL failed to start"
+              docker compose logs postgres-test
+              exit 1
+            fi
+            sleep 2
+          done
+          
+          echo "Waiting for API to be ready..."
+          for i in {1..30}; do
+            if curl -f http://localhost:3001/ > /dev/null 2>&1; then
+              echo "✓ API is ready"
+              break
+            fi
+            if [ $i -eq 30 ]; then
+              echo "✗ API failed to start"
+              docker compose logs api
+              exit 1
+            fi
+            sleep 2
+          done
+          
+          echo "Waiting for Client to be ready..."
+          for i in {1..30}; do
+            if curl -f http://localhost:3000/ > /dev/null 2>&1; then
+              echo "✓ Client is ready"
+              break
+            fi
+            if [ $i -eq 30 ]; then
+              echo "✗ Client failed to start"
+              docker compose logs client
+              exit 1
+            fi
+            sleep 2
+          done
+      
+      - name: Install dependencies
+        run: |
+          cd playwright
+          yarn
+      
+      - name: Install playwright browsers
+        run: |
+          cd playwright
+          yarn playwright install
+      
+      - name: Run Tests
+        env:
+          CI: "true"
+          BROWSER: chromium
+          BASE_URL: "http://localhost:3000"
+        run: |
+          cd playwright
+          yarn test
+      
+      - name: Cleanup test database
+        if: always()
+        run: |
+          docker compose exec -T postgres-test psql -U postgres -d test_db \
+            -c "TRUNCATE TABLE tasks, lists, users CASCADE;" || true
+      
+      - name: Stop Docker Compose services
+        if: always()
+        run: docker compose down
