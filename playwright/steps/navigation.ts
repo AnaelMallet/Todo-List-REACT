@@ -4,7 +4,7 @@ import { expect } from "@playwright/test"
 import { page } from "./hook"
 
 Given("j'accède au site", async function () {
-    await page.goto(process.env.BASE_URL  as string)
+    await page.goto(process.env.BASE_URL as string)
     
     await expect(page.getByTestId("bodyPage")).toBeInViewport()
 })

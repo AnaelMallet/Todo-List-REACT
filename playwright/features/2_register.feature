@@ -29,9 +29,25 @@ Fonctionnalité: Inscription
         Lorsque je saisis "test" dans le champs possédant l'ID "emailRegisterInput"
         Alors l'élément possédant l'ID "emailRegisterInputErrorText" avec le texte "L'adresse email n'est pas valide." est visible
     
-    Scénario: Vérification de champs: Mot de passe invalide
-        Lorsque je saisis "test" dans le champs possédant l'ID "passwordRegisterInput"
-        Alors l'élément possédant l'ID "passwordRegisterInputErrorText" avec le texte "Le mot de passe n'est pas valide." est visible
+    Scénario: Vérification de champs: Mot de passe invalide (trop court)
+        Lorsque je saisis "John@99" dans le champs possédant l'ID "passwordRegisterInput"
+        Alors l'élément possédant l'ID "passwordRegisterInputErrorText" avec le texte "Le mot de passe doit contenir au moins 8 caractères." est visible
+
+    Scénario: Vérification de champs: Mot de passe invalide (majuscule requis)
+        Lorsque je saisis "mrjohndoe@99" dans le champs possédant l'ID "passwordRegisterInput"
+        Alors l'élément possédant l'ID "passwordRegisterInputErrorText" avec le texte "Le mot de passe doit contenir au moins une majuscule." est visible
+
+    Scénario: Vérification de champs: Mot de passe invalide (miniscule requis)
+        Lorsque je saisis "MRJOHNDOE@99" dans le champs possédant l'ID "passwordRegisterInput"
+        Alors l'élément possédant l'ID "passwordRegisterInputErrorText" avec le texte "Le mot de passe doit contenir au moins une minuscule." est visible
+
+    Scénario: Vérification de champs: Mot de passe invalide (caractère spécial requis)
+        Lorsque je saisis "MrJohnDoe99" dans le champs possédant l'ID "passwordRegisterInput"
+        Alors l'élément possédant l'ID "passwordRegisterInputErrorText" avec le texte "Le mot de passe doit contenir au moins un caractère spécial parmi: !@#$%^&*=+?~" est visible
+
+    Scénario: Vérification de champs: Mot de passe invalide (chiffre requis)
+        Lorsque je saisis "MrJ@hnD@e" dans le champs possédant l'ID "passwordRegisterInput"
+        Alors l'élément possédant l'ID "passwordRegisterInputErrorText" avec le texte "Le mot de passe doit contenir au moins un chiffre." est visible
 
     Scénario: Vérification de champs: Confirmation du mot de passe invalide (champs password vide)
         Lorsque je saisis "" dans le champs possédant l'ID "passwordRegisterInput"

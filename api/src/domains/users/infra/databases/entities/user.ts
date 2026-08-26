@@ -16,7 +16,7 @@ export default class UserEntity extends BaseEntity {
   uuid!: string
 
   @Column('varchar', { length: 64 })
-  firstrname!: string
+  firstname!: string
 
   @Column('varchar', { length: 64 })
   lastname!: string

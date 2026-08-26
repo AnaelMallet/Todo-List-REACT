@@ -20,6 +20,7 @@ export class CreateListController implements BasicController {
 
     const dto: ListPropsDto = {
       name: args.name,
+      isFavorite: false,
       userId: context.user.userId
     }
 
