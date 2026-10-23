@@ -3,11 +3,11 @@ import { Config } from "@jest/types";
 const config: Config.InitialOptions = {
   collectCoverage: false,
   collectCoverageFrom: [
-    "src/domains/entities/*.ts",
-    "src/domains/errors/*.ts",
-    "src/domains/infra/database/repositories/*.ts",
-    "src/domains/use-cases/**/use-case.ts",
-    "src/domains/values-objects/*.ts",
+    "src/domains/*/entities/*.ts",
+    "src/domains/*/errors/*.ts",
+    "src/domains/*/infra/databases/repositories/*.ts",
+    "src/domains/*/use-cases/**/use-case.ts",
+    "src/domains/*/value-objects/*.ts",
   ],
   coverageProvider: "babel",
   coverageThreshold: {
