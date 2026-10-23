@@ -1,54 +1,64 @@
-import client from "@/app/graphql-api"
-import { OperationVariables, ApolloQueryResult, useMutation } from "@apollo/client"
-import { Formik, Form, Field } from "formik"
+import client from "@/app/graphql-api";
+import {
+  OperationVariables,
+  ApolloQueryResult,
+  useMutation,
+} from "@apollo/client";
+import { Formik, Form, Field } from "formik";
 
-import { useNotification, addNotification } from "../notifications/notificationProvider"
-import { useUser } from "../users/userProvider"
+import {
+  useNotification,
+  addNotification,
+} from "../notifications/NotificationProvider";
+import { useUser } from "../users/userProvider";
 
-import { validationSchema } from "./api"
-import { updateListMutation } from "./graphql"
-import { ListProps } from "./Lists"
+import { validationSchema } from "./api";
+import { updateListMutation } from "./graphql";
+import { ListProps } from "./Lists";
 
 interface UpdateListNameComponentProps {
-  list: ListProps,
-  handleIsUpdateListName: (uuid: string) => void,
-  refetch: (variables?: Partial<OperationVariables> | undefined) => Promise<ApolloQueryResult<any>>,
+  list: ListProps;
+  handleIsUpdateListName: (uuid: string) => void;
+  refetch: (
+    variables?: Partial<OperationVariables> | undefined,
+  ) => Promise<ApolloQueryResult<any>>;
 }
 
 function UpdateListNameForm(props: UpdateListNameComponentProps) {
-  const {
-    list,
-    handleIsUpdateListName,
-    refetch
-  } = props
+  const { list, handleIsUpdateListName, refetch } = props;
 
-  const { dispatch } = useNotification()
-  const { userContext } = useUser()
-  const [updateListMutate] = useMutation(updateListMutation, { client, context: userContext })
+  const { dispatch } = useNotification();
+  const { userContext } = useUser();
+  const [updateListMutate] = useMutation(updateListMutation, {
+    client,
+    context: userContext,
+  });
 
   return (
     <Formik
       initialValues={{
-        name: list.name
+        name: list.name,
       }}
       validationSchema={validationSchema}
-      onSubmit={async values => {
+      onSubmit={async (values) => {
         if (values.name === list.name) {
-          handleIsUpdateListName(list.uuid)
-          return
+          handleIsUpdateListName(list.uuid);
+          return;
         }
 
-        const response = await updateListMutate({ variables: { input: { uuid: list.uuid, ...values } } })
-        const responseErrors = response.data.updateList.errors
+        const response = await updateListMutate({
+          variables: { input: { uuid: list.uuid, ...values } },
+        });
+        const responseErrors = response.data.updateList.errors;
 
         if (responseErrors.length > 0) {
-          dispatch(addNotification(responseErrors[0].message, false))
+          dispatch(addNotification(responseErrors[0].message, false));
         } else {
-          dispatch(addNotification(`La liste a été mise à jour.`, true))
+          dispatch(addNotification(`La liste a été mise à jour.`, true));
         }
 
-        handleIsUpdateListName(list.uuid)
-        refetch()
+        handleIsUpdateListName(list.uuid);
+        refetch();
       }}
     >
       {({ values, isSubmitting }) => (
@@ -64,7 +74,7 @@ function UpdateListNameForm(props: UpdateListNameComponentProps) {
             values={list.name}
             onBlur={() => {
               if (values.name === list.name) {
-                handleIsUpdateListName(list.uuid)
+                handleIsUpdateListName(list.uuid);
               }
             }}
             disabled={isSubmitting}
@@ -72,7 +82,7 @@ function UpdateListNameForm(props: UpdateListNameComponentProps) {
         </Form>
       )}
     </Formik>
-  )
+  );
 }
 
-export default UpdateListNameForm
+export default UpdateListNameForm;

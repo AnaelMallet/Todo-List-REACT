@@ -4,151 +4,168 @@ import {
   SetStateAction,
   useContext,
   useEffect,
-  useState
-} from "react"
-import { useRouter } from "next/navigation"
-import { ApolloQueryResult, OperationVariables, useMutation, useQuery } from "@apollo/client"
-import client from "@/app/graphql-api"
+  useState,
+} from "react";
+import { useRouter } from "next/navigation";
+import {
+  ApolloQueryResult,
+  OperationVariables,
+  useMutation,
+  useQuery,
+} from "@apollo/client";
+import client from "@/app/graphql-api";
 
-import { getLocalStorage, removeLocalStorage, setLocalStorage } from "../utils"
-import { addNotification, useNotification } from "../notifications/notificationProvider"
+import { getLocalStorage, removeLocalStorage, setLocalStorage } from "../utils";
+import {
+  addNotification,
+  useNotification,
+} from "../notifications/NotificationProvider";
 
-import { getMeQuery, verifyTokenMutation } from "./graphql"
+import { getMeQuery, verifyTokenMutation } from "./graphql";
 
 type User = {
-  firstname: string
-  lastname: string
-  email: string
-  username?: string
-  password?: string
-  confirmationPassword?: string
-}
+  firstname: string;
+  lastname: string;
+  email: string;
+  username?: string;
+  password?: string;
+  confirmationPassword?: string;
+};
 
 type UserContextType = {
-  isLogged: boolean
-  logout: () => void,
-  login: () => void,
-  user: User | null,
-  userId: string | null,
-  refetch: (variables?: Partial<OperationVariables> | undefined) => Promise<ApolloQueryResult<any>>,
-  setUser: Dispatch<SetStateAction<User | null>>,
-  userContext: any
-}
+  isLogged: boolean;
+  logout: () => void;
+  login: () => void;
+  user: User | null;
+  userId: string | null;
+  refetch: (
+    variables?: Partial<OperationVariables> | undefined,
+  ) => Promise<ApolloQueryResult<any>>;
+  setUser: Dispatch<SetStateAction<User | null>>;
+  userContext: any;
+};
 
-export const UserContext = createContext<UserContextType>({} as UserContextType)
+export const UserContext = createContext<UserContextType>(
+  {} as UserContextType,
+);
 
 export function useUser() {
-  return useContext(UserContext)
+  return useContext(UserContext);
 }
 
 export default function UserProvider(props: any) {
-  const [ userId, setUserId ] = useState<string| null>(null)
-  const [ isLogged, setIsLogged ] = useState<boolean>(false)
-  const [isLoading , setIsLoading] = useState<boolean>(true)
-  const [ user, setUser ] = useState<User | null>(null)
-  const [ userContext, setUserContext ] = useState<any>(null)
-  const [mutateFunction] = useMutation(verifyTokenMutation, { client })
-  const { dispatch } = useNotification()
-  const router = useRouter()
+  const [userId, setUserId] = useState<string | null>(null);
+  const [isLogged, setIsLogged] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [user, setUser] = useState<User | null>(null);
+  const [userContext, setUserContext] = useState<any>(null);
+  const [mutateFunction] = useMutation(verifyTokenMutation, { client });
+  const { dispatch } = useNotification();
+  const router = useRouter();
 
-  const { loading, refetch } = useQuery(getMeQuery, { variables: { userId }, onCompleted: (data) => {
-    setUser(data.me.values)
-  } })
+  const { loading, refetch } = useQuery(getMeQuery, {
+    variables: { userId },
+    onCompleted: (data) => {
+      setUser(data.me.values);
+    },
+  });
 
   const logout = () => {
-    removeLocalStorage("userId")
-    removeLocalStorage("token")
-    setUserId(null)
-    setIsLogged(false)
-    dispatch(addNotification("Vous êtes déconnecté !", true))
-  }
+    removeLocalStorage("userId");
+    removeLocalStorage("token");
+    setUserId(null);
+    setIsLogged(false);
+    dispatch(addNotification("Vous êtes déconnecté !", true));
+  };
 
   const handleStorage = () => {
     setUserContext(() => {
       return {
         headers: {
           authorization: `Bearer ${getLocalStorage("token")}`,
-          userId: getLocalStorage("userId")
-        }
-      }
-    })
-  }
+          userId: getLocalStorage("userId"),
+        },
+      };
+    });
+  };
 
   const login = () => {
-    const localStorageUserId = getLocalStorage("userId")
+    const localStorageUserId = getLocalStorage("userId");
 
-    setUserId(localStorageUserId)
+    setUserId(localStorageUserId);
 
     if (localStorageUserId !== "") {
-      setIsLogged(true)
-      handleStorage()
-      window.addEventListener("storage", handleStorage)
+      setIsLogged(true);
+      handleStorage();
+      window.addEventListener("storage", handleStorage);
     }
-  }
+  };
 
-    useEffect(() => {
-      login()
+  useEffect(() => {
+    login();
 
-    return () => window.removeEventListener("storage", handleStorage)
-  }, [])
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
 
   useEffect(() => {
     const fetchAccessToken = async () => {
-      const response = await mutateFunction({ variables: { userId } })
-      const responseErrors = response.data.verifyToken.errors
-  
+      const response = await mutateFunction({ variables: { userId } });
+      const responseErrors = response.data.verifyToken.errors;
+
       if (responseErrors.length > 0) {
-        dispatch(addNotification(responseErrors[0].message, false))
+        dispatch(addNotification(responseErrors[0].message, false));
 
         setUserId(() => {
-          return null
-        })
+          return null;
+        });
 
         setIsLogged(() => {
-          return false
-        })
+          return false;
+        });
 
-        removeLocalStorage("userId")
+        removeLocalStorage("userId");
 
-        router.push("/login")
+        router.push("/login");
       }
 
-      return response.data.verifyToken.values.accessToken
-    }
+      return response.data.verifyToken.values.accessToken;
+    };
     const initializeAccessToken = async () => {
       if (userId) {
-        setLocalStorage("token", await fetchAccessToken())
+        setLocalStorage("token", await fetchAccessToken());
 
         const interval = setInterval(async () => {
-          const newAccessToken = await fetchAccessToken()
+          const newAccessToken = await fetchAccessToken();
 
           if (newAccessToken !== getLocalStorage("token")) {
-            setLocalStorage("token", newAccessToken)
+            setLocalStorage("token", newAccessToken);
           }
-          window.dispatchEvent(new StorageEvent("storage"))
-        }, 10000)
-  
-        return () => clearInterval(interval)
-      }
-      setIsLoading(false)
-    }
-    initializeAccessToken()
-  }, [dispatch, mutateFunction, router, userId])
+          window.dispatchEvent(new StorageEvent("storage"));
+        }, 10000);
 
-  if (loading || isLoading) return <></>
+        return () => clearInterval(interval);
+      }
+      setIsLoading(false);
+    };
+    initializeAccessToken();
+  }, [dispatch, mutateFunction, router, userId]);
+
+  if (loading || isLoading) return <></>;
 
   return (
-    <UserContext.Provider value={{
-      isLogged,
-      logout,
-      login,
-      user,
-      userId,
-      refetch,
-      setUser,
-      userContext
-    }}>
+    <UserContext.Provider
+      value={{
+        isLogged,
+        logout,
+        login,
+        user,
+        userId,
+        refetch,
+        setUser,
+        userContext,
+      }}
+    >
       {props.children}
     </UserContext.Provider>
-  )
+  );
 }
