@@ -12,7 +12,7 @@ export class UserTransformer extends BasicTransformer<User, UserEntity> {
     const passwordResult = Password.create(databaseEntity.password)
 
     const props: UserProps = {
-      firstname: databaseEntity.firstrname,
+      firstname: databaseEntity.firstname,
       lastname: databaseEntity.lastname,
       username: databaseEntity.username,
       email: emailResult.getValue(),
@@ -33,7 +33,7 @@ export class UserTransformer extends BasicTransformer<User, UserEntity> {
         entityUser.uuid = domainEntity.uuid
       }
 
-      entityUser.firstrname = domainEntity.props.firstname
+      entityUser.firstname = domainEntity.props.firstname
       entityUser.lastname = domainEntity.props.lastname
       entityUser.username = domainEntity.props.username
       entityUser.email = domainEntity.props.email.value

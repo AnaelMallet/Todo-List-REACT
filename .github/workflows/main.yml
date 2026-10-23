@@ -1,0 +1,174 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: [api, client, playwright]
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+          cache-dependency-path: ${{ matrix.project }}/yarn.lock
+
+      - name: Setup cache
+        uses: actions/cache@v4
+        id: modules
+        with:
+          path: ${{ matrix.project }}/node_modules
+          key: node-modules-${{ matrix.project }}-${{ hashFiles(format('{0}/yarn.lock', matrix.project)) }}
+
+      - name: Install dependencies
+        if: steps.modules.outputs.cache-hit != 'true'
+        working-directory: ${{ matrix.project }}
+        run: yarn install --frozen-lockfile
+
+  unit-tests:
+    needs: install
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Restore API deps cache
+        uses: actions/cache/restore@v4
+        with:
+          path: api/node_modules
+          key: node-modules-api-${{ hashFiles('api/yarn.lock') }}
+          fail-on-cache-miss: true
+
+      - name: Run unit tests
+        run: yarn test --coverage
+        working-directory: api
+
+      - name: Upload coverage to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: api/coverage/lcov.info
+          flags: api
+          fail-ci-if-error: false
+
+  e2e-tests:
+    needs: install
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox]
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: app_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DB_HOST: localhost
+      DB_PORT: 5432
+      DB_USERNAME: test
+      DB_PASSWORD: test
+      DB_NAME: app_test
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Restore API deps cache
+        uses: actions/cache/restore@v4
+        with:
+          path: api/node_modules
+          key: node-modules-api-${{ hashFiles('api/yarn.lock') }}
+          fail-on-cache-miss: true
+
+      - name: Restore frontend deps cache
+        uses: actions/cache/restore@v4
+        with:
+          path: client/node_modules
+          key: node-modules-client-${{ hashFiles('client/yarn.lock') }}
+          fail-on-cache-miss: true
+
+      - name: Restore playwright deps cache
+        uses: actions/cache/restore@v4
+        with:
+          path: playwright/node_modules
+          key: node-modules-playwright-${{ hashFiles('playwright/yarn.lock') }}
+          fail-on-cache-miss: true
+
+      - name: Install playwright browser
+        run: yarn playwright install --with-deps ${{ matrix.browser }}
+        working-directory: playwright
+
+      - name: Start API
+        run: |
+          mkdir -p "$GITHUB_WORKSPACE/logs"
+          yarn start > "$GITHUB_WORKSPACE/logs/api.log" 2>&1 &
+        working-directory: api
+
+      - name: Start frontend
+        run: yarn start > "$GITHUB_WORKSPACE/logs/client.log" 2>&1 &
+        working-directory: client
+
+      - name: Wait for app
+        run: npx wait-on http://localhost:3000 http://localhost:3001 --timeout 60000
+
+      - name: Show logs on failure
+        if: ${{ failure() }}
+        run: |
+          echo "=== API ==="; cat logs/api.log || true
+          echo "=== CLIENT ==="; cat logs/client.log || true
+          echo "=== Ports en écoute ==="; ss -ltnp || true
+
+      - name: Run tests
+        run: yarn test:${{ matrix.browser }}
+        working-directory: playwright
+
+      - name: Upload  test report artifact
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: cucumber-report-${{ matrix.browser }}
+          path: playwright/reports/
+          retention-days: 1
+
+      - name: Upload app log artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-logs-${{ matrix.browser }}
+          path: |
+            api/api.log
+            client/client.log
+          retnetion-days: 1

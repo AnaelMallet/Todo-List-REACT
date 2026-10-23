@@ -1,166 +1,210 @@
-'use client'
+"use client";
 
 import {
   ApolloQueryResult,
   OperationVariables,
-  useMutation
-} from "@apollo/client"
-import { useEffect, useState } from "react"
-import { Pencil, Trash2 } from "lucide-react"
-import classNames from "classnames"
+  useMutation,
+} from "@apollo/client";
+import { useEffect, useState } from "react";
+import { Pencil, Trash2 } from "lucide-react";
+import classNames from "classnames";
 
-import client from "@/app/graphql-api"
-import { FullStarIconSVG, StarIconSVG } from "@/app/svg"
+import client from "@/app/graphql-api";
+import { FullStarIconSVG, StarIconSVG } from "@/app/svg";
 
-import { addNotification, useNotification } from "../notifications/NotificationProvider"
-import { useUser } from "../users/UserProvider"
-import { useModal } from "../confirmationModal/ModalProvider"
-import { getSessionStorage, removeSessionStorage } from "../utils"
+import {
+  addNotification,
+  useNotification,
+} from "../notifications/NotificationProvider";
+import { useUser } from "../users/userProvider";
+import { useModal } from "../confirmationModal/modalProvider";
+import { getSessionStorage, removeSessionStorage } from "../utils";
 
-import { toggleFavoriteMutation, deleteListMutation } from "./graphql"
-import UpdateListNameForm from "./UpdateListNameForm"
-import { useSelectList } from "./SelectListProvider"
+import { toggleFavoriteMutation, deleteListMutation } from "./graphql";
+import UpdateListNameForm from "./UpdateListNameForm";
+import { useSelectList } from "./SelectListProvider";
 
 export interface ListProps {
-  uuid: string
-  name: string
-  isFavorite: boolean
+  uuid: string;
+  name: string;
+  isFavorite: boolean;
 }
 
 export interface IListState {
-    listId: string
-    isUpdateListName: boolean
+  listId: string;
+  isUpdateListName: boolean;
 }
 
 interface ListsArrayProps {
-  lists: ListProps[]
-  refetch: (variables?: Partial<OperationVariables> | undefined) => Promise<ApolloQueryResult<any>>
+  lists: ListProps[];
+  refetch: (
+    variables?: Partial<OperationVariables> | undefined,
+  ) => Promise<ApolloQueryResult<any>>;
 }
 
 function ListsArray(props: ListsArrayProps) {
-  const {
-    lists,
-    refetch
-  } = props
+  const { lists, refetch } = props;
 
-  const settingsLists: IListState[] = lists.map(list => ({
+  const settingsLists: IListState[] = lists.map((list) => ({
     listId: list.uuid,
-    isUpdateListName: false
-  }))
+    isUpdateListName: false,
+  }));
 
-  const { dispatch } = useNotification()
-  const { openModal, closeModal } = useModal()
-  const { userContext } = useUser()
-  const { selectedList, setSelectedList } = useSelectList()
-  const [toggleFavoriteMutate] = useMutation(toggleFavoriteMutation, { client, context: userContext })
-  const [deleteListMutate] = useMutation(deleteListMutation, { client, context: userContext })
-  const [stateLists, setStateLists] = useState<IListState[]>(settingsLists)
+  const { dispatch } = useNotification();
+  const { openModal, closeModal } = useModal();
+  const { userContext } = useUser();
+  const { selectedList, setSelectedList } = useSelectList();
+  const [toggleFavoriteMutate] = useMutation(toggleFavoriteMutation, {
+    client,
+    context: userContext,
+  });
+  const [deleteListMutate] = useMutation(deleteListMutation, {
+    client,
+    context: userContext,
+  });
+  const [stateLists, setStateLists] = useState<IListState[]>(settingsLists);
 
   useEffect(() => {
-    setStateLists(() => settingsLists)
-  }, [lists])
+    setStateLists(() => settingsLists);
+  }, [lists]);
 
   function handleIsUpdateListName(id: string) {
-    const updatedListSettings = [...stateLists]
-    const listSetting = updatedListSettings.find(state => state.listId === id) as IListState
+    const updatedListSettings = [...stateLists];
+    const listSetting = updatedListSettings.find(
+      (state) => state.listId === id,
+    ) as IListState;
 
-    listSetting.isUpdateListName = !listSetting.isUpdateListName
+    listSetting.isUpdateListName = !listSetting.isUpdateListName;
 
-    setStateLists(() => updatedListSettings)
+    setStateLists(() => updatedListSettings);
   }
 
   async function handleDeleteList(id: string): Promise<void> {
-    const list = lists.find(list => list.uuid === id)
+    const list = lists.find((list) => list.uuid === id);
 
-    const response = await deleteListMutate({ variables: { listUuid: list?.uuid } })
-    const responseErrors = response.data.deleteList.errors
+    const response = await deleteListMutate({
+      variables: { listUuid: list?.uuid },
+    });
+    const responseErrors = response.data.deleteList.errors;
 
-    refetch()
-    closeModal()
+    refetch();
+    closeModal();
 
     if (responseErrors.length > 0) {
-      dispatch(addNotification(responseErrors[0].message, false))
-      return
+      dispatch(addNotification(responseErrors[0].message, false));
+      return;
     }
 
-    dispatch(addNotification(`La liste "${list?.name}" à bien été supprimée.`, true))
-    removeSessionStorage("selectedList")
-    setSelectedList(() => "")
+    dispatch(
+      addNotification(`La liste '${list?.name}' à bien été supprimée.`, true),
+    );
+    removeSessionStorage("selectedList");
+    setSelectedList(() => "");
   }
 
   return (
-    <ul className="mt-7 space-y-4 pt-1 pb-3 mx-2 overflow-y-auto max-h-[49.09rem] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-lg [&::-webkit-scrollbar]:pr-3">
-      {
-        lists.map(list => {
-          return (
-            <li key={list.uuid} className="ml-3 mr-5 space-y-1">
-              <div className="flex place-items-center justify-between space-x-2 mb-2">
-                {
-                  stateLists
-                    .find((displayList: any) => displayList.listId === list.uuid)?.isUpdateListName
-                    ? <UpdateListNameForm
-                      list={list}
-                      handleIsUpdateListName={handleIsUpdateListName}
-                      refetch={refetch}
-                    />
-                    : <span
-                      onClick={() => { setSelectedList(() => list.uuid) }}
-                      className={classNames({
-                        "cursor-pointer text-lg truncate w-full rounded-md pl-1": true,
-                        "hover:bg-gray-700": list.uuid !== selectedList || (selectedList === "" || getSessionStorage("SelectedList") === null),
-                        "hover:bg-gray-400 bg-gray-500": list.uuid === selectedList && (selectedList !== "" || getSessionStorage("SelectedList") !== null)
-                      })}
-                    >{list.name}</span>
-                }
-                <span className="flex space-x-2">
-                  <button
-                    onClick={() => {
-                      handleIsUpdateListName(list.uuid)
-                    }}
-                  >
-                    <Pencil />
-                  </button>
-                  <button
-                    onClick={async () => {
-                      const response = await toggleFavoriteMutate({ variables: { listUuid: list.uuid } })
-                      const responseErrors = response.data.toggleIsFavorite.errors
-
-                      if (responseErrors.length > 0) {
-                        dispatch(addNotification(responseErrors[0].message, false))
-
-                        return
-                      }
-
-                      dispatch(addNotification(
-                        list.isFavorite
-                          ? `La liste "${list.name}" n'est plus en favoris.`
-                          : `La liste "${list.name}" a été mise en favoris.`,
-                        true
-                      ))
-
-                      refetch()
-                    }}
-                  >{list.isFavorite ? <FullStarIconSVG /> : <StarIconSVG />}</button>
-                  <button
-                    onClick={() => {
-                      openModal({
-                        title: "Suppression d'une liste",
-                        description: `Êtes-vous sûr de vouloir supprimer la liste "${list.name}" ?`,
-                        function: async function () { await handleDeleteList(list.uuid) }
-                      })
-                    }}
-                  >
-                    <Trash2 />
-                  </button>
+    <ul
+      data-testid="listingListElement"
+      className="mt-7 space-y-4 pt-1 pb-3 mx-2 overflow-y-auto max-h-[49.09rem] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-lg [&::-webkit-scrollbar]:pr-3"
+    >
+      {lists.map((list) => {
+        return (
+          <li
+            data-testid="listElement"
+            key={list.uuid}
+            className="ml-3 mr-5 space-y-1"
+          >
+            <div className="flex place-items-center justify-between space-x-2 mb-2">
+              {stateLists.find(
+                (displayList: any) => displayList.listId === list.uuid,
+              )?.isUpdateListName ? (
+                <UpdateListNameForm
+                  list={list}
+                  handleIsUpdateListName={handleIsUpdateListName}
+                  refetch={refetch}
+                />
+              ) : (
+                <span
+                  onClick={() => {
+                    setSelectedList(() => list.uuid);
+                  }}
+                  className={classNames({
+                    "cursor-pointer text-lg truncate w-full rounded-md pl-1": true,
+                    "hover:bg-gray-700":
+                      list.uuid !== selectedList ||
+                      selectedList === "" ||
+                      getSessionStorage("SelectedList") === null,
+                    "hover:bg-gray-400 bg-gray-500":
+                      list.uuid === selectedList &&
+                      (selectedList !== "" ||
+                        getSessionStorage("SelectedList") !== null),
+                  })}
+                >
+                  {list.name}
                 </span>
-              </div>
-              <hr />
-            </li>
-          )
-        })
-      }
+              )}
+              <span className="flex space-x-2">
+                <button
+                  data-testid="updateListButton"
+                  onClick={() => {
+                    handleIsUpdateListName(list.uuid);
+                  }}
+                >
+                  <Pencil />
+                </button>
+                <button
+                  data-testid="listFavoriteButton"
+                  onClick={async () => {
+                    const response = await toggleFavoriteMutate({
+                      variables: { listUuid: list.uuid },
+                    });
+                    const responseErrors =
+                      response.data.toggleIsFavorite.errors;
+
+                    if (responseErrors.length > 0) {
+                      dispatch(
+                        addNotification(responseErrors[0].message, false),
+                      );
+
+                      return;
+                    }
+
+                    dispatch(
+                      addNotification(
+                        list.isFavorite
+                          ? `La liste '${list.name}' n'est plus en favoris.`
+                          : `La liste '${list.name}' a été mise en favoris.`,
+                        true,
+                      ),
+                    );
+
+                    refetch();
+                  }}
+                >
+                  {list.isFavorite ? <FullStarIconSVG /> : <StarIconSVG />}
+                </button>
+                <button
+                  data-testid="deleteListButton"
+                  onClick={() => {
+                    openModal({
+                      title: "Suppression d'une liste",
+                      description: `Êtes-vous sûr de vouloir supprimer la liste "${list.name}" ?`,
+                      function: async function () {
+                        await handleDeleteList(list.uuid);
+                      },
+                    });
+                  }}
+                >
+                  <Trash2 />
+                </button>
+              </span>
+            </div>
+            <hr />
+          </li>
+        );
+      })}
     </ul>
-  )
+  );
 }
 
-export default ListsArray
+export default ListsArray;

@@ -30,7 +30,7 @@ const schemaValidation = Yup.object().shape({
     .min(8, "Le mot de passe doit contenir au moins 8 caractères.")
     .matches(/[A-Z]/g, "Le mot de passe doit contenir au moins une majuscule.")
     .matches(/[a-z]/g, "Le mot de passe doit contenir au moins une minuscule.")
-    .matches(/[0-9]/g, "Le mot de passe doit contenir au moins un chiffre")
+    .matches(/[0-9]/g, "Le mot de passe doit contenir au moins un chiffre.")
     .matches(/[!@#$%^&*=+?~]/g, "Le mot de passe doit contenir au moins un caractère spécial parmi: !@#$%^&*=+?~"),
   confirmationPassword: Yup
     .string()

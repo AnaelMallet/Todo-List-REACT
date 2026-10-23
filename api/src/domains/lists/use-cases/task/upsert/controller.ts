@@ -22,7 +22,12 @@ export class UpsertTaskController implements BasicController {
         if (args.input.uuid) {
             upsertTaskResult = await this.updateUseCase.execute(args.input)
         } else {
-            upsertTaskResult = await this.useCase.execute(args.input)
+            const input = {
+                ...args.input,
+                isDone: false
+            }
+
+            upsertTaskResult = await this.useCase.execute(input)
         }
 
         if (upsertTaskResult.isFailure === true) {
