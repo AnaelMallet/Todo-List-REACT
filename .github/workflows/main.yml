@@ -41,6 +41,8 @@ jobs:
 
       - name: Setup node
         uses: actions/setup-node@v4
+        with:
+          node-version: 22
 
       - name: Restore API deps cache
         uses: actions/cache/restore@v4
@@ -50,17 +52,17 @@ jobs:
           fail-on-cache-miss: true
 
       - name: Run unit tests
-        run: yarn test
+        run: yarn test --coverage
         working-directory: api
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload coverage to Codecov
         if: ${{ !cancelled() }}
+        uses: codecov/codecov-action@v5
         with:
-          name: unit-test-report
-          path: api/coverage/
-          if-no-files-found: ignore
-          retention-days: 1
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: api/coverage/lcov.info
+          flags: api
+          fail-ci-if-error: false
 
   e2e-tests:
     needs: install
@@ -146,13 +148,6 @@ jobs:
           echo "=== API ==="; cat logs/api.log || true
           echo "=== CLIENT ==="; cat logs/client.log || true
           echo "=== Ports en écoute ==="; ss -ltnp || true
-
-      - uses: actions/upload-artifact@v4
-        if: ${{ failure() }}
-        with:
-          name: app-logs-${{ matrix.browser }}
-          path: logs/
-          retention-days: 1
 
       - name: Run tests
         run: yarn test:${{ matrix.browser }}
