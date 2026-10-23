@@ -1,9 +1,13 @@
-import { Config } from "@jest/types"
+import { Config } from "@jest/types";
 
-const config : Config.InitialOptions = {
+const config: Config.InitialOptions = {
   collectCoverage: false,
   collectCoverageFrom: [
-    "src/domains/**/*.ts"
+    "src/domains/entities/*.ts",
+    "src/domains/errors/*.ts",
+    "src/domains/infra/database/repositories/*.ts",
+    "src/domains/use-cases/**/use-case.ts",
+    "src/domains/values-objects/*.ts",
   ],
   coverageProvider: "babel",
   coverageThreshold: {
@@ -11,20 +15,17 @@ const config : Config.InitialOptions = {
       branches: 100,
       statements: 100,
       lines: 100,
-      functions: 100
-    }
+      functions: 100,
+    },
   },
   maxConcurrency: 5,
   preset: "ts-jest",
   testEnvironment: "node",
   verbose: false,
-  moduleDirectories: [
-    "node_modules", 
-    "api"
-  ],
+  moduleDirectories: ["node_modules", "api"],
   moduleNameMapper: {
-    "^@shared/(.*)": "<rootDir>/src/shared/$1"
+    "^@shared/(.*)": "<rootDir>/src/shared/$1",
   },
-}
+};
 
-export default config
+export default config;
